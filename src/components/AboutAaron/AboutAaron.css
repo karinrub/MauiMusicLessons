@@ -1,0 +1,343 @@
+.about {
+  height: 350vh;
+  position: relative;
+  background-color: #13100a;
+}
+
+.about__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+/* Left panel — 40%, dark, text content */
+.about__left {
+  width: 40%;
+  background-color: #13100a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(2rem, 5vw, 4.5rem);
+  position: relative;
+  z-index: 2;
+}
+
+.about__phrase-wrap {
+  position: relative;
+  height: clamp(4rem, 8vw, 7rem);
+  margin-bottom: 2rem;
+}
+
+.about__phrase {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-weight: 300;
+  color: #ede8de;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  will-change: transform, opacity;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.about__phrase--active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about__phrase--exiting {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.about__sub {
+  font-family: var(--font-serif);
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  color: rgba(237, 232, 222, 0.4);
+  font-style: italic;
+  line-height: 1.7;
+  max-width: 260px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 600ms ease 300ms, transform 600ms ease 300ms;
+}
+
+.about__sub--visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Right panel — 60%, full-bleed image sequence */
+.about__right {
+  width: 60%;
+  position: relative;
+  overflow: hidden;
+}
+
+.about__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  will-change: opacity;
+  opacity: 0;
+  transition: opacity 400ms ease-in-out;
+}
+
+.about__img--active {
+  opacity: 1;
+}
+
+.about__img--exiting {
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+}
+
+.about--reduced {
+  height: auto;
+}
+
+.about--reduced .about__sticky {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+}
+
+.about--reduced .about__phrase-wrap {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.about--reduced .about__phrase {
+  position: static;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.about--reduced .about__img {
+  opacity: 1;
+  transition: none;
+}
+
+.about--reduced .about__right {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.about--reduced .about__img {
+  position: relative;
+  min-height: 18rem;
+}
+
+/* Epilogue — full-width image with text overlay */
+.about__epilogue {
+  position: relative;
+  min-height: 70vh;
+  overflow: hidden;
+}
+
+.about__epilogue-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .about__epilogue-img {
+    animation: kenBurns 24s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__phrase,
+  .about__img,
+  .about__img--exiting {
+    transition: none;
+  }
+
+  .about__sub {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.about__epilogue-text {
+  position: absolute;
+  bottom: 2.5rem;
+  left: clamp(2rem, 8vw, 6rem);
+  right: clamp(2rem, 8vw, 6rem);
+  max-width: 520px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.88rem, 1.4vw, 1rem);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Gradient over epilogue image for legibility */
+.about__epilogue::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Tablet: equal split */
+@media (max-width: 720px) {
+  .about__left {
+    width: 50%;
+    padding: 0 1.5rem;
+  }
+
+  .about__right {
+    width: 50%;
+  }
+
+  .about__phrase {
+    white-space: normal;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .about__phrase-wrap {
+    height: clamp(3rem, 10vw, 5rem);
+  }
+
+  /* Sub text: enforce readable minimum, not pure vw */
+  .about__sub {
+    font-size: clamp(0.88rem, 2.2vw, 1rem);
+    max-width: 100%;
+  }
+
+  .about__epilogue {
+    min-height: 55vh;
+  }
+
+  .about__epilogue-text {
+    max-width: 90%;
+    right: auto;
+  }
+}
+
+/* Mobile portrait: image top, text bottom */
+@media (max-width: 480px) {
+  .about {
+    height: 280vh;
+  }
+
+  .about__sticky {
+    flex-direction: column-reverse;
+  }
+
+  .about__left {
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .about__right {
+    width: 100%;
+    height: 60vw;
+    min-height: 240px;
+  }
+
+  .about--reduced .about__sticky {
+    flex-direction: column;
+  }
+
+  .about--reduced .about__right {
+    height: auto;
+  }
+
+  .about__phrase {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    white-space: normal;
+  }
+
+  .about__phrase-wrap {
+    height: clamp(4rem, 14vw, 6rem);
+    margin-bottom: 0.85rem;
+  }
+
+  .about__sub {
+    font-size: 0.88rem;
+    max-width: 100%;
+    line-height: 1.6;
+  }
+
+  .about__epilogue {
+    min-height: 55vh;
+  }
+
+  .about__epilogue-img {
+    object-position: center 20%;
+  }
+
+  .about__epilogue-text {
+    left: 1.5rem;
+    right: 1.5rem;
+    max-width: 100%;
+    bottom: 2rem;
+    font-size: 0.88rem;
+  }
+}
+
+/* Landscape phones: side-by-side at short viewport height */
+@media (max-height: 520px) and (orientation: landscape) {
+  .about__sticky {
+    flex-direction: row;
+  }
+
+  .about__left {
+    width: 45%;
+    height: 100%;
+    justify-content: center;
+    padding: 0 1.5rem;
+  }
+
+  .about__right {
+    width: 55%;
+    height: 100%;
+  }
+
+  .about__phrase {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    white-space: normal;
+  }
+
+  .about__phrase-wrap {
+    height: auto;
+    min-height: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .about__sub {
+    font-size: 0.82rem;
+  }
+
+  .about__epilogue {
+    min-height: 80vw;
+  }
+}

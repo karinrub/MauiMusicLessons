@@ -1,0 +1,231 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.8s ease,
+    background-color 350ms ease,
+    backdrop-filter 350ms ease,
+    border-bottom-color 350ms ease,
+    box-shadow 350ms ease,
+    padding 350ms ease;
+}
+
+.navbar--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.navbar--scrolled {
+  background-color: rgba(250, 247, 242, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 1rem 2rem;
+  box-shadow: 0 1px 0 rgba(44, 36, 24, 0.06);
+}
+
+.navbar__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__brand {
+  background: none;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.04em;
+  font-style: italic;
+  transition: color 0.4s ease;
+  padding: 0;
+}
+
+.navbar--scrolled .navbar__brand {
+  color: var(--color-dark);
+  font-style: italic;
+}
+
+.navbar__links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.navbar__links li button {
+  background: none;
+  border: none;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 0.5rem 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.navbar__links li button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar__links li button:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar--scrolled .navbar__links li button {
+  color: var(--color-dark-2);
+}
+
+.navbar__links li button:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.navbar--scrolled .navbar__links li button:hover {
+  color: var(--color-dark);
+}
+
+.navbar__cta {
+  background-color: var(--color-sand) !important;
+  color: #fff !important;
+  border-radius: 2px;
+  padding: 0.5rem 1.2rem !important;
+  font-weight: 500;
+  transition: background-color 0.22s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+.navbar__cta:hover {
+  background-color: var(--color-sand-dark) !important;
+}
+
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  /* Minimum 44×44px touch target */
+  padding: 0.75rem 0.5rem;
+  margin: -0.5rem -0.25rem;
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: background-color 0.4s ease;
+  border-radius: 1px;
+}
+
+.navbar--scrolled .navbar__hamburger span {
+  background: var(--color-dark);
+}
+
+.navbar__mobile-menu {
+  list-style: none;
+  background-color: var(--color-warm-white);
+  padding: 0.75rem 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(44, 36, 24, 0.06);
+}
+
+.navbar__mobile-menu li button {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--color-dark-2);
+  /* Minimum 44px touch target */
+  padding: 0.85rem 0;
+  width: 100%;
+  text-align: left;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(44, 36, 24, 0.06);
+  transition: color 0.2s ease;
+}
+
+.navbar__mobile-menu li button:hover {
+  color: var(--color-dark);
+}
+
+/* Book a Lesson CTA — visually distinct in mobile menu */
+.navbar__mobile-menu li:last-child button {
+  border-bottom: none;
+  color: var(--color-sand-dark);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Dark-section-aware state — overrides navbar--scrolled */
+.navbar.nav--over-dark {
+  background-color: rgba(8, 8, 8, 0.5);
+  backdrop-filter: blur(16px) saturate(0.8);
+  -webkit-backdrop-filter: blur(16px) saturate(0.8);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar.nav--over-dark .navbar__brand {
+  color: #e8e0d4;
+}
+
+.navbar.nav--over-dark .navbar__links li button {
+  color: #e8e0d4;
+}
+
+.navbar.nav--over-dark .navbar__links li button:hover {
+  color: #fff;
+}
+
+.navbar.nav--over-dark .navbar__cta {
+  color: var(--color-dark) !important;
+}
+
+.navbar.nav--over-dark .navbar__hamburger span {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar {
+    transition: opacity 0.8s ease;
+  }
+
+  .navbar.nav--over-dark,
+  .navbar.nav--over-dark .navbar__brand,
+  .navbar.nav--over-dark .navbar__links li button,
+  .navbar.nav--over-dark .navbar__cta {
+    transition: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .navbar__links {
+    display: none;
+  }
+
+  .navbar__hamburger {
+    display: flex;
+  }
+}

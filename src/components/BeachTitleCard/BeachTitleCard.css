@@ -1,0 +1,85 @@
+.beach-title-card {
+  position: relative;
+  height: 65vh;
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.beach-title-card__gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(180, 140, 90, 0.08));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.beach-title-card__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 640px;
+  padding: 0 2rem;
+  color: #ede8de;
+}
+
+.beach-title-card__eyebrow {
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.beach-title-card__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.8vw, 4rem);
+  font-weight: 300;
+  color: #ede8de;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.beach-title-card__subtext {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  color: rgba(237, 232, 222, 0.6);
+  line-height: 1.7;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+@media (max-width: 768px) {
+  .beach-title-card {
+    height: 55vh;
+  }
+
+  .beach-title-card__content {
+    padding: 0 1.5rem;
+    max-width: 100%;
+  }
+
+  .beach-title-card__title {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+  }
+
+  .beach-title-card__subtext {
+    max-width: 90vw;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beach-title-card__eyebrow,
+  .beach-title-card__title,
+  .beach-title-card__subtext {
+    opacity: 1;
+    transition: none;
+  }
+}

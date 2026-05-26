@@ -1,0 +1,401 @@
+/* ─── Section shell ──────────────────────────────────────── */
+.booking {
+  position: relative;
+  min-height: 100vh;
+  padding: 8rem 2rem 10rem;
+  overflow: hidden;
+}
+
+.booking__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.booking__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+@keyframes kenBurnsSubtle {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.04) translate(-0.5%, -0.25%); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .booking__bg-img {
+    animation: kenBurnsSubtle 26s ease-in-out infinite alternate;
+  }
+}
+
+.booking__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.55) 50%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+.booking__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+.booking__header {
+  margin-bottom: 3rem;
+}
+
+.booking__heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Conversation container ─────────────────────────────── */
+.conv {
+  display: flex;
+  flex-direction: column;
+  min-height: 31rem;
+}
+
+/* ─── Conversation history ───────────────────────────────── */
+.conv-history {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+  min-height: 15.5rem;
+}
+
+.conv-history__entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 2.25rem;
+}
+
+.conv-history__entry--empty {
+  visibility: hidden;
+}
+
+.conv-history__q {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.conv-history__a {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(196, 160, 90, 0.95);
+  letter-spacing: -0.01em;
+}
+
+/* ─── Step animation ─────────────────────────────────────── */
+@keyframes step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes step-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.conv-step--enter {
+  animation: step-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
+}
+
+.conv-step--exit {
+  animation: step-exit 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.conv:not(.conv--reduced) .conv-step {
+  min-height: 12.5rem;
+}
+
+/* ─── Question text ──────────────────────────────────────── */
+.conv-question {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.5vw, 1.9rem);
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* ─── Tiles ──────────────────────────────────────────────── */
+.booking-tiles {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 520px;
+}
+
+.booking-tiles--2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.booking-tile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+  border-radius: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.booking-tile--selected {
+  border: 2px solid rgba(196, 160, 90, 0.9);
+  background: rgba(196, 160, 90, 0.1);
+  color: #fff;
+}
+
+.booking-tile--unselected {
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ─── Hint text ──────────────────────────────────────────── */
+.conv-hint {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.38);
+  margin-top: 0.75rem;
+  line-height: 1.7;
+}
+
+/* ─── Inputs ─────────────────────────────────────────────── */
+.conv-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.conv-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 300;
+  padding: 0.65rem 0;
+  outline: none;
+  border-radius: 0;
+  width: 100%;
+  transition: border-bottom-color 200ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.conv-input::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.conv-input:focus {
+  border-bottom-color: var(--color-sand-light, var(--color-sand));
+}
+
+.conv-input--error {
+  border-bottom-color: #f4a261;
+}
+
+.conv-error {
+  display: block;
+  font-size: 0.8rem;
+  color: #f4a261;
+  margin-top: 0.4rem;
+}
+
+/* ─── Back button ────────────────────────────────────────── */
+.conv-back {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.38);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 0 1.5rem;
+  cursor: pointer;
+  display: block;
+  transition: color 200ms ease;
+}
+
+.conv-back--hidden {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.conv-back:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ─── Action / submit button ─────────────────────────────── */
+.conv-action {
+  background: transparent;
+  border: none;
+  color: var(--color-sand-light, var(--color-sand));
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1.25rem 0 0;
+  cursor: pointer;
+  display: block;
+  transition: opacity 200ms ease;
+}
+
+.conv-action:hover {
+  opacity: 0.7;
+}
+
+/* ─── Sent / confirmation ────────────────────────────────── */
+.conv-sent {
+  padding: 2rem 0 0;
+  text-align: center;
+}
+
+.conv-sent::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-sand);
+  opacity: 0.5;
+  margin: 0 auto 2.5rem;
+}
+
+.conv-sent__headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.conv-sent__sub {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.conv-sent__meta {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Reduced-motion static layout ──────────────────────── */
+.conv--reduced .conv-step {
+  margin-bottom: 3rem;
+  min-height: 0;
+}
+
+.conv--reduced {
+  min-height: 0;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .booking {
+    min-height: 130vh;
+  }
+
+  .booking-tiles--2col {
+    grid-template-columns: 1fr;
+  }
+
+  .conv-input {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .booking {
+    padding: 5rem 1.25rem 6rem;
+  }
+
+  .conv {
+    min-height: 35rem;
+  }
+
+  .conv:not(.conv--reduced) .conv-step {
+    min-height: 15rem;
+  }
+
+  .booking-tiles--2col {
+    grid-template-columns: 1fr;
+  }
+
+  /* Prevent iOS Safari auto-zoom */
+  .conv-input {
+    font-size: 1rem;
+    padding: 0.88rem 0;
+  }
+
+  .booking-tile {
+    font-size: 1rem;
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .booking {
+    padding: 4rem 1.25rem 5rem;
+  }
+
+  .booking__heading {
+    font-size: 1.75rem;
+  }
+}
