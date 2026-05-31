@@ -9,9 +9,22 @@ interface CinematicPanelProps {
   height?: string
   image?: string
   imageAlt?: string
+  className?: string
+  imageRestOpacity?: number
+  imageExitOpacity?: number
+  entryStart?: number
 }
 
-export default function CinematicPanel({ lines, height = '270vh', image, imageAlt = '' }: CinematicPanelProps) {
+export default function CinematicPanel({
+  lines,
+  height = '270vh',
+  image,
+  imageAlt = '',
+  className = '',
+  imageRestOpacity = 0.13,
+  imageExitOpacity = 0,
+  entryStart = 0.08,
+}: CinematicPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const lineRefs = useRef<(HTMLSpanElement | null)[]>([])
   const imageRef = useRef<HTMLImageElement>(null)
@@ -25,12 +38,12 @@ export default function CinematicPanel({ lines, height = '270vh', image, imageAl
       el.style.transform = 'translateY(0)'
       el.style.filter = 'none'
     })
-    if (imageRef.current) imageRef.current.style.opacity = '0.12'
-  }, [lines])
+    if (imageRef.current) imageRef.current.style.opacity = Math.max(imageRestOpacity, imageExitOpacity).toString()
+  }, [lines, imageRestOpacity, imageExitOpacity])
 
   const count = lines.length
   const spread = 0.26
-  const entryPoints = lines.map((_, i) => 0.07 + i * (spread / Math.max(count - 1, 1)))
+  const entryPoints = lines.map((_, i) => entryStart + i * (spread / Math.max(count - 1, 1)))
 
   useScrollY(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -43,9 +56,12 @@ export default function CinematicPanel({ lines, height = '270vh', image, imageAl
     const imgEl = imageRef.current
     if (imgEl) {
       let imgOp = 0
-      if (progress < 0.12) imgOp = (progress / 0.12) * 0.13
-      else if (progress < 0.82) imgOp = 0.13
-      else imgOp = Math.max(0, (1 - (progress - 0.82) / 0.15)) * 0.13
+      if (progress < 0.78) {
+        imgOp = imageRestOpacity
+      } else {
+        const exitProgress = Math.min(1, (progress - 0.78) / 0.22)
+        imgOp = imageRestOpacity - easeOutCubic(exitProgress) * (imageRestOpacity - imageExitOpacity)
+      }
 
       const scale = 1.06 - progress * 0.07
       imgEl.style.opacity = imgOp.toFixed(4)
@@ -83,8 +99,10 @@ export default function CinematicPanel({ lines, height = '270vh', image, imageAl
     })
   })
 
+  const classes = ['cinematic-panel', className].filter(Boolean).join(' ')
+
   return (
-    <div ref={containerRef} className="cinematic-panel" style={{ height }}>
+    <div ref={containerRef} className={classes} style={{ height }}>
       <div className="cinematic-panel__sticky">
         {image && (
           <img

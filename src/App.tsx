@@ -50,8 +50,9 @@ function App() {
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}
-          height="210vh"
-          image={publicAsset('/images/aaron-tourists-2.jpg')}
+          height="150vh"
+          className="cinematic-panel--beach-entry"
+          entryStart={0.02}
         />
         <BeachTitleCard />
         <BeachLessons />
@@ -59,6 +60,7 @@ function App() {
           lines={PANEL_3_LINES}
           height="250vh"
           image={publicAsset('/images/aaron-playing-1.jpg')}
+          entryStart={0.22}
         />
         <WeeklyLessons />
         <AboutAaron />

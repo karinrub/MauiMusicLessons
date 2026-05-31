@@ -1,53 +1,134 @@
 .weekly {
   position: relative;
-  background: radial-gradient(ellipse 80% 60% at 15% 20%, rgba(180,140,90,0.07) 0%, transparent 70%) var(--color-warm-white-2);
+  background: #13100a;
   overflow: hidden;
 }
 
-/* Cinematic panel → Weekly: dark dissolve into cream */
-.weekly::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 180px;
-  background: linear-gradient(to bottom, #13100a, transparent);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Weekly → About Aaron: cream fades to dark */
+/* Section exit — fades into AboutAaron */
 .weekly::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100px;
+  height: 200px;
   background: linear-gradient(to bottom, transparent, #0a0a0a);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* Single-column content block */
-.weekly__content {
-  max-width: 860px;
-  padding: 6rem 2rem 4rem clamp(2rem, 8vw, 6rem);
+/* ─── Beat 1: Title card ─────────────────────────────────── */
+
+.weekly__title-card {
+  position: relative;
+  width: 100%;
+  background: #13100a;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  align-items: center;
 }
 
-.weekly__content .section-eyebrow {
-  margin-bottom: 1.5rem;
+/* Low-opacity texture image — depth without becoming a photograph */
+.weekly__tc-texture {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.weekly__tc-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 7rem 2rem 3rem;
+  max-width: 640px;
+  color: #ede8de;
+}
+
+/* Gradient dissolves title card into Beat 2 — no dead black gap */
+.weekly__tc-fade {
+  align-self: stretch;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, #13100a);
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.weekly__tc-eyebrow {
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 400ms ease, transform 650ms ease;
+}
+
+.weekly__tc-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.8vw, 4rem);
+  font-weight: 300;
+  color: #ede8de;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 500ms ease, transform 700ms ease;
+}
+
+.weekly__tc-subtext {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  color: rgba(237, 232, 222, 0.6);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 540px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 500ms ease, transform 700ms ease;
+}
+
+/* ─── Beat 2: Editorial two-column panel ─────────────────── */
+
+.weekly__editorial {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.weekly__editorial-text {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  padding: 5rem clamp(1.5rem, 4vw, 3rem) 5rem clamp(2rem, 8vw, 6rem);
+}
+
+.weekly__heading-block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+/* Warm-sand rule between heading and body copy */
+.weekly__rule {
+  width: 40px;
+  height: 1px;
+  background: rgba(180, 140, 90, 0.4);
+  border: none;
+  margin: 0 0 1.75rem 0;
+  flex-shrink: 0;
 }
 
 .weekly__body {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  margin-top: 2rem;
   margin-bottom: 2.5rem;
 }
 
@@ -58,106 +139,188 @@
 
 .weekly__btn {
   align-self: flex-start;
-  margin-top: 0.5rem;
 }
 
-/* Full-width bottom image */
-.weekly__bottom-img {
-  width: 100%;
-  height: 440px;
+.weekly__editorial-photo {
+  flex: 0 0 55%;
+  position: relative;
   overflow: hidden;
 }
 
-.weekly__bottom-img img {
+/* Portrait image at natural proportions — full composition visible */
+.weekly__editorial-photo img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+}
+
+/* Subtle gradient on left edge of photo — softens the column boundary */
+.weekly__editorial-photo-edge {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 80px;
+  background: linear-gradient(to right, rgba(13, 10, 8, 0.3), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ─── Beat 3: Full-width scene + overlaid quote ───────────── */
+
+.weekly__scene {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.weekly__scene-img {
+  display: block;
+  width: 100%;
+  height: clamp(480px, 60vh, 680px);
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .weekly__bottom-img img {
-    animation: kenBurns 24s ease-in-out infinite alternate;
-  }
+/* Quote overlaid on right portion of the image — editorial caption feel */
+.weekly__scene-quote {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38%;
+  background: rgba(13, 10, 8, 0.72);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  z-index: 1;
 }
 
-/* Plain serif quote below image */
-.weekly__quote {
-  padding: 2.5rem clamp(2rem, 8vw, 6rem) 4rem;
-}
-
-.weekly__quote blockquote {
+.weekly__quote-text {
   font-family: var(--font-serif);
-  font-size: clamp(1.15rem, 2.3vw, 1.44rem);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
   font-style: italic;
   font-weight: 400;
-  color: var(--color-dark);
+  color: #ede8de;
   line-height: 1.7;
-  margin-bottom: 0.6rem;
-  opacity: 0.78;
-  border-left: 2px solid rgba(180,140,90,0.4);
-  padding-left: 1.5rem;
+  margin: 0 0 0.75rem 0;
 }
 
-.weekly__quote cite {
-  font-size: 0.8rem;
-  color: var(--color-sand-dark);
-  letter-spacing: 0.06em;
-  font-style: normal;
+.weekly__quote-cite {
+  display: block;
+  font-size: 0.78rem;
+  color: rgba(237, 232, 222, 0.55);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.7;
+  font-style: normal;
 }
 
-@media (max-width: 900px) {
-  .weekly__bottom-img {
-    height: 320px;
-  }
+/* Fades scene bottom toward section exit */
+.weekly__scene-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, #13100a);
+  pointer-events: none;
+  z-index: 1;
 }
+
+/* ─── Responsive ─────────────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .weekly__body {
+  .weekly__tc-content {
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  .weekly__tc-title {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+  }
+
+  .weekly__tc-subtext {
     max-width: 90vw;
   }
 
-  .weekly__bottom-img img {
-    object-position: center top;
+  /* Beat 2: photo on top, text below */
+  .weekly__editorial {
+    flex-direction: column-reverse;
+  }
+
+  .weekly__editorial-text {
+    flex: none;
+    width: 100%;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .weekly__editorial-photo {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+  }
+
+  .weekly__editorial-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+
+  .weekly__editorial-photo-edge {
+    display: none;
+  }
+
+  /* Beat 3: quote moves below image */
+  .weekly__scene {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .weekly__scene-img {
+    position: relative;
+    height: clamp(280px, 55vw, 420px);
+    flex-shrink: 0;
+  }
+
+  .weekly__scene-quote {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    background: rgba(13, 10, 8, 0.92);
+    padding: 2rem 1.5rem;
+  }
+
+  .weekly__scene-fade {
+    display: none;
   }
 }
 
 @media (max-width: 560px) {
-  .weekly__content {
-    padding: 4rem 1.5rem 3rem;
-  }
-
-  .weekly__bottom-img {
-    height: max(50vw, 220px);
-  }
-
-  .weekly__quote {
-    padding: 2rem 1.5rem 3rem;
-  }
-
-  .weekly__quote blockquote {
-    font-size: 1.09rem;
+  .weekly__tc-content {
+    padding: 4rem 1.5rem 2.5rem;
   }
 }
 
 @media (max-width: 360px) {
-  .weekly__content {
+  .weekly__tc-content {
     padding: 3.5rem 1.25rem 2.5rem;
   }
 
-  .weekly__bottom-img {
-    height: max(50vw, 180px);
-  }
-
-  .weekly__quote {
-    padding: 1.75rem 1.25rem 2.5rem;
+  .weekly__editorial-text {
+    padding: 2.5rem 1.25rem 3rem;
   }
 }
 
 @media (max-height: 520px) and (orientation: landscape) {
-  .weekly__bottom-img {
-    height: 70vw;
+  .weekly__scene-img {
+    height: 60vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly__tc-eyebrow,
+  .weekly__tc-title,
+  .weekly__tc-subtext {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

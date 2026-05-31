@@ -1,6 +1,8 @@
 .beach {
+  position: relative;
   background-color: #0a0a0a;
   overflow: hidden;
+  margin-top: -12vh;
 }
 
 /* Video panel — full bleed, seamless from BeachTitleCard above */
@@ -9,22 +11,6 @@
   height: 72vh;
   min-height: 460px;
   overflow: hidden;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: transform 900ms ease-out, opacity 900ms ease-out;
-}
-
-.beach__video-wrap--visible {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .beach__video-wrap {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
 }
 
 .beach__video {
@@ -37,12 +23,48 @@
 .beach__video-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(19, 16, 10, 0.55) 0%,
-    rgba(19, 16, 10, 0.2) 40%,
-    rgba(19, 16, 10, 0.62) 100%
-  );
+  background:
+    linear-gradient(to left, rgba(10, 10, 10, 0.82) 0%, transparent 14%),
+    linear-gradient(
+      180deg,
+      rgba(19, 16, 10, 0.35) 0%,
+      rgba(19, 16, 10, 0.08) 40%,
+      rgba(19, 16, 10, 0.5) 100%
+    );
+}
+
+.beach__mute-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 3;
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(237, 232, 222, 0.15);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(237, 232, 222, 0.75);
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.beach__mute-btn:hover {
+  background: rgba(10, 10, 10, 0.75);
+  color: rgba(237, 232, 222, 1);
+}
+
+.beach__mute-btn:focus-visible {
+  outline: 2px solid rgba(237, 232, 222, 0.5);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beach__mute-btn {
+    transition: none;
+  }
 }
 
 .beach__video-wrap::before {
@@ -51,7 +73,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 200px;
+  height: 280px;
   background: linear-gradient(to bottom, #0a0a0a 0%, transparent 100%);
   z-index: 2;
   pointer-events: none;
@@ -69,7 +91,8 @@
 .beach__lines {
   position: relative;
   background-color: #0a0a0a;
-  padding: 5rem 0 6rem clamp(2rem, 10vw, 8rem);
+  overflow: hidden;
+  padding: 5rem 0 8rem clamp(2rem, 10vw, 8rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -88,7 +111,7 @@
 
 @media (max-width: 768px) {
   .beach__lines {
-    padding: 5rem 1.5rem 6rem;
+    padding: 5rem 1.5rem 8rem;
   }
 }
 
@@ -99,7 +122,7 @@
   }
 
   .beach__lines {
-    padding: 3.5rem 1.5rem 4rem;
+    padding: 3.5rem 1.5rem 6rem;
   }
 }
 

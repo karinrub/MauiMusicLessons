@@ -18,6 +18,8 @@ interface ScrollLineProps {
   size?: 'xl' | 'lg' | 'md'
   weight?: 300 | 400
   color?: string
+  activeColor?: string
+  minOpacity?: number
 }
 
 export default function ScrollLine({
@@ -27,16 +29,21 @@ export default function ScrollLine({
   size = 'xl',
   weight = 300,
   color = 'var(--color-dark)',
+  activeColor,
+  minOpacity,
 }: ScrollLineProps) {
   const spanRef = useRef<HTMLSpanElement>(null)
   const isBodyCopyRef = useRef<boolean | null>(null)
+  const isActiveRef = useRef(false)
 
   useScrollY(() => {
     const span = spanRef.current
     if (!span) return
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      span.style.transition = 'none'
       span.style.opacity = '1'
+      span.style.color = activeColor || color
       span.style.transform = 'none'
       span.style.filter = 'none'
       return
@@ -54,8 +61,24 @@ export default function ScrollLine({
     const exitEnd = Math.min(1, exitAt + 0.216)
 
     const rawOp = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
-    const op = progress < enterStart ? 0.12 : rawOp
+    const op = minOpacity !== undefined
+      ? Math.max(minOpacity, rawOp)
+      : (progress < enterStart ? 0.12 : rawOp)
     span.style.opacity = op.toFixed(4)
+
+    if (activeColor) {
+      const isNowActive = op > 0.5
+      if (isNowActive !== isActiveRef.current) {
+        isActiveRef.current = isNowActive
+        if (isNowActive) {
+          span.style.transition = 'color 500ms ease-out, opacity 500ms ease-out, filter 400ms ease-in-out'
+          span.style.color = activeColor
+        } else {
+          span.style.transition = 'color 700ms ease-in, opacity 700ms ease-in, filter 400ms ease-in-out'
+          span.style.color = color
+        }
+      }
+    }
 
     let ty = 0
     let blur = 0
@@ -89,7 +112,9 @@ export default function ScrollLine({
           letterSpacing: '-0.02em',
           opacity: 0,
           willChange: 'transform, opacity',
-          transition: 'opacity 600ms ease-in-out, filter 400ms ease-in-out',
+          transition: activeColor
+            ? 'color 700ms ease-in, opacity 700ms ease-in, filter 400ms ease-in-out'
+            : 'opacity 600ms ease-in-out, filter 400ms ease-in-out',
         }}
       >
         {children}

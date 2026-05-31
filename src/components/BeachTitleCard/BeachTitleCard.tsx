@@ -15,7 +15,7 @@ export default function BeachTitleCard() {
     if (prefersReducedMotion) return
 
     const refs = [eyebrowRef.current, titleRef.current, subtextRef.current]
-    const delays = [0, 120, 280]
+    const delays = [0, 80, 180]
     const timeouts: ReturnType<typeof setTimeout>[] = []
     let triggered = false
 
@@ -25,10 +25,13 @@ export default function BeachTitleCard() {
       observer.disconnect()
       refs.forEach((el, i) => {
         if (!el) return
-        const t = setTimeout(() => { el.style.opacity = '1' }, delays[i])
+        const t = setTimeout(() => {
+          el.style.opacity = '1'
+          el.style.transform = 'translateY(0)'
+        }, delays[i])
         timeouts.push(t)
       })
-    }, { threshold: 0.1 })
+    }, { threshold: 0.05 })
 
     observer.observe(section)
 
@@ -43,13 +46,13 @@ export default function BeachTitleCard() {
       <div className="beach-title-card__gradient" aria-hidden="true" />
       <div className="beach-title-card__content">
         <p ref={eyebrowRef} className="section-eyebrow section-eyebrow--light beach-title-card__eyebrow">
-          For Visitors
+          Kihei, Maui
         </p>
         <h2 ref={titleRef} id="beach-title-heading" className="beach-title-card__title">
           Ukulele by the Beach
         </h2>
         <p ref={subtextRef} className="beach-title-card__subtext">
-          The perfect addition to your Maui trip. One hour, one song, one memory you won't forget.
+          One hour, one song, one memory the island makes with you.
         </p>
       </div>
     </section>

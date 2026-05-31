@@ -9,8 +9,16 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [overDark, setOverDark] = useState(false)
 
+  useEffect(() => {
+    const revealTimer = window.setTimeout(() => {
+      setVisible(true)
+    }, 360)
+
+    return () => window.clearTimeout(revealTimer)
+  }, [])
+
   useScrollY(() => {
-    setScrolled(window.scrollY > 60)
+    setScrolled(window.scrollY > window.innerHeight * 0.85)
     if (window.scrollY > window.innerHeight * 0.6) setVisible(true)
   })
 
