@@ -6,9 +6,11 @@ import './CinematicEntry.css'
 interface CinematicEntryProps {
   lines: string[]
   imageSrc?: string
+  imageWidth?: number
+  imageHeight?: number
 }
 
-export default function CinematicEntry({ lines, imageSrc }: CinematicEntryProps) {
+export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeight }: CinematicEntryProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const lineRefs = useRef<(HTMLSpanElement | null)[]>([])
   const imageRef = useRef<HTMLImageElement>(null)
@@ -40,8 +42,8 @@ export default function CinematicEntry({ lines, imageSrc }: CinematicEntryProps)
       if (imageRef.current) {
         const imgOp = progress < 0.14
           ? (progress / 0.14) * 0.13
-          : progress > 0.92
-            ? Math.max(0, 1 - (progress - 0.92) / 0.08) * 0.13
+          : progress > 0.86
+            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.13
             : 0.13
         imageRef.current.style.opacity = imgOp.toFixed(4)
       }
@@ -51,7 +53,7 @@ export default function CinematicEntry({ lines, imageSrc }: CinematicEntryProps)
 
         const enterStart = entryPoints[i]
         const enterEnd = enterStart + 0.28
-        const exitStart = 0.9
+        const exitStart = 0.84
         const exitEnd = 1
         const op = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
 
@@ -95,7 +97,10 @@ export default function CinematicEntry({ lines, imageSrc }: CinematicEntryProps)
           src={imageSrc}
           alt=""
           aria-hidden="true"
+          width={imageWidth}
+          height={imageHeight}
           loading="lazy"
+          decoding="async"
           className="cinematic-entry__image"
         />
       )}

@@ -78,6 +78,100 @@ input, textarea, select {
   /* inherits 50%-opacity currentColor from parent section text */
 }
 
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.9rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background-color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.38s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+  transition-duration: 0.08s;
+}
+
+.btn--primary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  color: #fff;
+  box-shadow: none;
+}
+
+.btn--primary:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--color-dark);
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: rgba(255, 246, 232, 0.82);
+  border: none;
+  padding: 0.85rem 0.2rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  font-weight: 400;
+  box-shadow: none;
+  position: relative;
+  width: fit-content;
+}
+
+.btn--ghost:hover {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.96);
+  box-shadow: none;
+}
+
+.btn--ghost::after {
+  content: '';
+  position: absolute;
+  left: 0.2rem;
+  right: 0.2rem;
+  bottom: 0.62rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.36;
+  transform: scaleX(0.72);
+  transform-origin: left;
+  transition:
+    opacity 0.38s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn--ghost:hover::after {
+  opacity: 0.72;
+  transform: scaleX(1);
+}
+
+.btn--dark {
+  background-color: var(--color-dark);
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.btn--dark:hover {
+  background-color: #1a1008;
+  box-shadow: 0 8px 24px rgba(44, 36, 24, 0.28);
+}
+
 /* Film grain overlay — animated SVG feTurbulence, shifts every frame */
 .grain {
   position: fixed;
@@ -103,6 +197,10 @@ input, textarea, select {
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  .btn {
+    transition: none;
+  }
 
   .cinematic-panel__text {
     opacity: 1 !important;

@@ -47,6 +47,8 @@ export default function BeachLessons() {
           ref={videoRef}
           className="beach__video"
           src={publicAsset('/videos/aaron-ukelele-vid.mp4')}
+          width="1920"
+          height="1080"
           autoPlay
           muted
           loop
@@ -71,7 +73,7 @@ export default function BeachLessons() {
         <ScrollLine size="lg" weight={300} delay={0.32} exitAt={0.65} activeColor="#F5EFE4" minOpacity={0.15}>
           {lines[1]}
         </ScrollLine>
-        <ScrollLine size="lg" weight={400} delay={0.55} exitAt={0.87} activeColor="#F5EFE4" minOpacity={0.15}>
+        <ScrollLine size="lg" weight={400} delay={0.55} exitAt={0.96} activeColor="#F5EFE4" minOpacity={0.15}>
           {lines[2]}
         </ScrollLine>
       </div>

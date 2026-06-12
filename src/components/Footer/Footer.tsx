@@ -17,6 +17,9 @@ export default function Footer() {
         </div>
 
         <nav className="footer__nav" aria-label="Footer navigation">
+          <button onClick={() => scrollToSection('maui-music-lessons')}>
+            Maui Music Lessons
+          </button>
           <button onClick={() => scrollToSection('beach-lessons')}>
             Beach Lessons
           </button>

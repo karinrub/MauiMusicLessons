@@ -7,6 +7,7 @@ import BeachTitleCard from './components/BeachTitleCard/BeachTitleCard'
 import WeeklyLessons from './components/WeeklyLessons/WeeklyLessons'
 import AboutAaron from './components/AboutAaron/AboutAaron'
 import BookingSection from './components/BookingSection/BookingSection'
+import SeoContent from './components/SeoContent/SeoContent'
 import Footer from './components/Footer/Footer'
 import { publicAsset } from './utils/assets'
 
@@ -22,9 +23,9 @@ const PANEL_2_LINES = [
 ]
 
 const PANEL_3_LINES = [
-  'Every week,',
-  'a little further',
-  'into the music.',
+  'You live on Maui.',
+  'The music can stay with you.',
+  'Week after week.',
 ]
 
 function Grain() {
@@ -50,24 +51,37 @@ function App() {
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}
-          height="150vh"
+          height="200vh"
           className="cinematic-panel--beach-entry"
-          entryStart={0.02}
+          image={publicAsset('/images/aaron-pause.jpg')}
+          imageWidth={2200}
+          imageHeight={1467}
+          imageRestOpacity={0.28}
+          imageExitOpacity={0.08}
+          entryStart={0.04}
         />
         <BeachTitleCard />
         <BeachLessons />
         <CinematicPanel
           lines={PANEL_3_LINES}
-          height="250vh"
+          height="200vh"
+          className="cinematic-panel--weekly-entry"
           image={publicAsset('/images/aaron-playing-1.jpg')}
-          entryStart={0.22}
+          imageWidth={2200}
+          imageHeight={1467}
+          imageRestOpacity={0.30}
+          imageExitOpacity={0.10}
+          entryStart={0.05}
         />
         <WeeklyLessons />
         <AboutAaron />
         <CinematicEntry
           lines={PANEL_2_LINES}
           imageSrc={publicAsset('/images/aaron-onlyMe.jpg')}
+          imageWidth={2200}
+          imageHeight={1467}
         />
+        <SeoContent />
         <BookingSection />
       </main>
       <Footer />

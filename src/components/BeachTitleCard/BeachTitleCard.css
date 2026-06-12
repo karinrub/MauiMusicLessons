@@ -1,13 +1,13 @@
 .beach-title-card {
   position: relative;
   z-index: 2;
-  height: 52vh;
-  margin-top: -42vh;
+  height: 90vh;
+  margin-top: -36vh;
   background: linear-gradient(
     to bottom,
     rgba(10, 10, 10, 0) 0%,
-    rgba(10, 10, 10, 0.72) 44%,
-    rgba(10, 10, 10, 0) 100%
+    rgba(10, 10, 10, 0.44) 42%,
+    rgba(10, 10, 10, 0.08) 100%
   );
   display: flex;
   align-items: center;
@@ -15,12 +15,24 @@
   overflow: hidden;
 }
 
+.beach-title-card__texture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: 64% center;
+  opacity: 0.08;
+  pointer-events: none;
+  transform: scale(1.04);
+  filter: saturate(0.85) contrast(0.9);
+}
+
 .beach-title-card__gradient {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
+  height: 44%;
   background: linear-gradient(to bottom, transparent, rgba(180, 140, 90, 0.08));
   pointer-events: none;
   z-index: 0;
@@ -33,13 +45,16 @@
   max-width: 640px;
   padding: 0 2rem;
   color: #ede8de;
+  opacity: 0.2;
+  transform: translateY(12px) scale(0.72);
+  transform-origin: center;
+  filter: blur(7px);
+  will-change: transform, opacity, filter;
 }
 
 .beach-title-card__eyebrow {
   justify-content: center;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 400ms ease, transform 650ms ease;
+  opacity: 1;
 }
 
 .beach-title-card__title {
@@ -48,11 +63,9 @@
   font-weight: 300;
   color: #ede8de;
   line-height: 1.16;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.075em;
   margin-bottom: 1.25rem;
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 500ms ease, transform 700ms ease;
+  will-change: letter-spacing;
 }
 
 .beach-title-card__subtext {
@@ -60,15 +73,13 @@
   color: rgba(237, 232, 222, 0.6);
   line-height: 1.7;
   font-weight: 300;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 500ms ease, transform 700ms ease;
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
   .beach-title-card {
-    height: 46vh;
-    margin-top: -36vh;
+    height: 72vh;
+    margin-top: -32vh;
   }
 
   .beach-title-card__content {
@@ -87,11 +98,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .beach-title-card__eyebrow,
-  .beach-title-card__title,
-  .beach-title-card__subtext {
+  .beach-title-card__content {
     opacity: 1;
     transform: none;
-    transition: none;
+    filter: none;
+  }
+
+  .beach-title-card__title {
+    letter-spacing: -0.025em;
   }
 }

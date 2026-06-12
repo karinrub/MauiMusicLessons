@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { CSSProperties, PointerEvent } from 'react'
+import type { CSSProperties, KeyboardEvent, PointerEvent } from 'react'
 import { publicAsset } from '../../utils/assets'
 import './AboutAaron.css'
 
@@ -149,6 +149,39 @@ export default function AboutAaron() {
     updateProgressFromPointer(event)
   }
 
+  const selectChapter = (chapter: number) => {
+    const nextChapter = Math.min(chapterMaxIndex, Math.max(0, chapter))
+    const nextProgress = progressForChapter(nextChapter)
+
+    hasInteractedRef.current = true
+    if (hintDelayRef.current) clearTimeout(hintDelayRef.current)
+    if (hintEndRef.current) clearTimeout(hintEndRef.current)
+    setIsHinting(false)
+    activeChapterRef.current = nextChapter
+    dragProgressRef.current = nextProgress
+    setActiveChapter(nextChapter)
+    setDragProgress(nextProgress)
+  }
+
+  const handleRailKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const incrementKeys = ['ArrowRight', 'ArrowUp', 'PageUp']
+    const decrementKeys = ['ArrowLeft', 'ArrowDown', 'PageDown']
+
+    if (incrementKeys.includes(event.key)) {
+      event.preventDefault()
+      selectChapter(activeChapterRef.current + 1)
+    } else if (decrementKeys.includes(event.key)) {
+      event.preventDefault()
+      selectChapter(activeChapterRef.current - 1)
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      selectChapter(0)
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      selectChapter(chapterMaxIndex)
+    }
+  }
+
   const finishDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (!isDragging) return
 
@@ -174,6 +207,10 @@ export default function AboutAaron() {
             className={`about__background${index === activeChapter ? ' about__background--active' : ''}`}
             src={chapter.image}
             alt=""
+            width="2200"
+            height="1467"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
             draggable="false"
           />
         ))}
@@ -196,6 +233,14 @@ export default function AboutAaron() {
         }}
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
+        onKeyDown={handleRailKeyDown}
+        role="slider"
+        tabIndex={0}
+        aria-label="About Aaron chapter"
+        aria-valuemin={0}
+        aria-valuemax={chapterMaxIndex}
+        aria-valuenow={activeChapter}
+        aria-valuetext={chapters[activeChapter].title}
         style={{ '--about-drag-progress': dragProgress } as CSSProperties}
       >
         <div className="about__rail-line" />

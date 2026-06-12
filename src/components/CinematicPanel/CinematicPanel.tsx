@@ -9,6 +9,8 @@ interface CinematicPanelProps {
   height?: string
   image?: string
   imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
   className?: string
   imageRestOpacity?: number
   imageExitOpacity?: number
@@ -20,6 +22,8 @@ export default function CinematicPanel({
   height = '270vh',
   image,
   imageAlt = '',
+  imageWidth,
+  imageHeight,
   className = '',
   imageRestOpacity = 0.13,
   imageExitOpacity = 0,
@@ -56,7 +60,9 @@ export default function CinematicPanel({
     const imgEl = imageRef.current
     if (imgEl) {
       let imgOp = 0
-      if (progress < 0.78) {
+      if (progress < 0.15) {
+        imgOp = easeOutCubic(progress / 0.15) * imageRestOpacity
+      } else if (progress < 0.78) {
         imgOp = imageRestOpacity
       } else {
         const exitProgress = Math.min(1, (progress - 0.78) / 0.22)
@@ -73,8 +79,8 @@ export default function CinematicPanel({
 
       const enterStart = entryPoints[i]
       const enterEnd = enterStart + 0.18
-      const exitStart = 0.76
-      const exitEnd = 0.93
+      const exitStart = 0.8
+      const exitEnd = 0.96
 
       const op = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
       el.style.opacity = op.toFixed(4)
@@ -110,7 +116,10 @@ export default function CinematicPanel({
             src={image}
             alt={imageAlt}
             aria-hidden="true"
+            width={imageWidth}
+            height={imageHeight}
             loading="lazy"
+            decoding="async"
             className="cinematic-panel__image"
           />
         )}

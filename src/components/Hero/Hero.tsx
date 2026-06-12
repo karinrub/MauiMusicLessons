@@ -22,7 +22,8 @@ export default function Hero() {
     const img = imgRef.current
     const content = contentRef.current
     if (img) {
-      img.style.transform = `translateY(${(sy * 0.36).toFixed(2)}px)`
+      const imageDrift = Math.min(vh * 0.08, sy * 0.08)
+      img.style.transform = `translateY(${imageDrift.toFixed(2)}px)`
     }
     if (content) {
       const ty = sy * 0.18
@@ -32,8 +33,8 @@ export default function Hero() {
     }
     const veil = veilRef.current
     if (veil) {
-      const veilProgress = Math.max(0, Math.min(1, sy / (heroHeight * 0.88)))
-      veil.style.opacity = (easeOutCubic(veilProgress) * 0.88).toFixed(4)
+      const veilProgress = Math.max(0, Math.min(1, (sy - vh * 0.16) / (heroHeight - vh * 0.16)))
+      veil.style.opacity = easeOutCubic(veilProgress).toFixed(4)
     }
   })
 
@@ -45,6 +46,10 @@ export default function Hero() {
             ref={imgRef}
             src={publicAsset('/images/aaron-beach-1.jpg')}
             alt="Aaron playing guitar on a Maui beach"
+            width="2200"
+            height="1467"
+            fetchPriority="high"
+            decoding="async"
             className="hero__bg"
           />
           <div className="hero__overlay" />
@@ -53,7 +58,7 @@ export default function Hero() {
         <div className="hero__content" ref={contentRef}>
           <p className="hero__eyebrow">Kihei, Maui · Hawaii</p>
           <h1 className="hero__headline">
-            <span className="hero__headline-line">Guitar &amp; Ukulele</span>
+            <span className="hero__headline-line">Guitar &amp; Ukulele </span>
             <span className="hero__headline-line">Lessons on Maui</span>
           </h1>
           <p className="hero__sub">

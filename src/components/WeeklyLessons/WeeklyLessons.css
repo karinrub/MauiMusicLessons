@@ -2,6 +2,10 @@
   position: relative;
   background: #13100a;
   overflow: hidden;
+  margin-top: -8vh;
+  margin-bottom: -14vh;
+  padding-top: 8vh;
+  z-index: 1;
 }
 
 /* Section exit — fades into AboutAaron */
@@ -11,8 +15,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 200px;
-  background: linear-gradient(to bottom, transparent, #0a0a0a);
+  height: 26vh;
+  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.92));
   pointer-events: none;
   z-index: 2;
 }
@@ -47,7 +51,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 7rem 2rem 3rem;
+  padding: 6rem 2rem 2.5rem;
   max-width: 640px;
   color: #ede8de;
 }
@@ -55,8 +59,8 @@
 /* Gradient dissolves title card into Beat 2 — no dead black gap */
 .weekly__tc-fade {
   align-self: stretch;
-  height: 100px;
-  background: linear-gradient(to bottom, transparent, #13100a);
+  height: 72px;
+  background: linear-gradient(to bottom, rgba(19, 16, 10, 0), #13100a);
   pointer-events: none;
   position: relative;
   z-index: 1;
@@ -66,8 +70,8 @@
 .weekly__tc-eyebrow {
   justify-content: center;
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 400ms ease, transform 650ms ease;
+  transform: translateY(10px);
+  transition: opacity 360ms ease, transform 540ms ease;
 }
 
 .weekly__tc-title {
@@ -79,8 +83,8 @@
   letter-spacing: -0.025em;
   margin-bottom: 1.25rem;
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 500ms ease, transform 700ms ease;
+  transform: translateY(14px);
+  transition: opacity 420ms ease, transform 620ms ease;
 }
 
 .weekly__tc-subtext {
@@ -90,8 +94,8 @@
   font-weight: 300;
   max-width: 540px;
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 500ms ease, transform 700ms ease;
+  transform: translateY(10px);
+  transition: opacity 480ms ease, transform 640ms ease;
 }
 
 /* ─── Beat 2: Editorial two-column panel ─────────────────── */
@@ -217,8 +221,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, #13100a);
+  height: 0;
+  background: none;
   pointer-events: none;
   z-index: 1;
 }
@@ -227,7 +231,7 @@
 
 @media (max-width: 768px) {
   .weekly__tc-content {
-    padding: 5rem 1.5rem 3rem;
+    padding: 4.5rem 1.5rem 2.5rem;
   }
 
   .weekly__tc-title {
@@ -295,13 +299,13 @@
 
 @media (max-width: 560px) {
   .weekly__tc-content {
-    padding: 4rem 1.5rem 2.5rem;
+    padding: 3.75rem 1.5rem 2.25rem;
   }
 }
 
 @media (max-width: 360px) {
   .weekly__tc-content {
-    padding: 3.5rem 1.25rem 2.5rem;
+    padding: 3.25rem 1.25rem 2.25rem;
   }
 
   .weekly__editorial-text {

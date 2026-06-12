@@ -25,8 +25,12 @@ export default function Navbar() {
   useEffect(() => {
     const darkElements = [
       ...Array.from(document.querySelectorAll<Element>('.cinematic-panel')),
+      document.querySelector('.hero-scroll-container'),
       document.querySelector('.beach-title-card'),
+      document.querySelector('#beach-lessons'),
       document.querySelector('.beach__lines'),
+      document.querySelector('.weekly'),
+      document.querySelector('.cinematic-entry'),
       document.querySelector('#about'),
       document.querySelector('#book'),
     ].filter((el): el is Element => el !== null)

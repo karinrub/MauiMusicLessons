@@ -1,12 +1,14 @@
 .cinematic-panel {
   position: relative;
-  background-color: #13100a;
+  background-color: #0e0b08;
 }
 
 .cinematic-panel--beach-entry {
   min-height: 100vh;
   min-height: 100svh;
-  background-color: #1a1410;
+  background-color: #0e0b08;
+  margin-top: -18vh;
+  z-index: 1;
 }
 
 .cinematic-panel__sticky {
@@ -19,21 +21,59 @@
   overflow: hidden;
 }
 
+.cinematic-panel--beach-entry .cinematic-panel__sticky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(14, 11, 8, 0.58), rgba(14, 11, 8, 0.18) 32%, rgba(14, 11, 8, 0) 62%),
+    radial-gradient(ellipse 84% 62% at 50% 42%, transparent 0%, rgba(14, 11, 8, 0.18) 82%);
+}
+
 .cinematic-panel--beach-entry .cinematic-panel__sticky::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 34vh;
+  height: 22vh;
   z-index: 1;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgba(26, 20, 16, 0),
-    rgba(26, 20, 16, 0.5) 64%,
-    rgba(10, 10, 10, 0.82) 100%
+    rgba(22, 17, 12, 0.24) 58%,
+    rgba(10, 10, 10, 0.56) 100%
   );
+}
+
+/* Weekly-entry panel — centered, smaller type, top veil from beach exit */
+
+.cinematic-panel--weekly-entry .cinematic-panel__lines {
+  padding: 0 clamp(2rem, 15vw, 22rem);
+  text-align: center;
+}
+
+.cinematic-panel--weekly-entry .cinematic-panel__text {
+  font-size: clamp(1.6rem, 3.8vw, 3.2rem);
+}
+
+.cinematic-panel--weekly-entry .cinematic-panel__line:last-child .cinematic-panel__text {
+  color: var(--color-sand-light);
+}
+
+.cinematic-panel--weekly-entry .cinematic-panel__sticky::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.92), transparent);
 }
 
 /* Ambient photographic layer — barely visible, creates depth */
@@ -56,15 +96,15 @@
   object-position: center 30%;
   mask-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.94) 58%,
-    rgba(0, 0, 0, 0.72) 100%
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.94) 54%,
+    rgba(0, 0, 0, 0.78) 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.94) 58%,
-    rgba(0, 0, 0, 0.72) 100%
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.94) 54%,
+    rgba(0, 0, 0, 0.78) 100%
   );
 }
 
@@ -76,8 +116,8 @@
 }
 
 .cinematic-panel--beach-entry .cinematic-panel__lines {
-  padding: 14vh 8vw;
-  z-index: 2;
+  padding: 18vh 8vw 12vh;
+  z-index: 3;
 }
 
 .cinematic-panel__line {

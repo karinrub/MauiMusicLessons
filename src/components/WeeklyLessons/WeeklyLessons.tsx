@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
 import { scrollToSection } from '../../utils/animation'
 import { publicAsset } from '../../utils/assets'
+import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
 import './WeeklyLessons.css'
 
 export default function WeeklyLessons() {
@@ -10,38 +11,7 @@ export default function WeeklyLessons() {
   const tcTitleRef = useRef<HTMLHeadingElement>(null)
   const subtextRef = useRef<HTMLParagraphElement>(null)
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const card = cardRef.current
-    if (!card) return
-    if (prefersReducedMotion) return
-
-    const refs = [eyebrowRef.current, tcTitleRef.current, subtextRef.current]
-    const delays = [0, 80, 180]
-    const timeouts: ReturnType<typeof setTimeout>[] = []
-    let triggered = false
-
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || triggered) return
-      triggered = true
-      observer.disconnect()
-      refs.forEach((el, i) => {
-        if (!el) return
-        const t = setTimeout(() => {
-          el.style.opacity = '1'
-          el.style.transform = 'translateY(0)'
-        }, delays[i])
-        timeouts.push(t)
-      })
-    }, { threshold: 0.05 })
-
-    observer.observe(card)
-
-    return () => {
-      observer.disconnect()
-      timeouts.forEach(clearTimeout)
-    }
-  }, [])
+  useStaggeredReveal(cardRef, [eyebrowRef, tcTitleRef, subtextRef])
 
   return (
     <section className="weekly" id="weekly-lessons" aria-labelledby="weekly-title-heading">
@@ -101,19 +71,25 @@ export default function WeeklyLessons() {
           <img
             src={publicAsset('/images/aaron-teaching-1.jpg')}
             alt="Aaron sitting on a green beach bench, smiling and holding a mint green ukulele, with a coastal tree canopy above him and the ocean visible behind"
+            width="1467"
+            height="2200"
             loading="lazy"
+            decoding="async"
           />
         </div>
       </div>
 
       {/* Beat 3 — Full-width photograph with overlaid quote */}
       <div className="weekly__scene">
-        <img
-          src={publicAsset('/images/aaron-weekly-1.jpg')}
-          alt="Aaron and a young student sitting on a park bench, both playing ukulele and facing each other"
-          loading="lazy"
-          className="weekly__scene-img"
-        />
+          <img
+            src={publicAsset('/images/aaron-weekly-1.jpg')}
+            alt="Aaron and a young student sitting on a park bench, both playing ukulele and facing each other"
+            width="720"
+            height="960"
+            loading="lazy"
+            decoding="async"
+            className="weekly__scene-img"
+          />
         <div className="weekly__scene-quote">
           <blockquote className="weekly__quote-text">
             "You don't need talent. You need curiosity and a little consistency."
