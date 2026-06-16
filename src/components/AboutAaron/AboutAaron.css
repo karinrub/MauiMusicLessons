@@ -54,6 +54,13 @@
   );
 }
 
+.about__foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  will-change: opacity;
+}
+
 .about__content {
   position: absolute;
   z-index: 3;

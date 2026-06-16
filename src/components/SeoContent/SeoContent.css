@@ -41,6 +41,12 @@
   color: #ede8de;
 }
 
+.seo-content__entrance {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 500ms cubic-bezier(0.33, 1, 0.68, 1), transform 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
 .seo-content__intro p {
   max-width: 62ch;
   margin-bottom: 1.1rem;

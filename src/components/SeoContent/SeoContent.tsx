@@ -1,4 +1,6 @@
+import { useRef } from 'react'
 import { scrollToSection } from '../../utils/animation'
+import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
 import './SeoContent.css'
 
 const serviceAreas = [
@@ -41,12 +43,17 @@ const faqs = [
 ]
 
 export default function SeoContent() {
+  const introRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  useStaggeredReveal(introRef, [headingRef], [0], 0.1)
+
   return (
     <section className="seo-content" id="maui-music-lessons" aria-labelledby="seo-content-heading">
       <div className="seo-content__inner">
-        <div className="seo-content__intro">
+        <div className="seo-content__intro" ref={introRef}>
           <p className="section-eyebrow">Maui Music Lessons</p>
-          <h2 id="seo-content-heading">Guitar and Ukulele Lessons on Maui</h2>
+          <h2 id="seo-content-heading" ref={headingRef} className="seo-content__entrance">Guitar and Ukulele Lessons on Maui</h2>
           <p>
             Aaron Grzanich teaches private music lessons on Maui for visitors, locals, families,
             couples, and beginners. Lessons are available for guitar and ukulele, with beach

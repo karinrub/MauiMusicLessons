@@ -6,7 +6,7 @@
   z-index: 1;
 }
 
-/* Video panel — full bleed, seamless from BeachTitleCard above */
+/* Video panel — full bleed, arrives as release from CinematicPanel above */
 .beach__video-wrap {
   position: relative;
   height: 84vh;

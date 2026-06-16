@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent, PointerEvent } from 'react'
 import { publicAsset } from '../../utils/assets'
+import { useScrollY } from '../../hooks/useScrollY'
+import { easeOutCubic } from '../../utils/animation'
+import { viewportProgress } from '../../utils/scroll'
 import './AboutAaron.css'
 
 const chapters = [
@@ -54,6 +57,8 @@ export default function AboutAaron() {
   const [isHinting, setIsHinting] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
 
+  const sectionRef = useRef<HTMLElement>(null)
+  const foregroundRef = useRef<HTMLDivElement>(null)
   const railRef = useRef<HTMLDivElement>(null)
   const activeChapterRef = useRef(0)
   const dragProgressRef = useRef(0)
@@ -72,6 +77,24 @@ export default function AboutAaron() {
     mq.addEventListener('change', update)
     return () => mq.removeEventListener('change', update)
   }, [])
+
+  // Releases About's text/rail attention as the section exits, ahead of CinematicEntry's
+  // first line establishing itself — see TRANSITION_EXECUTION_PLAN.md Task 2.1.
+  useScrollY(() => {
+    const foreground = foregroundRef.current
+    if (!foreground) return
+
+    if (reducedMotion) {
+      foreground.style.opacity = '1'
+      return
+    }
+
+    const section = sectionRef.current
+    if (!section) return
+
+    const exitProgress = viewportProgress(section, -0.15, -0.65)
+    foreground.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
+  })
 
   useEffect(() => {
     activeChapterRef.current = activeChapter
@@ -107,17 +130,41 @@ export default function AboutAaron() {
   }, [activeChapter, reducedMotion])
 
   useEffect(() => {
-    if (reducedMotion || hintHasRunRef.current) return
+    if (reducedMotion) return
+    const section = sectionRef.current
+    if (!section) return
 
-    hintDelayRef.current = setTimeout(() => {
-      if (hasInteractedRef.current || hintHasRunRef.current) return
-      hintHasRunRef.current = true
-      setIsHinting(true)
-      hintEndRef.current = setTimeout(() => setIsHinting(false), 1000)
-    }, 1200)
+    const clearPendingHint = () => {
+      if (hintDelayRef.current) {
+        clearTimeout(hintDelayRef.current)
+        hintDelayRef.current = null
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (hasInteractedRef.current || hintHasRunRef.current || hintDelayRef.current) return
+          hintDelayRef.current = setTimeout(() => {
+            hintDelayRef.current = null
+            if (hasInteractedRef.current) return
+            hintHasRunRef.current = true
+            setIsHinting(true)
+            hintEndRef.current = setTimeout(() => setIsHinting(false), 1000)
+          }, 700)
+        } else {
+          clearPendingHint()
+          if (!hasInteractedRef.current) hintHasRunRef.current = false
+        }
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(section)
 
     return () => {
-      if (hintDelayRef.current) clearTimeout(hintDelayRef.current)
+      observer.disconnect()
+      clearPendingHint()
       if (hintEndRef.current) clearTimeout(hintEndRef.current)
     }
   }, [reducedMotion])
@@ -199,7 +246,7 @@ export default function AboutAaron() {
   }
 
   return (
-    <section className="about" id="about">
+    <section ref={sectionRef} className="about" id="about">
       <div className="about__backgrounds" aria-hidden="true">
         {chapters.map((chapter, index) => (
           <img
@@ -218,42 +265,44 @@ export default function AboutAaron() {
 
       <div className="about__overlay" aria-hidden="true" />
 
-      <div className={`about__content${isTextVisible ? ' about__content--visible' : ''}`}>
-        <p className="section-eyebrow about__eyebrow">About Aaron</p>
-        <h2 className="about__title">{chapters[displayedChapter].title}</h2>
-        <p className="about__text">{chapters[displayedChapter].text}</p>
-      </div>
-
-      <div
-        ref={railRef}
-        className={`about__rail${isDragging ? ' about__rail--dragging' : ''}`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={(event) => {
-          if (isDragging) updateProgressFromPointer(event)
-        }}
-        onPointerUp={finishDrag}
-        onPointerCancel={finishDrag}
-        onKeyDown={handleRailKeyDown}
-        role="slider"
-        tabIndex={0}
-        aria-label="About Aaron chapter"
-        aria-valuemin={0}
-        aria-valuemax={chapterMaxIndex}
-        aria-valuenow={activeChapter}
-        aria-valuetext={chapters[activeChapter].title}
-        style={{ '--about-drag-progress': dragProgress } as CSSProperties}
-      >
-        <div className="about__rail-line" />
-        <div className="about__markers" aria-hidden="true">
-          {chapters.map((chapter) => (
-            <div className="about__marker" key={chapter.label}>
-              <span className="about__marker-tick" />
-              <span className="about__marker-label">{chapter.label}</span>
-            </div>
-          ))}
+      <div ref={foregroundRef} className="about__foreground">
+        <div className={`about__content${isTextVisible ? ' about__content--visible' : ''}`}>
+          <p className="section-eyebrow about__eyebrow">About Aaron</p>
+          <h2 className="about__title">{chapters[displayedChapter].title}</h2>
+          <p className="about__text">{chapters[displayedChapter].text}</p>
         </div>
-        <div className={`about__scrubber${isHinting ? ' about__scrubber--hint' : ''}`} aria-hidden="true">
-          <span className="about__scrubber-dot" />
+
+        <div
+          ref={railRef}
+          className={`about__rail${isDragging ? ' about__rail--dragging' : ''}`}
+          onPointerDown={handlePointerDown}
+          onPointerMove={(event) => {
+            if (isDragging) updateProgressFromPointer(event)
+          }}
+          onPointerUp={finishDrag}
+          onPointerCancel={finishDrag}
+          onKeyDown={handleRailKeyDown}
+          role="slider"
+          tabIndex={0}
+          aria-label="About Aaron chapter"
+          aria-valuemin={0}
+          aria-valuemax={chapterMaxIndex}
+          aria-valuenow={activeChapter}
+          aria-valuetext={chapters[activeChapter].title}
+          style={{ '--about-drag-progress': dragProgress } as CSSProperties}
+        >
+          <div className="about__rail-line" />
+          <div className="about__markers" aria-hidden="true">
+            {chapters.map((chapter) => (
+              <div className="about__marker" key={chapter.label}>
+                <span className="about__marker-tick" />
+                <span className="about__marker-label">{chapter.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className={`about__scrubber${isHinting ? ' about__scrubber--hint' : ''}`} aria-hidden="true">
+            <span className="about__scrubber-dot" />
+          </div>
         </div>
       </div>
     </section>

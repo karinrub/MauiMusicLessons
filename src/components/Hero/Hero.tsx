@@ -33,7 +33,7 @@ export default function Hero() {
     }
     const veil = veilRef.current
     if (veil) {
-      const veilProgress = Math.max(0, Math.min(1, (sy - vh * 0.16) / (heroHeight - vh * 0.16)))
+      const veilProgress = Math.max(0, Math.min(1, (sy - vh * 0.16) / (heroHeight * 0.6)))
       veil.style.opacity = easeOutCubic(veilProgress).toFixed(4)
     }
   })
@@ -49,7 +49,7 @@ export default function Hero() {
             width="2200"
             height="1467"
             fetchPriority="high"
-            decoding="async"
+            decoding="sync"
             className="hero__bg"
           />
           <div className="hero__overlay" />

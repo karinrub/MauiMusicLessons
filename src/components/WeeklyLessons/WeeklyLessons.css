@@ -15,7 +15,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 26vh;
+  height: 15vh;
   background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.92));
   pointer-events: none;
   z-index: 2;

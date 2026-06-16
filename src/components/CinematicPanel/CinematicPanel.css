@@ -7,7 +7,7 @@
   min-height: 100vh;
   min-height: 100svh;
   background-color: #0e0b08;
-  margin-top: -18vh;
+  margin-top: -51vh;
   z-index: 1;
 }
 
@@ -49,7 +49,12 @@
   );
 }
 
-/* Weekly-entry panel — centered, smaller type, top veil from beach exit */
+/* Weekly-entry panel — centered, smaller type, quieter weight than beach-entry */
+
+.cinematic-panel--weekly-entry {
+  margin-top: -20vh;
+  z-index: 1;
+}
 
 .cinematic-panel--weekly-entry .cinematic-panel__lines {
   padding: 0 clamp(2rem, 15vw, 22rem);

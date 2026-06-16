@@ -3,7 +3,6 @@ import Hero from './components/Hero/Hero'
 import CinematicPanel from './components/CinematicPanel/CinematicPanel'
 import CinematicEntry from './components/CinematicEntry/CinematicEntry'
 import BeachLessons from './components/BeachLessons/BeachLessons'
-import BeachTitleCard from './components/BeachTitleCard/BeachTitleCard'
 import WeeklyLessons from './components/WeeklyLessons/WeeklyLessons'
 import AboutAaron from './components/AboutAaron/AboutAaron'
 import BookingSection from './components/BookingSection/BookingSection'
@@ -23,9 +22,8 @@ const PANEL_2_LINES = [
 ]
 
 const PANEL_3_LINES = [
-  'You live on Maui.',
-  'The music can stay with you.',
-  'Week after week.',
+  'And if you live here —',
+  'the music can stay.',
 ]
 
 function Grain() {
@@ -51,7 +49,7 @@ function App() {
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}
-          height="200vh"
+          height="125vh"
           className="cinematic-panel--beach-entry"
           image={publicAsset('/images/aaron-pause.jpg')}
           imageWidth={2200}
@@ -60,17 +58,16 @@ function App() {
           imageExitOpacity={0.08}
           entryStart={0.04}
         />
-        <BeachTitleCard />
         <BeachLessons />
         <CinematicPanel
           lines={PANEL_3_LINES}
-          height="200vh"
+          height="115vh"
           className="cinematic-panel--weekly-entry"
           image={publicAsset('/images/aaron-playing-1.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.30}
-          imageExitOpacity={0.10}
+          imageRestOpacity={0.12}
+          imageExitOpacity={0.04}
           entryStart={0.05}
         />
         <WeeklyLessons />
