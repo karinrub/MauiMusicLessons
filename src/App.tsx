@@ -55,7 +55,7 @@ function App() {
           image={publicAsset('/images/aaron-pause.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.64}
+          imageRestOpacity={0.34}
           imageExitOpacity={0.4}
         />
         <BeachLessons />

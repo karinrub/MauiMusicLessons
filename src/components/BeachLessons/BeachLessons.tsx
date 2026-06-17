@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
 import { scrollToSection } from '../../utils/animation'
 import { publicAsset } from '../../utils/assets'
@@ -28,7 +28,6 @@ function UnmutedIcon() {
 export default function BeachLessons() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isMuted, setIsMuted] = useState(true)
-
   const cardRef = useRef<HTMLDivElement>(null)
   const eyebrowRef = useRef<HTMLParagraphElement>(null)
   const tcTitleRef = useRef<HTMLHeadingElement>(null)
@@ -39,8 +38,18 @@ export default function BeachLessons() {
   const toggleMute = () => {
     const video = videoRef.current
     if (!video) return
-    video.muted = !video.muted
-    setIsMuted(video.muted)
+
+    const nextMuted = !video.muted
+    video.muted = nextMuted
+    video.volume = nextMuted ? video.volume : 1
+    setIsMuted(nextMuted)
+
+    if (!nextMuted && video.paused) {
+      video.play().catch(() => {
+        video.muted = true
+        setIsMuted(true)
+      })
+    }
   }
 
   return (
@@ -76,7 +85,7 @@ export default function BeachLessons() {
           width="1920"
           height="1080"
           autoPlay
-          muted
+          muted={isMuted}
           loop
           playsInline
           preload="metadata"
@@ -84,9 +93,11 @@ export default function BeachLessons() {
         />
         <div className="beach__video-overlay" />
         <button
+          type="button"
           className="beach__mute-btn"
           onClick={toggleMute}
           aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          aria-pressed={!isMuted}
         >
           {isMuted ? <MutedIcon /> : <UnmutedIcon />}
         </button>
@@ -112,9 +123,11 @@ export default function BeachLessons() {
               Solo travelers who want something that belongs only to them, couples looking to learn a song together, families who didn't expect this to be the favorite part of the trip — Aaron has taught all of them.
             </ScrollLine>
           </div>
-          <button className="btn btn--dark beach__btn" onClick={() => scrollToSection('book')}>
-            Book a beach lesson
-          </button>
+          <div className="beach__cta">
+            <button className="btn btn--dark beach__btn" onClick={() => scrollToSection('book')}>
+              Book a beach lesson
+            </button>
+          </div>
         </div>
         <div className="beach__editorial-photo">
           <div className="beach__editorial-photo-edge" aria-hidden="true" />

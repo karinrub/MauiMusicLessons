@@ -167,6 +167,8 @@
   height: clamp(520px, 74vh, 780px);
   object-fit: cover;
   object-position: center 18%;
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Subtle gradient on left edge of photo — softens the column boundary */
