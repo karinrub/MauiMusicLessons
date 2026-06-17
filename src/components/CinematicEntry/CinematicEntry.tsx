@@ -32,7 +32,7 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
 
     const count = lines.length
     const spread = 0.28
-    const entryPoints = lines.map((_, i) => 0.08 + i * (spread / Math.max(count - 1, 1)))
+    const entryPoints = lines.map((_, i) => 0.04 + i * (spread / Math.max(count - 1, 1)))
 
     let rafId: number
 
@@ -41,10 +41,10 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
 
       if (imageRef.current) {
         const imgOp = progress < 0.14
-          ? (progress / 0.14) * 0.13
+          ? (progress / 0.14) * 0.18
           : progress > 0.86
-            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.13
-            : 0.13
+            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.18
+            : 0.18
         imageRef.current.style.opacity = imgOp.toFixed(4)
       }
 
@@ -52,7 +52,7 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
         if (!el) return
 
         const enterStart = entryPoints[i]
-        const enterEnd = enterStart + 0.28
+        const enterEnd = enterStart + 0.22
         const exitStart = 0.84
         const exitEnd = 1
         const op = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)

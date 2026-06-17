@@ -53,17 +53,17 @@ export default function ScrollLine({
       isBodyCopyRef.current = parseFloat(window.getComputedStyle(span).fontSize) < BODY_COPY_THRESHOLD_PX
     }
 
-    const progress = viewportProgress(span, 0.86, -0.08)
+    const progress = viewportProgress(span, 0.92, 0.12)
 
     const enterStart = delay
-    const enterEnd = delay + 0.32
+    const enterEnd = delay + 0.24
     const exitStart = exitAt
     const exitEnd = Math.min(1, exitAt + 0.216)
 
     const rawOp = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
     const op = minOpacity !== undefined
       ? Math.max(minOpacity, rawOp)
-      : (progress < enterStart ? 0.12 : rawOp)
+      : (progress < enterStart ? 0.24 : rawOp)
     span.style.opacity = op.toFixed(4)
 
     if (activeColor) {
@@ -86,8 +86,8 @@ export default function ScrollLine({
     if (progress <= enterEnd) {
       const p = Math.max(0, (progress - enterStart) / Math.max(0.001, enterEnd - enterStart))
       const ep = easeOutCubic(Math.min(1, p))
-      ty = (1 - ep) * 28
-      blur = isBodyCopyRef.current ? 0 : (1 - ep) * 3
+      ty = (1 - ep) * 18
+      blur = isBodyCopyRef.current ? 0 : (1 - ep) * 2
     } else if (progress >= exitStart) {
       const p = Math.min(1, (progress - exitStart) / Math.max(0.001, exitEnd - exitStart))
       const ep = easeOutCubic(p)
@@ -113,8 +113,8 @@ export default function ScrollLine({
           opacity: 0,
           willChange: 'transform, opacity',
           transition: activeColor
-            ? 'color 700ms ease-in, opacity 700ms ease-in, filter 400ms ease-in-out'
-            : 'opacity 600ms ease-in-out, filter 400ms ease-in-out',
+            ? 'color 520ms ease-in, opacity 440ms ease-in, filter 320ms ease-in-out'
+            : 'opacity 440ms ease-in-out, filter 320ms ease-in-out',
         }}
       >
         {children}

@@ -18,8 +18,8 @@ export default function Navbar() {
   }, [])
 
   useScrollY(() => {
-    setScrolled(window.scrollY > window.innerHeight * 0.85)
-    if (window.scrollY > window.innerHeight * 0.6) setVisible(true)
+    setScrolled(window.scrollY > window.innerHeight * 0.72)
+    if (window.scrollY > window.innerHeight * 0.48) setVisible(true)
   })
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Navbar() {
         else intersecting.delete(entry.target)
       })
       setOverDark(intersecting.size > 0)
-    }, { rootMargin: '0px 0px -95% 0px', threshold: 0 })
+    }, { rootMargin: '0px 0px -92% 0px', threshold: 0 })
 
     darkElements.forEach(el => darkObserver.observe(el))
     return () => darkObserver.disconnect()

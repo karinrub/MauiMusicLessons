@@ -2,9 +2,9 @@
   position: relative;
   background: #13100a;
   overflow: hidden;
-  margin-top: -8vh;
-  margin-bottom: -14vh;
-  padding-top: 8vh;
+  margin-top: -6vh;
+  margin-bottom: -8vh;
+  padding-top: 6vh;
   z-index: 1;
 }
 
@@ -15,8 +15,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 15vh;
-  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.92));
+  height: 10vh;
+  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.82));
   pointer-events: none;
   z-index: 2;
 }
@@ -39,7 +39,7 @@
   inset: 0;
   background-size: cover;
   background-position: center 30%;
-  opacity: 0.08;
+  opacity: 0.15;
   pointer-events: none;
   z-index: 0;
 }
@@ -51,7 +51,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 6rem 2rem 2.5rem;
+  padding: 4.75rem 2rem 2rem;
   max-width: 640px;
   color: #ede8de;
 }
@@ -59,7 +59,7 @@
 /* Gradient dissolves title card into Beat 2 — no dead black gap */
 .weekly__tc-fade {
   align-self: stretch;
-  height: 72px;
+  height: 52px;
   background: linear-gradient(to bottom, rgba(19, 16, 10, 0), #13100a);
   pointer-events: none;
   position: relative;
@@ -89,7 +89,7 @@
 
 .weekly__tc-subtext {
   font-size: clamp(0.9rem, 1.6vw, 1.05rem);
-  color: rgba(237, 232, 222, 0.6);
+  color: rgba(237, 232, 222, 0.7);
   line-height: 1.7;
   font-weight: 300;
   max-width: 540px;
@@ -107,10 +107,10 @@
 }
 
 .weekly__editorial-text {
-  flex: 0 0 45%;
+  flex: 0 0 48%;
   display: flex;
   flex-direction: column;
-  padding: 5rem clamp(1.5rem, 4vw, 3rem) 5rem clamp(2rem, 8vw, 6rem);
+  padding: 4.5rem clamp(1.5rem, 4vw, 3rem) 4.75rem clamp(2rem, 7vw, 5.5rem);
 }
 
 .weekly__heading-block {
@@ -132,21 +132,30 @@
 .weekly__body {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  margin-bottom: 2.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .weekly__body p {
-  line-height: 1.7;
-  opacity: 0.82;
+  line-height: 1.65;
+  opacity: 0.88;
 }
 
 .weekly__btn {
   align-self: flex-start;
+  background: var(--color-sand-light);
+  color: #21180f;
+  border: 1px solid rgba(232, 213, 190, 0.64);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+}
+
+.weekly__btn:hover {
+  background: #fff3df;
+  color: #160f08;
 }
 
 .weekly__editorial-photo {
-  flex: 0 0 55%;
+  flex: 0 0 52%;
   position: relative;
   overflow: hidden;
 }
@@ -155,7 +164,9 @@
 .weekly__editorial-photo img {
   display: block;
   width: 100%;
-  height: auto;
+  height: clamp(520px, 74vh, 780px);
+  object-fit: cover;
+  object-position: center 18%;
 }
 
 /* Subtle gradient on left edge of photo — softens the column boundary */
@@ -179,7 +190,7 @@
 .weekly__scene-img {
   display: block;
   width: 100%;
-  height: clamp(480px, 60vh, 680px);
+  height: clamp(460px, 58vh, 640px);
   object-fit: cover;
   object-position: center center;
 }
@@ -191,9 +202,12 @@
   top: 50%;
   transform: translateY(-50%);
   width: 38%;
-  background: rgba(13, 10, 8, 0.72);
+  background: rgba(13, 10, 8, 0.66);
+  border-left: 2px solid rgba(232, 213, 190, 0.58);
   padding: clamp(1.5rem, 3vw, 2.5rem);
   z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .weekly__quote-text {
@@ -231,7 +245,7 @@
 
 @media (max-width: 768px) {
   .weekly__tc-content {
-    padding: 4.5rem 1.5rem 2.5rem;
+    padding: 4rem 1.5rem 2rem;
   }
 
   .weekly__tc-title {
@@ -250,7 +264,7 @@
   .weekly__editorial-text {
     flex: none;
     width: 100%;
-    padding: 3rem 1.5rem 4rem;
+    padding: 2.75rem 1.5rem 3.5rem;
   }
 
   .weekly__editorial-photo {
@@ -288,7 +302,9 @@
     right: auto;
     transform: none;
     width: 100%;
-    background: rgba(13, 10, 8, 0.92);
+    background: rgba(13, 10, 8, 0.9);
+    border-left: 0;
+    border-top: 1px solid rgba(232, 213, 190, 0.2);
     padding: 2rem 1.5rem;
   }
 
@@ -299,7 +315,7 @@
 
 @media (max-width: 560px) {
   .weekly__tc-content {
-    padding: 3.75rem 1.5rem 2.25rem;
+    padding: 3.5rem 1.5rem 2rem;
   }
 }
 

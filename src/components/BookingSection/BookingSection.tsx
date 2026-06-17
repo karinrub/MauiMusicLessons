@@ -66,6 +66,18 @@ function groupPrice(g: GroupSize): number {
   return prices[g]
 }
 
+function groupPriceText(g: GroupSize): string {
+  return g === 'solo' ? `$${PRICING.solo_30} / $${PRICING.solo_60}` : `$${groupPrice(g)}`
+}
+
+function durationLabel(d: Duration): string {
+  return d === '30' ? '30 minutes' : '1 hour'
+}
+
+function durationPriceText(d: Duration): string {
+  return d === '30' ? `$${PRICING.solo_30}` : `$${PRICING.solo_60}`
+}
+
 function lessonSummary(data: BookingData): string {
   const parts = []
   if (data.instrument) parts.push(data.instrument === 'guitar' ? 'Guitar' : 'Ukulele')
@@ -255,15 +267,9 @@ function BookingConversation() {
     history.push({ question: 'When', answer: data.preferredDate })
   }
 
-  const solo30Label = `30 minutes — $${PRICING.solo_30}`
-  const solo60Label = `1 hour — $${PRICING.solo_60}`
   const groupSizes: GroupSize[] = ['solo', 'duo', 'group_small', 'group_large']
   const instruments: Instrument[] = ['guitar', 'ukulele']
   const durations: Duration[] = ['30', '60']
-  const historySlots = [...history, ...Array(4 - history.length).fill(null)] as (
-    | { question: string; answer: string }
-    | null
-  )[]
 
   // Reduced-motion: static stacked form — all steps visible at once, no back needed
   if (reduced) {
@@ -280,6 +286,7 @@ function BookingConversation() {
                 {lessonSummary(data)}
               </p>
             )}
+            <p className="conv-sent__sub">Aaron accepts cash or Venmo.</p>
           </div>
         </div>
       )
@@ -297,7 +304,8 @@ function BookingConversation() {
                 className={`booking-tile${data.groupSize === g ? ' booking-tile--selected' : data.groupSize ? ' booking-tile--unselected' : ''}`}
                 onClick={() => selectGroup(g)}
               >
-                {g === 'solo' ? groupLabel(g) : `${groupLabel(g)} — $${groupPrice(g)}`}
+                <span className="booking-tile__label">{groupLabel(g)}</span>
+                <span className="booking-tile__meta">{groupPriceText(g)}</span>
               </button>
             ))}
           </div>
@@ -314,7 +322,7 @@ function BookingConversation() {
                 className={`booking-tile${data.instrument === i ? ' booking-tile--selected' : data.instrument ? ' booking-tile--unselected' : ''}`}
                 onClick={() => selectInstrument(i)}
               >
-                {i === 'guitar' ? 'Guitar' : 'Ukulele'}
+                <span className="booking-tile__label">{i === 'guitar' ? 'Guitar' : 'Ukulele'}</span>
               </button>
             ))}
           </div>
@@ -333,7 +341,8 @@ function BookingConversation() {
                   className={`booking-tile${data.duration === d ? ' booking-tile--selected' : data.duration ? ' booking-tile--unselected' : ''}`}
                   onClick={() => selectDuration(d)}
                 >
-                  {d === '30' ? solo30Label : solo60Label}
+                  <span className="booking-tile__label">{durationLabel(d)}</span>
+                  <span className="booking-tile__meta">{durationPriceText(d)}</span>
                 </button>
               ))}
             </div>
@@ -408,16 +417,15 @@ function BookingConversation() {
   // Normal animated mode — one step at a time
   return (
     <div className="conv">
-      {step !== 'confirm' && step !== 'sent' && (
+      {step !== 'confirm' && step !== 'sent' && history.length > 0 && (
         <div className="conv-history" aria-label="Booking selections">
-          {historySlots.map((entry, index) => (
+          {history.map((entry) => (
             <div
-              key={entry ? entry.question : `history-slot-${index}`}
-              className={`conv-history__entry${entry ? '' : ' conv-history__entry--empty'}`}
-              aria-hidden={!entry}
+              key={entry.question}
+              className="conv-history__entry"
             >
-              <span className="conv-history__q">{entry?.question ?? 'Selection'}</span>
-              <span className="conv-history__a">{entry?.answer ?? 'Pending'}</span>
+              <span className="conv-history__q">{entry.question}</span>
+              <span className="conv-history__a">{entry.answer}</span>
             </div>
           ))}
         </div>
@@ -455,7 +463,8 @@ function BookingConversation() {
                     className={`booking-tile${data.groupSize === g ? ' booking-tile--selected' : data.groupSize ? ' booking-tile--unselected' : ''}`}
                     onClick={() => selectGroup(g)}
                   >
-                    {g === 'solo' ? groupLabel(g) : `${groupLabel(g)} — $${groupPrice(g)}`}
+                    <span className="booking-tile__label">{groupLabel(g)}</span>
+                    <span className="booking-tile__meta">{groupPriceText(g)}</span>
                   </button>
                 ))}
               </div>
@@ -473,7 +482,7 @@ function BookingConversation() {
                     className={`booking-tile${data.instrument === i ? ' booking-tile--selected' : data.instrument ? ' booking-tile--unselected' : ''}`}
                     onClick={() => selectInstrument(i)}
                   >
-                    {i === 'guitar' ? 'Guitar' : 'Ukulele'}
+                    <span className="booking-tile__label">{i === 'guitar' ? 'Guitar' : 'Ukulele'}</span>
                   </button>
                 ))}
               </div>
@@ -492,7 +501,8 @@ function BookingConversation() {
                     className={`booking-tile${data.duration === d ? ' booking-tile--selected' : data.duration ? ' booking-tile--unselected' : ''}`}
                     onClick={() => selectDuration(d)}
                   >
-                    {d === '30' ? solo30Label : solo60Label}
+                    <span className="booking-tile__label">{durationLabel(d)}</span>
+                    <span className="booking-tile__meta">{durationPriceText(d)}</span>
                   </button>
                 ))}
               </div>
@@ -579,6 +589,7 @@ function BookingConversation() {
               {lessonSummary(data)}
             </p>
           )}
+          <p className="conv-sent__sub">Aaron accepts cash or Venmo.</p>
         </div>
       )}
     </div>
@@ -602,6 +613,7 @@ export default function BookingSection() {
         <div className="booking__header">
           <p className="section-eyebrow section-eyebrow--light">Ready when you are</p>
           <h2 className="booking__heading">Book a Lesson</h2>
+          <p className="booking__sub">Choose the basics, then send Aaron a lesson request by email.</p>
         </div>
         <BookingConversation />
       </div>

@@ -26,14 +26,14 @@ export default function Hero() {
       img.style.transform = `translateY(${imageDrift.toFixed(2)}px)`
     }
     if (content) {
-      const ty = sy * 0.18
-      const op = Math.max(0, 1 - sy / (vh * 0.68))
+      const ty = sy * 0.12
+      const op = Math.max(0, 1 - sy / (vh * 0.96))
       content.style.transform = `translateY(-${ty.toFixed(2)}px)`
       content.style.opacity = op.toFixed(4)
     }
     const veil = veilRef.current
     if (veil) {
-      const veilProgress = Math.max(0, Math.min(1, (sy - vh * 0.16) / (heroHeight * 0.6)))
+      const veilProgress = Math.max(0, Math.min(1, (sy - vh * 0.22) / (heroHeight * 0.58)))
       veil.style.opacity = easeOutCubic(veilProgress).toFixed(4)
     }
   })

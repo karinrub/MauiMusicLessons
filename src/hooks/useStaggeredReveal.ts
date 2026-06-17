@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 export function useStaggeredReveal(
   containerRef: { current: Element | null },
   targetRefs: Array<{ current: HTMLElement | null }>,
-  delays = [0, 80, 180],
-  threshold = 0.05
+  delays = [0, 60, 120],
+  threshold = 0.02
 ): void {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -36,7 +36,7 @@ export function useStaggeredReveal(
         }, delays[i] ?? 0)
         timeouts.push(timeout)
       })
-    }, { threshold })
+    }, { threshold, rootMargin: '0px 0px -4% 0px' })
 
     observer.observe(container)
 

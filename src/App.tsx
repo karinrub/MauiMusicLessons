@@ -49,26 +49,26 @@ function App() {
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}
-          height="125vh"
+          variant="beachEntry"
+          height="156vh"
           className="cinematic-panel--beach-entry"
           image={publicAsset('/images/aaron-pause.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.28}
-          imageExitOpacity={0.08}
-          entryStart={0.04}
+          imageRestOpacity={0.64}
+          imageExitOpacity={0.4}
         />
         <BeachLessons />
         <CinematicPanel
           lines={PANEL_3_LINES}
-          height="115vh"
+          height="136vh"
           className="cinematic-panel--weekly-entry"
           image={publicAsset('/images/aaron-playing-1.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.12}
-          imageExitOpacity={0.04}
-          entryStart={0.05}
+          imageRestOpacity={0.38}
+          imageExitOpacity={0.18}
+          entryStart={0}
         />
         <WeeklyLessons />
         <AboutAaron />

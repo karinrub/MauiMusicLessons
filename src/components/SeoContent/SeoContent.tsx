@@ -3,42 +3,30 @@ import { scrollToSection } from '../../utils/animation'
 import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
 import './SeoContent.css'
 
-const serviceAreas = [
-  'Kihei',
-  'Wailea',
-  'Makena',
-  'Lahaina',
-  'Kaanapali',
-  'Wailuku',
-  'Paia',
-  'Upcountry Maui',
-]
-
-const lessonTypes = [
-  'Private guitar lessons on Maui',
-  'Ukulele lessons for beginners',
-  'Beach music lessons in Kihei',
-  'Weekly guitar and ukulele lessons for residents',
-  'Family and couples ukulele lessons',
-  'Visitor-friendly Maui music experiences',
-]
-
 const faqs = [
   {
     question: 'Do I need experience before taking a music lesson on Maui?',
     answer: 'No. Aaron teaches complete beginners, returning players, families, couples, and weekly students. Lessons start with your current comfort level and focus on playing music right away.',
   },
   {
-    question: 'Are lessons available for visitors staying in Kihei or Wailea?',
-    answer: 'Yes. Beach ukulele and guitar lessons are designed for Maui visitors who want a relaxed local music experience in South Maui, including Kihei, Wailea, and nearby areas.',
-  },
-  {
-    question: 'Can locals take weekly guitar or ukulele lessons?',
-    answer: 'Yes. Weekly lessons are available for Maui residents and long-term visitors who want consistent progress on guitar or ukulele.',
-  },
-  {
     question: 'Do I need to bring a ukulele?',
     answer: 'Ukuleles can be borrowed for lessons when needed. Guitar students should mention whether they have an instrument when requesting a lesson time.',
+  },
+  {
+    question: 'Where exactly does the lesson take place?',
+    answer: 'Beach lessons are held at Mai Poina Beach Park in Kihei. Aaron can also come to your vacation rental or accommodation if you\'re staying in Kihei, Wailea, or Makena.',
+  },
+  {
+    question: 'How far in advance should I book?',
+    answer: 'Aaron books 2–3 days ahead. If you have a specific date in mind, reach out early — spots fill quickly during busy seasons.',
+  },
+  {
+    question: 'What will I actually learn in one lesson?',
+    answer: 'In a single session, most students leave able to play a complete song — chords, strumming pattern, and all. Aaron starts where you are and keeps it musical from the first few minutes.',
+  },
+  {
+    question: 'What if I need to cancel or reschedule?',
+    answer: 'Aaron is flexible. If your plans change, just reach out as early as you can and he\'ll work with you.',
   },
 ]
 
@@ -69,22 +57,27 @@ export default function SeoContent() {
           </button>
         </div>
 
-        <div className="seo-content__lists" aria-label="Lesson options and service areas">
-          <div>
-            <h3>Lesson Options</h3>
+        <div className="seo-content__details">
+          <div className="seo-content__info-card seo-content__lesson-types">
+            <h3>Lesson Types</h3>
             <ul>
-              {lessonTypes.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              <li>
+                <span>Beach lessons</span>
+                <p>One-hour ukulele sessions for visitors, couples, families, and beginners.</p>
+              </li>
+              <li>
+                <span>Weekly lessons</span>
+                <p>Guitar or ukulele instruction for local and long-term students building steady progress.</p>
+              </li>
             </ul>
           </div>
-          <div>
-            <h3>Serving Maui</h3>
-            <ul>
-              {serviceAreas.map((area) => (
-                <li key={area}>{area}</li>
-              ))}
-            </ul>
+
+          <div className="seo-content__info-card seo-content__service-area">
+            <h3>Where Lessons Happen</h3>
+            <p>
+              Aaron teaches at Mai Poina Beach Park in Kihei, or at the student's vacation rental
+              if they're staying in Kihei, Wailea, or Makena.
+            </p>
           </div>
         </div>
 
@@ -104,4 +97,4 @@ export default function SeoContent() {
   )
 }
 
-export { faqs, lessonTypes, serviceAreas }
+export { faqs }

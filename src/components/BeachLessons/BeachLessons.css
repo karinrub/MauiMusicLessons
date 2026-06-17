@@ -1,16 +1,92 @@
 .beach {
   position: relative;
-  background-color: #0a0a0a;
+  background-color: #0e0c09;
   overflow: hidden;
-  margin-top: -16vh;
+  margin-top: -10vh;
   z-index: 1;
 }
 
-/* Video panel — full bleed, arrives as release from CinematicPanel above */
+/* ─── Beat 1: Title card ─────────────────────────────────── */
+
+.beach__title-card {
+  position: relative;
+  width: 100%;
+  background: #0e0c09;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.beach__tc-texture {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.14;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.beach__tc-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 7rem 2rem 2rem;
+  max-width: 640px;
+  color: #ede8de;
+}
+
+.beach__tc-fade {
+  align-self: stretch;
+  height: 52px;
+  background: linear-gradient(to bottom, rgba(14, 12, 9, 0), #0e0c09);
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.beach__tc-eyebrow {
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 360ms ease, transform 540ms ease;
+}
+
+.beach__tc-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.8vw, 4rem);
+  font-weight: 300;
+  color: #ede8de;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 420ms ease, transform 620ms ease;
+}
+
+.beach__tc-subtext {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  color: rgba(237, 232, 222, 0.72);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 540px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 480ms ease, transform 640ms ease;
+}
+
+/* ─── Beat 2: Video panel ────────────────────────────────── */
+
 .beach__video-wrap {
   position: relative;
-  height: 84vh;
-  min-height: 460px;
+  height: 78vh;
+  min-height: 430px;
   overflow: hidden;
 }
 
@@ -25,12 +101,12 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to left, rgba(10, 10, 10, 0.82) 0%, transparent 14%),
+    linear-gradient(to left, rgba(10, 10, 10, 0.52) 0%, transparent 16%),
     linear-gradient(
       180deg,
-      rgba(19, 16, 10, 0.24) 0%,
+      rgba(19, 16, 10, 0.16) 0%,
       rgba(19, 16, 10, 0.02) 32%,
-      rgba(19, 16, 10, 0.42) 100%
+      rgba(19, 16, 10, 0.3) 100%
     );
 }
 
@@ -62,12 +138,6 @@
   outline-offset: 2px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .beach__mute-btn {
-    transition: none;
-  }
-}
-
 .beach__video-wrap::before {
   content: '';
   position: absolute;
@@ -75,7 +145,7 @@
   left: 0;
   right: 0;
   height: 88px;
-  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.42) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(14, 12, 9, 0.32) 0%, transparent 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -84,46 +154,139 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 55%, #0a0a0a 100%);
+  background: linear-gradient(to bottom, transparent 64%, #0e0c09 100%);
   pointer-events: none;
 }
 
-/* Editorial feature lines — dark, continuous from video above */
-.beach__lines {
-  position: relative;
-  background-color: #0a0a0a;
-  overflow: hidden;
-  padding: 4rem 0 clamp(10rem, 24vh, 16rem) clamp(2rem, 10vw, 8rem);
+/* ─── Beat 3: Editorial two-column panel ─────────────────── */
+
+.beach__editorial {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #0e0c09;
+}
+
+.beach__editorial-text {
+  flex: 0 0 47%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  padding: 4.5rem clamp(1.5rem, 4vw, 3rem) 4.75rem clamp(2rem, 7vw, 5.5rem);
 }
 
-.beach__lines::after {
-  content: '';
+.beach__heading-block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.beach__rule {
+  width: 40px;
+  height: 1px;
+  background: rgba(180, 140, 90, 0.4);
+  border: none;
+  margin: 0 0 1.75rem 0;
+  flex-shrink: 0;
+}
+
+.beach__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.beach__btn {
+  align-self: flex-start;
+  background: var(--color-sand-light);
+  color: #21180f;
+  border: 1px solid rgba(232, 213, 190, 0.64);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2);
+}
+
+.beach__btn:hover {
+  background: #fff3df;
+  color: #160f08;
+}
+
+.beach__editorial-photo {
+  flex: 0 0 53%;
+  position: relative;
+  overflow: hidden;
+}
+
+.beach__editorial-photo img {
+  display: block;
+  width: 100%;
+  height: clamp(520px, 74vh, 780px);
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.beach__editorial-photo-edge {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 28vh;
-  background: linear-gradient(to bottom, transparent, #13100a);
+  inset: 0 auto 0 0;
+  width: 80px;
+  background: linear-gradient(to right, rgba(10, 10, 10, 0.3), transparent);
+  z-index: 1;
   pointer-events: none;
 }
 
+/* ─── Responsive ─────────────────────────────────────────── */
+
 @media (max-width: 768px) {
-  .beach__lines {
-    padding: 4rem 1.5rem 7rem;
+  .beach__tc-content {
+    padding: 5.5rem 1.5rem 2rem;
+  }
+
+  .beach__tc-title {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+  }
+
+  .beach__tc-subtext {
+    max-width: 90vw;
+  }
+
+  .beach__editorial {
+    flex-direction: column-reverse;
+  }
+
+  .beach__editorial-text {
+    flex: none;
+    width: 100%;
+    padding: 2.75rem 1.5rem 3.5rem;
+  }
+
+  .beach__editorial-photo {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+  }
+
+  .beach__editorial-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+
+  .beach__editorial-photo-edge {
+    display: none;
+  }
+
+  .beach__closing {
+    padding: clamp(3.5rem, 8vh, 6rem) clamp(1.5rem, 6vw, 4rem);
   }
 }
 
 @media (max-width: 560px) {
   .beach__video-wrap {
-    height: 64vh;
+    height: 60vh;
     min-height: 380px;
   }
 
-  .beach__lines {
-    padding: 3rem 1.5rem 5.5rem;
+  .beach__tc-content {
+    padding: 5.5rem 1.5rem 2rem;
   }
 }
 
@@ -131,12 +294,33 @@
   .beach__video-wrap {
     min-height: 340px;
   }
+
+  .beach__tc-content {
+    padding: 5.25rem 1.25rem 2.25rem;
+  }
+
+  .beach__editorial-text {
+    padding: 2.5rem 1.25rem 3rem;
+  }
 }
 
-/* Landscape phones */
 @media (max-height: 520px) and (orientation: landscape) {
   .beach__video-wrap {
     height: 90vw;
     min-height: unset;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beach__tc-eyebrow,
+  .beach__tc-title,
+  .beach__tc-subtext {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .beach__mute-btn {
+    transition: none;
   }
 }

@@ -268,6 +268,7 @@ export default function AboutAaron() {
       <div ref={foregroundRef} className="about__foreground">
         <div className={`about__content${isTextVisible ? ' about__content--visible' : ''}`}>
           <p className="section-eyebrow about__eyebrow">About Aaron</p>
+          <p className="about__chapter-count">Chapter {displayedChapter + 1} of {chapterCount}</p>
           <h2 className="about__title">{chapters[displayedChapter].title}</h2>
           <p className="about__text">{chapters[displayedChapter].text}</p>
         </div>
@@ -293,8 +294,11 @@ export default function AboutAaron() {
         >
           <div className="about__rail-line" />
           <div className="about__markers" aria-hidden="true">
-            {chapters.map((chapter) => (
-              <div className="about__marker" key={chapter.label}>
+            {chapters.map((chapter, index) => (
+              <div
+                className={`about__marker${index === activeChapter ? ' about__marker--active' : ''}`}
+                key={chapter.label}
+              >
                 <span className="about__marker-tick" />
                 <span className="about__marker-label">{chapter.label}</span>
               </div>

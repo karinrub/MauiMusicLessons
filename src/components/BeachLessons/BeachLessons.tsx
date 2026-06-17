@@ -1,13 +1,9 @@
 import { useState, useRef } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
+import { scrollToSection } from '../../utils/animation'
 import { publicAsset } from '../../utils/assets'
+import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
 import './BeachLessons.css'
-
-const lines = [
-  'Never touched a ukulele? Perfect. Aaron starts where you are and makes it feel natural from the very first chord.',
-  "Solo travelers who want something that belongs only to them, couples looking to learn a song together, families who didn't expect this to be the favorite part of the trip — Aaron has taught all of them.",
-  "This isn't a tourist show. It's a genuine hour with a local musician who has played on this shore long enough that the lesson, the wind, and the waves all find their own rhythm.",
-]
 
 function MutedIcon() {
   return (
@@ -33,6 +29,13 @@ export default function BeachLessons() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isMuted, setIsMuted] = useState(true)
 
+  const cardRef = useRef<HTMLDivElement>(null)
+  const eyebrowRef = useRef<HTMLParagraphElement>(null)
+  const tcTitleRef = useRef<HTMLHeadingElement>(null)
+  const subtextRef = useRef<HTMLParagraphElement>(null)
+
+  useStaggeredReveal(cardRef, [eyebrowRef, tcTitleRef, subtextRef])
+
   const toggleMute = () => {
     const video = videoRef.current
     if (!video) return
@@ -41,7 +44,30 @@ export default function BeachLessons() {
   }
 
   return (
-    <section className="beach" id="beach-lessons">
+    <section className="beach" id="beach-lessons" aria-labelledby="beach-title-heading">
+
+      {/* Beat 1 — Title card */}
+      <div className="beach__title-card" ref={cardRef}>
+        <div
+          className="beach__tc-texture"
+          style={{ backgroundImage: `url(${publicAsset('/images/aaron-tourists-2.jpg')})` }}
+          aria-hidden="true"
+        />
+        <div className="beach__tc-content">
+          <p className="section-eyebrow section-eyebrow--light beach__tc-eyebrow" ref={eyebrowRef}>
+            For Visitors to Maui
+          </p>
+          <h2 className="beach__tc-title" id="beach-title-heading" ref={tcTitleRef}>
+            Ukulele by the Beach
+          </h2>
+          <p className="beach__tc-subtext" ref={subtextRef}>
+            One hour, one song, one memory the island makes with you.
+          </p>
+        </div>
+        <div className="beach__tc-fade" aria-hidden="true" />
+      </div>
+
+      {/* Beat 2 — Video */}
       <div className="beach__video-wrap">
         <video
           ref={videoRef}
@@ -66,17 +92,44 @@ export default function BeachLessons() {
         </button>
       </div>
 
-      <div className="beach__lines">
-        <ScrollLine size="lg" weight={300} delay={0.10} exitAt={0.50} activeColor="#C4AA85" minOpacity={0.15}>
-          {lines[0]}
-        </ScrollLine>
-        <ScrollLine size="lg" weight={300} delay={0.32} exitAt={0.65} activeColor="#F5EFE4" minOpacity={0.15}>
-          {lines[1]}
-        </ScrollLine>
-        <ScrollLine size="lg" weight={400} delay={0.55} exitAt={0.96} activeColor="#F5EFE4" minOpacity={0.15}>
-          {lines[2]}
-        </ScrollLine>
+      {/* Beat 3 — Editorial panel */}
+      <div className="beach__editorial">
+        <div className="beach__editorial-text">
+          <div className="beach__heading-block">
+            <ScrollLine size="xl" weight={300} delay={0.08} color="#ede8de">
+              Where the lesson
+            </ScrollLine>
+            <ScrollLine size="xl" weight={300} delay={0.2} color="#ede8de">
+              finds its own rhythm.
+            </ScrollLine>
+          </div>
+          <hr className="beach__rule" aria-hidden="true" />
+          <div className="beach__body">
+            <ScrollLine size="md" weight={400} delay={0.12} exitAt={0.9} color="#ede8de">
+              Never touched a ukulele? Perfect. Aaron starts where you are and makes it feel natural from the very first chord.
+            </ScrollLine>
+            <ScrollLine size="md" weight={400} delay={0.22} exitAt={0.9} color="#ede8de">
+              Solo travelers who want something that belongs only to them, couples looking to learn a song together, families who didn't expect this to be the favorite part of the trip — Aaron has taught all of them.
+            </ScrollLine>
+          </div>
+          <button className="btn btn--dark beach__btn" onClick={() => scrollToSection('book')}>
+            Book a beach lesson
+          </button>
+        </div>
+        <div className="beach__editorial-photo">
+          <div className="beach__editorial-photo-edge" aria-hidden="true" />
+          <img
+            src={publicAsset('/images/aaron-tourists-1.jpg')}
+            alt="Two women learning ukulele together at Mai Poina Beach Park in Kihei, Maui, smiling with palm trees and the ocean behind them"
+            width="1080"
+            height="1440"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
+
+
     </section>
   )
 }

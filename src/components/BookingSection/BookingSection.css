@@ -1,8 +1,8 @@
 /* ─── Section shell ──────────────────────────────────────── */
 .booking {
   position: relative;
-  min-height: 100vh;
-  padding: 9rem 2rem 10rem;
+  min-height: 96vh;
+  padding: 8rem 2rem 8.5rem;
   overflow: hidden;
   margin-bottom: -1px;
 }
@@ -47,25 +47,27 @@
 .booking__bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.55) 50%,
-    rgba(15, 13, 11, 0.88) 100%
-  );
+  background:
+    linear-gradient(to right, rgba(10, 8, 6, 0.86) 0%, rgba(10, 8, 6, 0.62) 48%, rgba(10, 8, 6, 0.35) 100%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.34) 50%, rgba(15, 13, 11, 0.82) 100%);
 }
 
 .booking__inner {
   position: relative;
   z-index: 2;
-  max-width: 600px;
+  max-width: 660px;
   margin: 0 auto;
   color: #fff;
+  background: rgba(12, 10, 8, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: clamp(1.75rem, 4vw, 2.6rem);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 /* ─── Header ─────────────────────────────────────────────── */
 .booking__header {
-  margin-bottom: 3rem;
+  margin-bottom: 2.25rem;
 }
 
 .booking__heading {
@@ -77,31 +79,36 @@
   letter-spacing: -0.01em;
 }
 
+.booking__sub {
+  max-width: 34rem;
+  margin-top: 0.85rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* ─── Conversation container ─────────────────────────────── */
 .conv {
   display: flex;
   flex-direction: column;
-  min-height: 31rem;
+  min-height: 24rem;
 }
 
 /* ─── Conversation history ───────────────────────────────── */
 .conv-history {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-bottom: 3rem;
-  min-height: 15.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+  margin-bottom: 2rem;
 }
 
 .conv-history__entry {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-height: 2.25rem;
-}
-
-.conv-history__entry--empty {
-  visibility: hidden;
+  min-height: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 0.55rem;
 }
 
 .conv-history__q {
@@ -116,7 +123,7 @@
   font-family: var(--font-serif);
   font-size: 1rem;
   font-weight: 300;
-  color: rgba(196, 160, 90, 0.95);
+  color: rgba(232, 213, 190, 0.96);
   letter-spacing: -0.01em;
 }
 
@@ -144,7 +151,7 @@
 }
 
 .conv-step--enter {
-  animation: step-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
+  animation: step-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) 90ms both;
 }
 
 .conv-step--exit {
@@ -157,7 +164,7 @@
 }
 
 .conv:not(.conv--reduced) .conv-step {
-  min-height: 12.5rem;
+  min-height: 11rem;
 }
 
 /* ─── Question text ──────────────────────────────────────── */
@@ -166,7 +173,7 @@
   font-size: clamp(1.6rem, 2.5vw, 1.9rem);
   font-weight: 300;
   color: #fff;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.35rem;
   letter-spacing: -0.01em;
   line-height: 1.2;
 }
@@ -174,7 +181,7 @@
 /* ─── Tiles ──────────────────────────────────────────────── */
 .booking-tiles {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.65rem;
   max-width: 520px;
 }
 
@@ -185,10 +192,12 @@
 .booking-tile {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  padding: 1.1rem 1.6rem;
+  min-height: 4rem;
+  padding: 1rem 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.055);
   color: #fff;
   font-family: var(--font-serif);
   font-size: 1.1rem;
@@ -197,16 +206,24 @@
   transition:
     border-color 200ms ease,
     background-color 200ms ease,
-    color 200ms ease;
+    color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
   border-radius: 0;
   text-align: left;
   width: 100%;
 }
 
+.booking-tile:hover {
+  border-color: rgba(232, 213, 190, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .booking-tile--selected {
-  border: 2px solid rgba(196, 160, 90, 0.9);
-  background: rgba(196, 160, 90, 0.1);
+  border-color: rgba(232, 213, 190, 0.9);
+  background: rgba(232, 213, 190, 0.16);
   color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(232, 213, 190, 0.72), 0 10px 28px rgba(0, 0, 0, 0.18);
 }
 
 .booking-tile--unselected {
@@ -214,10 +231,24 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+.booking-tile__label {
+  display: block;
+  line-height: 1.2;
+}
+
+.booking-tile__meta {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(232, 213, 190, 0.86);
+}
+
 /* ─── Hint text ──────────────────────────────────────────── */
 .conv-hint {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.52);
   margin-top: 0.75rem;
   line-height: 1.7;
 }
@@ -247,7 +278,7 @@
 }
 
 .conv-input::placeholder {
-  color: rgba(255, 255, 255, 0.32);
+  color: rgba(255, 255, 255, 0.42);
 }
 
 .conv-input:focus {
@@ -291,21 +322,24 @@
 
 /* ─── Action / submit button ─────────────────────────────── */
 .conv-action {
-  background: transparent;
-  border: none;
-  color: var(--color-sand-light, var(--color-sand));
+  background: var(--color-sand-light, var(--color-sand));
+  border: 1px solid rgba(232, 213, 190, 0.72);
+  color: #21180f;
   font-family: var(--font-sans);
   font-size: 0.82rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 1.25rem 0 0;
+  padding: 0.9rem 1.2rem;
+  margin-top: 1.35rem;
   cursor: pointer;
-  display: block;
-  transition: opacity 200ms ease;
+  display: inline-block;
+  transition: background-color 200ms ease, opacity 200ms ease, transform 200ms ease;
 }
 
 .conv-action:hover {
-  opacity: 0.7;
+  background: #fff3df;
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
 /* ─── Sent / confirmation ────────────────────────────────── */
@@ -362,7 +396,7 @@
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 768px) {
   .booking {
-    min-height: 130vh;
+    min-height: auto;
   }
 
   .booking-tiles--2col {
@@ -376,15 +410,23 @@
 
 @media (max-width: 560px) {
   .booking {
-    padding: 6rem 1.25rem 6rem;
+    padding: 5rem 1.25rem 5rem;
+  }
+
+  .booking__inner {
+    padding: 1.4rem;
   }
 
   .conv {
-    min-height: 35rem;
+    min-height: 28rem;
   }
 
   .conv:not(.conv--reduced) .conv-step {
-    min-height: 15rem;
+    min-height: 13rem;
+  }
+
+  .conv-history {
+    grid-template-columns: 1fr;
   }
 
   .booking-tiles--2col {
