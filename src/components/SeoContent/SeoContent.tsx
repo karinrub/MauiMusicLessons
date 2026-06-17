@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { scrollToSection } from '../../utils/animation'
 import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
 import './SeoContent.css'
@@ -11,10 +11,6 @@ const faqs = [
   {
     question: 'Do I need to bring a ukulele?',
     answer: 'Ukuleles can be borrowed for lessons when needed. Guitar students should mention whether they have an instrument when requesting a lesson time.',
-  },
-  {
-    question: 'Where exactly does the lesson take place?',
-    answer: 'Beach lessons are held at Mai Poina Beach Park in Kihei. Aaron can also come to your vacation rental or accommodation if you\'re staying in Kihei, Wailea, or Makena.',
   },
   {
     question: 'How far in advance should I book?',
@@ -33,6 +29,7 @@ const faqs = [
 export default function SeoContent() {
   const introRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
 
   useStaggeredReveal(introRef, [headingRef], [0], 0.1)
 
@@ -84,12 +81,30 @@ export default function SeoContent() {
         <div className="seo-content__faq">
           <h3>Music Lessons on Maui FAQ</h3>
           <div className="seo-content__faq-grid">
-            {faqs.map((faq) => (
-              <article className="seo-content__faq-item" key={faq.question}>
-                <h4>{faq.question}</h4>
-                <p>{faq.answer}</p>
-              </article>
-            ))}
+            {faqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index
+              const answerId = `seo-faq-answer-${index}`
+
+              return (
+                <article className={`seo-content__faq-item${isOpen ? ' seo-content__faq-item--open' : ''}`} key={faq.question}>
+                  <h4>
+                    <button
+                      type="button"
+                      className="seo-content__faq-trigger"
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                    >
+                      <span>{faq.question}</span>
+                      <span className="seo-content__faq-icon" aria-hidden="true" />
+                    </button>
+                  </h4>
+                  <div className="seo-content__faq-answer" id={answerId}>
+                    <p>{faq.answer}</p>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </div>
       </div>

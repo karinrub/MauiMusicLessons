@@ -66,8 +66,8 @@ function App() {
           image={publicAsset('/images/aaron-playing-1.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.38}
-          imageExitOpacity={0.18}
+          imageRestOpacity={0.22}
+          imageExitOpacity={0.08}
           entryStart={0}
         />
         <WeeklyLessons />

@@ -70,6 +70,19 @@ function groupPriceText(g: GroupSize): string {
   return g === 'solo' ? `$${PRICING.solo_30} / $${PRICING.solo_60}` : `$${groupPrice(g)}`
 }
 
+function groupSummary(g: GroupSize): string {
+  return `${groupLabel(g)} - ${groupPriceText(g)}`
+}
+
+function lessonPriceText(data: BookingData): string | null {
+  if (!data.groupSize) return null
+  if (data.groupSize === 'solo') {
+    if (!data.duration) return groupPriceText(data.groupSize)
+    return data.duration === '30' ? `$${PRICING.solo_30}` : `$${PRICING.solo_60}`
+  }
+  return `$${groupPrice(data.groupSize)}`
+}
+
 function durationLabel(d: Duration): string {
   return d === '30' ? '30 minutes' : '1 hour'
 }
@@ -83,6 +96,8 @@ function lessonSummary(data: BookingData): string {
   if (data.instrument) parts.push(data.instrument === 'guitar' ? 'Guitar' : 'Ukulele')
   if (data.duration) parts.push(data.duration === '30' ? '30 min' : '1 hour')
   if (data.groupSize) parts.push(groupDescription(data.groupSize))
+  const price = lessonPriceText(data)
+  if (price) parts.push(price)
   return parts.join(' · ')
 }
 
@@ -251,7 +266,7 @@ function BookingConversation() {
 
   const history: { question: string; answer: string }[] = []
   if (stepIdx > 0 && data.groupSize) {
-    history.push({ question: "Who's joining?", answer: groupLabel(data.groupSize) })
+    history.push({ question: "Who's joining?", answer: groupSummary(data.groupSize) })
   }
   if (stepIdx > 1 && data.instrument) {
     history.push({ question: 'Instrument', answer: data.instrument === 'guitar' ? 'Guitar' : 'Ukulele' })
@@ -305,7 +320,6 @@ function BookingConversation() {
                 onClick={() => selectGroup(g)}
               >
                 <span className="booking-tile__label">{groupLabel(g)}</span>
-                <span className="booking-tile__meta">{groupPriceText(g)}</span>
               </button>
             ))}
           </div>
@@ -327,6 +341,7 @@ function BookingConversation() {
             ))}
           </div>
           {contactErrors.instrument && <span className="conv-error">{contactErrors.instrument}</span>}
+          {data.groupSize && <p className="conv-hint">{groupSummary(data.groupSize)}</p>}
           <p className="conv-hint">Ukuleles available to borrow if you need one.</p>
         </div>
 
@@ -464,7 +479,6 @@ function BookingConversation() {
                     onClick={() => selectGroup(g)}
                   >
                     <span className="booking-tile__label">{groupLabel(g)}</span>
-                    <span className="booking-tile__meta">{groupPriceText(g)}</span>
                   </button>
                 ))}
               </div>

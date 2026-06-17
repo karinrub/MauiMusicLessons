@@ -5,6 +5,8 @@
   overflow: hidden;
   background: #0a0a0a;
   box-sizing: border-box;
+  margin-top: -1px;
+  margin-bottom: -1px;
 }
 
 .about__backgrounds {
@@ -23,6 +25,18 @@
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(to bottom, rgba(10, 10, 10, 0.78), rgba(10, 10, 10, 0));
+}
+
+.about::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 32%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, #13100a);
 }
 
 .about__background {
@@ -128,6 +142,58 @@
 
 .about__rail--dragging {
   cursor: grabbing;
+}
+
+.about__chapter-button {
+  position: absolute;
+  z-index: 5;
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--color-sand-light);
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 180ms ease, color 180ms ease;
+}
+
+.about__chapter-button--prev {
+  left: calc(50% - min(240px, 40vw) - 3.75rem);
+}
+
+.about__chapter-button--next {
+  right: calc(50% - min(240px, 40vw) - 3.75rem);
+}
+
+.about__chapter-button:hover,
+.about__chapter-button:focus-visible {
+  opacity: 1;
+}
+
+.about__chapter-button:focus-visible {
+  outline: 1px solid rgba(232, 213, 190, 0.55);
+  outline-offset: 2px;
+}
+
+.about__chapter-button:disabled {
+  cursor: default;
+  opacity: 0.18;
+}
+
+.about__chapter-button svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .about__rail-line {
@@ -253,6 +319,18 @@
     bottom: 1.65rem;
   }
 
+  .about__chapter-button {
+    bottom: 1.65rem;
+  }
+
+  .about__chapter-button--prev {
+    left: max(0.35rem, calc(7.5vw - 2.75rem));
+  }
+
+  .about__chapter-button--next {
+    right: max(0.35rem, calc(7.5vw - 2.75rem));
+  }
+
   .about__marker-label {
     font-size: 0.52rem;
   }
@@ -280,6 +358,7 @@
 @media (prefers-reduced-motion: reduce) {
   .about__background,
   .about__content,
+  .about__chapter-button,
   .about__scrubber {
     transition: none;
   }

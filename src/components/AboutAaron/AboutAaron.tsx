@@ -210,6 +210,9 @@ export default function AboutAaron() {
     setDragProgress(nextProgress)
   }
 
+  const goToPreviousChapter = () => selectChapter(activeChapterRef.current - 1)
+  const goToNextChapter = () => selectChapter(activeChapterRef.current + 1)
+
   const handleRailKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const incrementKeys = ['ArrowRight', 'ArrowUp', 'PageUp']
     const decrementKeys = ['ArrowLeft', 'ArrowDown', 'PageDown']
@@ -273,6 +276,18 @@ export default function AboutAaron() {
           <p className="about__text">{chapters[displayedChapter].text}</p>
         </div>
 
+        <button
+          type="button"
+          className="about__chapter-button about__chapter-button--prev"
+          onClick={goToPreviousChapter}
+          disabled={activeChapter === 0}
+          aria-label="Previous chapter"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15 6 9 12l6 6" />
+          </svg>
+        </button>
+
         <div
           ref={railRef}
           className={`about__rail${isDragging ? ' about__rail--dragging' : ''}`}
@@ -308,6 +323,18 @@ export default function AboutAaron() {
             <span className="about__scrubber-dot" />
           </div>
         </div>
+
+        <button
+          type="button"
+          className="about__chapter-button about__chapter-button--next"
+          onClick={goToNextChapter}
+          disabled={activeChapter === chapterMaxIndex}
+          aria-label="Next chapter"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
       </div>
     </section>
   )
