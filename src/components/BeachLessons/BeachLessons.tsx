@@ -59,7 +59,7 @@ export default function BeachLessons() {
       <div className="beach__title-card" ref={cardRef}>
         <div
           className="beach__tc-texture"
-          style={{ backgroundImage: `url(${publicAsset('/images/aaron-tourists-2.jpg')})` }}
+          style={{ backgroundImage: `url(${publicAsset('/images/aaron-teaching-1.jpg')})` }}
           aria-hidden="true"
         />
         <div className="beach__tc-content">

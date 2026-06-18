@@ -22,7 +22,7 @@
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   opacity: 0.14;
   pointer-events: none;
   z-index: 0;
