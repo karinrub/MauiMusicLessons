@@ -1,5 +1,5 @@
-# BookingSection — Implementation Workplan
-**Status:** Approved for implementation  
+# BookingSection — Final Polish Workplan
+**Status:** Structural implementation complete. Final polish phase remaining.  
 **Files:** `src/components/BookingSection/BookingSection.tsx`, `src/components/BookingSection/BookingSection.css`  
 **Do not modify any other component unless explicitly noted.**
 
@@ -7,47 +7,38 @@
 
 ## Purpose
 
-This document is the single source of truth for all BookingSection improvements. It was produced after a live design review, frame-by-frame video analysis, and code inspection. The design strategy has been approved. This document converts that strategy into executable tasks.
+This document is the single source of truth for remaining BookingSection work. The structural implementation is complete and validated via live review. Panel stabilization, overflow elimination, contact step visibility, back navigation, group path logic, duration skipping, and the day/time chip interface are all working correctly.
 
-**Why this work exists:** The BookingSection has the right architecture but two structural problems that damage conversion quality: (1) the panel resizes between every step, destroying visual stability, and (2) the tallest steps overflow the viewport, forcing the user to scroll to reach CTA buttons. These problems compound at the highest-commitment moments in the flow. The section was designed around its initial view, not its interaction journey.
-
-**What success looks like:** A user who arrives at the BookingSection and begins booking never has to scroll to find a button, never loses visual context, and arrives at the confirmation state feeling like they've made a personal connection — not submitted a form.
-
-**What must remain unchanged:** See Non-Negotiable Constraints below.
+Three issues remain before the BookingSection is considered production complete.
 
 ---
 
 ## Non-Negotiable Constraints
 
-### Design elements — do not change
+These must be respected throughout all remaining work. Do not revisit them.
+
+### Design — do not change
 - Background image (`aaron-bookingForm.jpg`) — file, position, overlay values
 - `object-position: center 30%` on `.booking__bg-img`
 - Overlay CSS values on `.booking__bg-overlay` — do not adjust opacity
 - Ken Burns animation (`kenBurnsSubtle`) — keep as-is
-- `margin-bottom: -1px` on `.booking` — this is a Footer color-match seam, do not remove
+- `margin-bottom: -1px` on `.booking` — Footer color-match seam, never remove
 - All color variables (`--color-sand`, `--color-sand-light`, etc.)
-- Georgia serif font usage throughout
-- All tile visual states: default, hover, selected (`booking-tile--selected`), unselected (`booking-tile--unselected`)
+- All tile visual states: default, hover, selected, unselected
 - History chip display (`.conv-history`, `.conv-history__entry`, `.conv-history__q`, `.conv-history__a`)
 - Step entry/exit animation direction and easing (`step-enter`, `step-exit` keyframes)
-- Reduced-motion fallback (`conv--reduced`) — must remain fully functional after all changes
-- `mailto:` submission mechanism — do not replace with a fetch/API call
-- Confirmation copy: "We'll see you out there, [Name]." — do not change this string
+- Reduced-motion fallback (`conv--reduced`) — must remain fully functional
 
-### Interaction patterns — do not change
-- Auto-advance on tile selection (selecting a tile immediately advances to next step without a button)
-- Back navigation clearing downstream data (`clearDataFrom`)
-- Step history array pattern (`stepHistory`, `advance`, `goBack`)
+### Interaction — do not change
+- Auto-advance on tile selection
+- Back navigation and `clearDataFrom()` cascade
+- `STEP_ORDER` array and step sequencing
 - `useReducedMotion` hook behavior
+- `buildMailto` function — do not modify email format or recipient
+- `mailto:` submission mechanism — do not replace with fetch/API
+- Confirmation copy: "We'll see you out there, [Name]." — do not change
 
-### Architecture — do not change
-- Component lives in `BookingSection/BookingSection.tsx` — do not split into separate files unless a task explicitly requires it
-- CSS lives in `BookingSection/BookingSection.css` — no inline styles, no CSS modules rename
-- `BookingConversation` is an inner component of `BookingSection` — keep this structure
-- `STEP_ORDER` array controls step sequencing — preserve this pattern for the date step even as its UI changes
-- `buildMailto` function — do not modify the email format or recipient
-
-### Brand constraints
+### Brand — do not change
 - All copy must be warm, personal, unhurried
 - No exclamation points
 - No generic UX language ("Submit", "Next", "Continue", "Proceed")
@@ -55,780 +46,160 @@ This document is the single source of truth for all BookingSection improvements.
 
 ---
 
-## Approved Findings
+## What Is Already Working — Do Not Reopen
 
-These are the confirmed truths from the review. Implementation decisions must be consistent with all of them.
+The following were confirmed correct in live post-implementation review. Do not revisit.
 
-**Structural**
-- The panel resizes on every step. This is the root cause of most visual problems.
-- The section was designed for its arrival state, not its interaction journey.
-- Steps 2 and 3 (instrument, duration) create visual void below a shortened panel.
-- Steps 4 and 5 (date, contact) cause the panel to overflow the viewport.
-- Panel height instability makes the section feel like a prototype, not a finished product.
-
-**Overflow**
-- The date step's "SOUNDS GOOD →" button is below the fold at common desktop viewport heights.
-- The contact step's "OPEN EMAIL DRAFT →" button is below the fold. At this step, the footer is visible.
-- The section heading ("Book a Lesson") is off-screen during the contact step.
-- The user loses all visual context at the highest-commitment moment in the flow.
-
-**Image**
-- The background image is compositionally strong and contributes emotionally.
-- It shows a teacher/student scene — exactly right for this section's purpose.
-- It contributes at its best during the initial (pre-interaction) view.
-- Image degradation during interaction is a symptom of panel instability, not an image problem.
-- Do not touch the image, overlay, or Ken Burns animation. Fixing the panel will fix the image relationship.
-
-**Date step**
-- The free-text date input breaks the tile-based interaction language established in steps 1–3.
-- It is the only step that requires typing, scrolling, and clicking a button.
-- It introduces cognitive load at the point of highest uncertainty (tourists don't know their exact schedule).
-- It is the weakest interaction in the flow and must be replaced.
-
-**Contact step**
-- Three inputs is correct — name, email, phone (optional).
-- The step question ("Last thing — how do we reach you?") is good — keep it.
-- Enter key does not trigger submission — this is a bug.
-- The step has no emotional warmth before the submit button.
-- "OPEN EMAIL DRAFT →" names the mechanism, not the outcome.
-
-**Transition**
-- The SeoContent → BookingSection transition works but is not intentionally designed.
-- It can be improved with a single CSS addition to the SeoContent bottom edge.
-
-**What is not a problem**
-- The history chip display — this is one of the strongest design details on the site.
-- The tile design, spacing, and selection states.
-- The step animation timing and direction.
-- The confirmation screen copy.
-- The `mailto:` mechanism.
-- The reduced-motion fallback.
+- Panel height stability
+- Overflow elimination on all steps
+- Contact step CTA visible without scrolling at 1440×707
+- Footer fully hidden during all active booking steps
+- Back navigation with correct state cascade
+- Group path (Two of us / Small group / Larger group) skipping duration step correctly
+- Duration step (Just me path only) showing correct per-duration pricing
+- Day/time chip interface functioning correctly with multi-select days and single-select time
+- Optional note field accepting and passing text to email
+- Confirmation screen rendering correctly with personalized name
+- Step transitions (step-enter / step-exit keyframes) — 300ms exit / 260ms enter with 90ms overlap is correct behavior
+- Reduced-motion fallback
 
 ---
 
-## Final Design Direction
+## Remaining Work
 
-When all phases are complete, the BookingSection must behave as follows:
+### Finding 1 — Solo Pricing History Chip
 
-**Visual stability:** The panel maintains a consistent visual footprint from initial load through the confirmation state. It does not shrink on steps 2–3. It does not grow beyond the viewport on steps 4–5. The background image is compositionally stable and emotionally present throughout the entire interaction.
+**Objective:** Remove the price range from the WHO'S JOINING history chip when "Just me" is selected.
 
-**Interaction quality:** Steps 1–4 (group, instrument, duration, date) all use the same tile/chip interaction model. The user never changes from clicking to typing as their primary interaction mode until the contact step (name/email). No step requires scrolling to reach a CTA. The Enter key works on every text input.
+**Current behavior:** After selecting "Just me", the history chip displays "Just me - $35 / $60". The price range appears because duration has not yet been chosen. The UI is exposing pricing uncertainty at a moment when it serves no purpose.
 
-**Emotional experience:** The flow feels like a short, pleasant conversation. The date step feels as effortless as the tile steps. The contact step has a single line of warmth before the submit button. The submit button names the outcome, not the mechanism. The confirmation screen is the emotional peak.
+**Why this matters:** The chip is intended to confirm a decision the user has made. Price is not yet a confirmed decision at the group-size step — it depends on duration. Showing "$35 / $60" makes the chip feel provisional and slightly unfinished. All other chips show only resolved information.
 
-**Conversion experience:** A user who begins the flow (clicks step 1) has no friction barrier preventing completion. Every CTA is visible without scrolling. Every input has keyboard support. The flow completes in under 60 seconds for a motivated user.
+**Required behavior:** The WHO'S JOINING chip for "Just me" must display only "Just me" — no price. Pricing for the solo path is fully resolved in the duration chip ("1 hour — $60" or "30 minutes — $35"), which is the correct place for it.
 
----
+**Implementation guidance:**
 
-## Implementation Phases
+In `BookingSection.tsx`, locate the logic that builds the history chip answer for the group/participants step. For group options ("Two of us", "Small group (3–5)", "Larger group (6–8)"), the price is flat and known immediately — those chips may continue to show price. For "Just me", strip the price from the chip answer. Only show "Just me".
 
-### Phase 1 — Panel Height Stabilization
-**Objective:** Give `.booking__inner` a fixed visual footprint that holds throughout all steps.
+The duration chip already resolves pricing for the solo path. No other changes are needed.
 
-**Rationale:** This is the root cause fix. All other visual problems — image degradation, void below panel on short steps, overflow on tall steps — are symptoms of this instability. Fix this first so subsequent phases build on a stable foundation.
+Do not change the duration tile labels or the duration chip — they are correct as-is.
 
-**Dependencies:** None. This is the first change.
+Do not change group option chip labels — those prices are confirmed at selection time.
 
-**Tasks:**
+**Validation:**
+- Select "Just me" — history chip shows "Just me" only, no price
+- Select "Two of us" — history chip shows "Two of us - $60" (unchanged)
+- Select "Small group (3–5)" — chip shows correct group price (unchanged)
+- Select "Larger group (6–8)" — chip shows correct group price (unchanged)
+- Continue to duration step — chip for "Just me" still shows "Just me" only
+- Select "30 minutes" — duration chip shows "30 minutes — $35"
+- Select "1 hour" — duration chip shows "1 hour — $60"
+- Back-navigate from duration to group size — WHO'S JOINING chip still shows "Just me" only
 
-1. **Measure the contact step's rendered height.** Open the live site at `http://localhost:5173` (or the dev server URL). Navigate to the BookingSection. Complete steps 1–3 quickly to reach step 5 (contact). Open DevTools, select `.booking__inner`, and read its rendered `offsetHeight`. Note this value.
-
-2. **Set `min-height` on `.booking__inner`.** In `BookingSection.css`, add `min-height` to `.booking__inner`. The value must be large enough to contain the contact step at the most common viewport heights (1440×900, 1280×800). Use `min-height: 680px` as the starting value. Adjust upward if the contact step still overflows at 1280×800. Do not use a viewport-relative value (`vh`) for this — the panel must not grow unboundedly on tall displays.
-
-   ```css
-   .booking__inner {
-     /* existing properties preserved */
-     min-height: 680px;
-   }
-   ```
-
-3. **Set `min-height` on `.conv`.** The current value is `24rem`. This is insufficient. Change to `min-height: 480px`. This prevents the conversational container from collapsing on short steps (instrument, duration).
-
-   ```css
-   .conv {
-     min-height: 480px;
-   }
-   ```
-
-4. **Remove height constraints that fight the stabilization.** Check `.conv:not(.conv--reduced) .conv-step` — its `min-height: 11rem` is fine and can stay. Check `@media (max-width: 560px)` — `.conv` has `min-height: 28rem` there. Update this to `min-height: 480px` to match.
-
-5. **Verify steps 2 and 3 no longer create visual void.** After setting panel min-height, the instrument and duration steps (2 tiles each) should sit at the top of the conversational container with whitespace below them. This whitespace is intentional — it allows the background image's compositional relationship to the panel to remain stable. Do not add spacers or centering to fill this whitespace. Leave it.
-
-6. **Verify the panel does not cause new problems at 1024×768.** At this viewport size, the panel may still overflow on the contact step. If it does, reduce padding (`clamp(1.75rem, 4vw, 2.6rem)`) to `clamp(1.5rem, 3vw, 2rem)` at `max-width: 1024px`. Only make this change if needed — do not touch padding speculatively.
-
-**Completion criteria:**
-- Panel visual footprint is consistent across all steps when viewed at 1440×900
-- Panel does not shrink visibly between steps 1, 2, 3
-- No step causes `.booking__inner` to grow beyond its min-height
-- Background image strips on left and right of panel remain consistently visible across all steps
-
-**Validation requirements:** See Phase 1 Validation Checklist below.
+**Completion criteria:** The string "$35 / $60" never appears anywhere in the BookingSection UI.
 
 ---
 
-### Phase 2 — Eliminate Overflow and Scroll Requirements
-**Objective:** Ensure every step's CTA is visible without scrolling at all target viewports.
+### Finding 2 — Availability Note Trust Gap
 
-**Rationale:** Phase 1 may resolve overflow at 1440px viewports. Phase 2 addresses the remaining cases and adds a safety net for all viewport sizes. This phase also fixes the Enter key regression on the contact step.
+**Objective:** Confirm to the user that their optional scheduling note was received, without cluttering the history chip system.
 
-**Dependencies:** Phase 1 must be complete and validated before beginning Phase 2.
+**Current behavior:** The availability step includes an optional text field ("Anything else about timing? (optional)"). Users enter meaningful scheduling context here — e.g., "We're leaving Sunday so ideally earlier in the week." The note is passed correctly into the email Aaron receives. However, after the user advances to the contact step, the note is invisible. There is no confirmation it was captured. The WHEN history chip shows only "Fri · Afternoon" — the note is absent from the summary. This creates a small but real trust gap.
 
-**Tasks:**
+**Why this matters:** Tourists in particular use this field to communicate their vacation window — it is the most practically important piece of information they provide. If they can't see that it was received, they may wonder whether to repeat it in the name field, add it to the email field, or start over. The fix must close this loop without damaging the chip system.
 
-1. **Add a ref to `.booking__inner`.** In `BookingSection.tsx`, add:
-   ```typescript
-   const bookingInnerRef = useRef<HTMLDivElement>(null)
-   ```
-   Attach it to the `.booking__inner` div in `BookingSection`:
-   ```tsx
-   <div className="booking__inner" ref={bookingInnerRef}>
-   ```
-   Pass `bookingInnerRef` as a prop to `BookingConversation`, or lift the `scrollIntoView` call into `BookingSection` and pass a callback. The simplest implementation is to lift it.
+**Decision required:** Do not assume the examples below are the correct implementation. Evaluate and choose the approach that best fits the existing design language.
 
-2. **Add conditional scroll-into-view on step advance.** After `setStepHistory` is called in `advance()`, check whether the bottom of `.booking__inner` is below the visible viewport. If so, scroll the panel into view:
-   ```typescript
-   function advance(next: Step) {
-     // existing exit animation logic unchanged
-     if (!reduced && stepBodyRef.current) {
-       setExitHTML(stepBodyRef.current.innerHTML)
-       if (exitTimerRef.current) clearTimeout(exitTimerRef.current)
-       exitTimerRef.current = setTimeout(() => setExitHTML(null), 400)
-     }
-     setStepHistory((prev) => [...prev, next])
-     // Scroll panel into view if it overflows viewport
-     requestAnimationFrame(() => {
-       if (bookingInnerRef.current) {
-         const rect = bookingInnerRef.current.getBoundingClientRect()
-         if (rect.bottom > window.innerHeight - 16) {
-           bookingInnerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-         }
-       }
-     })
-   }
-   ```
-   The `requestAnimationFrame` ensures the DOM has updated after the step change before measuring. The `- 16` gives 16px of bottom breathing room. The check prevents unnecessary scrolling on steps where the panel fits.
+Options to evaluate:
 
-3. **Account for the fixed navbar height in the scroll.** The navbar is approximately 60px tall. If `scrollIntoView({ block: 'start' })` places the panel flush against the top of the viewport, the navbar will overlap it. Add a CSS scroll-margin to `.booking__inner`:
-   ```css
-   .booking__inner {
-     scroll-margin-top: 80px;
-   }
-   ```
-   This tells the browser to leave 80px of space above the panel when scrolling it into view.
+Option A — Inline acknowledgment below the field. When the note field contains text, show a small confirmation beneath it: something like "✓ We'll pass this along to Aaron." This appears while the user is on the availability step and disappears when they advance. The chip remains as "Fri · Afternoon" — clean and scannable.
 
-4. **Add Enter key handler to the contact step name input.** In the contact step JSX, add `onKeyDown` to the name input:
-   ```tsx
-   onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
-   ```
+Option B — Append a note indicator to the WHEN chip. When a note is present, the WHEN chip shows "Fri · Afternoon · note added" or a small icon/indicator. This gives the user a persistent receipt. Risk: adds visual complexity to the chip row.
 
-5. **Add Enter key handler to the contact step email input:**
-   ```tsx
-   onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
-   ```
+Option C — Add a fifth history chip "YOUR NOTE" with a truncated version of the note text (e.g., first 40 chars + "..."). This treats the note as a first-class answered question. Risk: may feel heavy for what is optional supplementary info.
 
-6. **Add Enter key handler to the contact step phone input:**
-   ```tsx
-   onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
-   ```
+**Evaluation criteria for choosing:** The solution must (1) confirm to the user the note was received, (2) not add visual noise to the history chip grid, (3) feel consistent with the warm and unhurried tone of the rest of the flow, (4) work correctly with back navigation — if the user goes back and clears the note, the confirmation must disappear.
 
-7. **Verify reduced-motion path is unaffected.** The `advance` function has a `if (!reduced)` guard for animations. The scroll behavior should fire regardless of reduced-motion preference — it is a layout behavior, not an animation. Verify the `scrollIntoView` call is outside the `if (!reduced)` guard.
+**Implementation guidance:** Whichever option is chosen, implement it cleanly. If Option A: a conditional element below the textarea that renders when `noteValue.trim().length > 0`. If Option B or C: modify the chip rendering logic in the history array construction. All implementations must handle the reduced-motion fallback correctly.
 
-**Completion criteria:**
-- At 1440×900: no step requires scrolling to reach a CTA
-- At 1280×800: no step requires scrolling to reach a CTA
-- At 1024×768: no step requires scrolling to reach a CTA
-- Enter key on name, email, or phone input triggers `submitContact()`
-- Enter key on date input continues to trigger `submitDate()` (regression check)
-- Footer is not visible during any active booking step
+**Validation:**
+- Enter text in the optional note field — confirmation appears
+- Clear the text field — confirmation disappears
+- Advance to contact step — user can see that the note was received (either via chip, persistent indicator, or chosen mechanism)
+- Back-navigate to availability step — note text is still present in the field, confirmation still visible
+- Submit with note — verify note appears in the generated email (do not break this)
+- Submit without note — no note indicator visible anywhere in the flow
 
-**Validation requirements:** See Phase 2 Validation Checklist below.
+**Completion criteria:** A user who enters text in the optional note field has clear visual confirmation that it was captured before they advance to the contact step.
 
 ---
 
-### Phase 3 — Replace Date Text Input with Day/Time Chip Selection
-**Objective:** Make the date step feel as effortless and consistent as the tile steps.
+### Finding 3 — Final Polish Pass
 
-**Rationale:** The free-text date input is the single biggest friction point in the flow. It breaks the tile-based interaction model, requires typing, and causes uncertainty for tourists who don't know their exact schedule. Chip selection removes all three problems.
+**Objective:** Review the BookingSection as a finished product and identify any remaining refinements that should be made before declaring it production complete.
 
-**Dependencies:** Phases 1 and 2 must be complete. The chip layout has its own height — it must be built into a stable, tested panel.
+**Scope:** This is not a redesign task. Do not invent work. Read the component code, inspect the CSS, and interact with the live site. Only include issues that genuinely exist and genuinely affect quality.
 
-**Tasks:**
+**Areas to inspect:**
 
-1. **Add `PreferredDays` and `PreferredTime` types to `BookingSection.tsx`:**
-   ```typescript
-   type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
-   type TimeOfDay = 'morning' | 'afternoon' | 'evening'
-   ```
+1. **Copy consistency** — Read every string in the flow. Check for tone inconsistencies, awkward phrasing, or any string that sounds generic. The bar is: every word should sound like Aaron said it.
 
-2. **Update `BookingData` interface** to replace `preferredDate: string` with:
-   ```typescript
-   preferredDays: DayOfWeek[]
-   preferredTime: TimeOfDay | null
-   preferredDateNote: string
-   ```
+2. **Reduced-motion path** — Interact with the full flow with `prefers-reduced-motion: reduce` active (or using the `.conv--reduced` class). Confirm it presents a complete, usable layout — not just an unstyled form.
 
-3. **Add initial values** in the `useState` call for `data`:
-   ```typescript
-   preferredDays: [],
-   preferredTime: null,
-   preferredDateNote: '',
-   ```
+3. **Chip grid layout at 4 chips** — Verify the two-column history chip grid looks correct when all four chips are present (WHO'S JOINING / INSTRUMENT / DURATION / WHEN). Check alignment, spacing, and that no chip is visually orphaned.
 
-4. **Update `clearDataFrom`** to clear the new fields wherever `preferredDate` was previously cleared. Replace all `d.preferredDate = ''` with:
-   ```typescript
-   d.preferredDays = []
-   d.preferredTime = null
-   d.preferredDateNote = ''
-   ```
+4. **Mobile layout** — If there is a `@media (max-width: 768px)` block for BookingSection, verify it is still coherent after the implementation changes. The primary target is desktop, but the mobile layout must not be broken.
 
-5. **Update `buildMailto`** to use the new fields:
-   ```typescript
-   const dayLabels: Record<DayOfWeek, string> = {
-     mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday',
-     fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
-   }
-   const timeLabels: Record<TimeOfDay, string> = {
-     morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening'
-   }
-   // In the body array:
-   `Preferred days: ${data.preferredDays.map(d => dayLabels[d]).join(', ') || 'Not specified'}`,
-   `Preferred time: ${data.preferredTime ? timeLabels[data.preferredTime] : 'Not specified'}`,
-   `Timing note: ${data.preferredDateNote.trim() || 'None'}`,
-   ```
+5. **Empty state / first arrival** — Scroll to the section fresh. Confirm the initial arrival view (section heading + "Pick what works..." subtext + four group-size tiles) is visually correct and no previous session state is leaking.
 
-6. **Update `submitDate`** to check that at least one day OR one time is selected (either is sufficient to advance):
-   ```typescript
-   function submitDate() {
-     const hasDay = data.preferredDays.length > 0
-     const hasTime = data.preferredTime !== null
-     if (!hasDay && !hasTime) return
-     setContactErrors((prev) => {
-       const next = { ...prev }
-       delete next.preferredDate
-       return next
-     })
-     if (!reduced) advance('contact')
-   }
-   ```
+6. **Keyboard navigation** — Tab through the flow. Confirm focus states are visible on all interactive elements (tiles, chips, BACK button, text inputs, submit button).
 
-7. **Update `submitContact` validation** to check `preferredDays.length === 0 && preferredTime === null` instead of `!preferredDate.trim()`. The error message should be: `'Please select at least one preferred day or time'`.
+**Implementation guidance:** For each genuine issue found, fix it. For each area that is already correct, note it as confirmed and move on. Do not generate tasks for things that are working.
 
-8. **Replace the date step JSX** (the `step === 'date'` block) with the chip interface:
+**Validation:** After this pass, go through the full booking flow one final time as a user who has never seen the site before. If anything feels off, fix it. If nothing does, the BookingSection is done.
 
-   ```tsx
-   {step === 'date' && (
-     <>
-       <p className="conv-question">When works for you?</p>
-       
-       <div className="date-chip-group">
-         <p className="date-chip-label">Day</p>
-         <div className="date-chips">
-           {(['mon','tue','wed','thu','fri','sat','sun'] as DayOfWeek[]).map((day) => {
-             const labels: Record<DayOfWeek, string> = {
-               mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu',
-               fri: 'Fri', sat: 'Sat', sun: 'Sun'
-             }
-             const selected = data.preferredDays.includes(day)
-             return (
-               <button
-                 key={day}
-                 type="button"
-                 className={`date-chip${selected ? ' date-chip--selected' : ''}`}
-                 onClick={() => {
-                   setData((prev) => ({
-                     ...prev,
-                     preferredDays: selected
-                       ? prev.preferredDays.filter((d) => d !== day)
-                       : [...prev.preferredDays, day]
-                   }))
-                 }}
-               >
-                 {labels[day]}
-               </button>
-             )
-           })}
-         </div>
-       </div>
-
-       <div className="date-chip-group">
-         <p className="date-chip-label">Time</p>
-         <div className="date-chips">
-           {(['morning','afternoon','evening'] as TimeOfDay[]).map((time) => {
-             const labels: Record<TimeOfDay, string> = {
-               morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening'
-             }
-             const selected = data.preferredTime === time
-             return (
-               <button
-                 key={time}
-                 type="button"
-                 className={`date-chip${selected ? ' date-chip--selected' : ''}`}
-                 onClick={() => {
-                   setData((prev) => ({ ...prev, preferredTime: selected ? null : time }))
-                 }}
-               >
-                 {labels[time]}
-               </button>
-             )
-           })}
-         </div>
-       </div>
-
-       <input
-         type="text"
-         className="conv-input date-note-input"
-         placeholder="Anything else about timing? (optional)"
-         value={data.preferredDateNote}
-         onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
-       />
-
-       {(data.preferredDays.length > 0 || data.preferredTime !== null) && (
-         <button type="button" className="conv-action" onClick={submitDate}>
-           Sounds good →
-         </button>
-       )}
-     </>
-   )}
-   ```
-   
-   Note: The "Sounds good →" button appears only when at least one chip is selected. Before any chip is selected, there is no button — the interface guides through selection rather than presenting a dead button.
-
-9. **Add chip CSS to `BookingSection.css`:**
-
-   ```css
-   /* ─── Date chip selection ────────────────────────────────── */
-   .date-chip-group {
-     margin-bottom: 1.25rem;
-   }
-
-   .date-chip-label {
-     font-family: var(--font-sans);
-     font-size: 0.65rem;
-     text-transform: uppercase;
-     letter-spacing: 0.12em;
-     color: rgba(255, 255, 255, 0.4);
-     margin-bottom: 0.65rem;
-   }
-
-   .date-chips {
-     display: flex;
-     flex-wrap: wrap;
-     gap: 0.5rem;
-   }
-
-   .date-chip {
-     padding: 0.5rem 0.9rem;
-     border: 1px solid rgba(255, 255, 255, 0.22);
-     background: rgba(255, 255, 255, 0.055);
-     color: #fff;
-     font-family: var(--font-serif);
-     font-size: 0.95rem;
-     font-weight: 300;
-     cursor: pointer;
-     border-radius: 0;
-     transition:
-       border-color 200ms ease,
-       background-color 200ms ease;
-   }
-
-   .date-chip:hover {
-     border-color: rgba(232, 213, 190, 0.5);
-     background: rgba(255, 255, 255, 0.08);
-   }
-
-   .date-chip--selected {
-     border-color: rgba(232, 213, 190, 0.9);
-     background: rgba(232, 213, 190, 0.16);
-     box-shadow: inset 0 0 0 1px rgba(232, 213, 190, 0.72);
-   }
-
-   .date-note-input {
-     margin-top: 0.5rem;
-     margin-bottom: 0;
-   }
-   ```
-
-10. **Update the reduced-motion static form** to match the new date fields. In the `conv--reduced` return block, replace the date `<input type="text">` section with the chip interface (same JSX as above). The reduced-motion version shows all steps simultaneously, so the chips should appear in the same position relative to other steps.
-
-11. **Update `lessonSummary`** if it references `preferredDate` — replace with a composed string from `preferredDays` and `preferredTime` for the confirmation screen's `conv-sent__meta`. If `preferredDays` is empty and `preferredTime` is null, omit timing from the summary.
-
-**Completion criteria:**
-- Date step shows 7 day chips and 3 time chips
-- Day chips are multi-select; time chips are single-select
-- "Sounds good →" button appears only after at least one chip is selected
-- Auto-advance does NOT fire on the date step — user must click the button (chips need deliberate selection before proceeding)
-- Optional text note is present and functional but not required
-- `buildMailto` correctly formats the selected days and time in the email body
-- Reduced-motion static form shows the chip interface
-- Validation error fires if user somehow reaches submit with no date info (edge case in reduced-motion form)
-
-**Validation requirements:** See Phase 3 Validation Checklist below.
-
----
-
-### Phase 4 — Contact Step and Closing Moment
-**Objective:** Elevate the emotional quality of the final step and the submit action.
-
-**Rationale:** The structural work is done at this point. This phase improves the copy and adds one line of warmth before the submit button. These are the smallest changes with the most emotional impact.
-
-**Dependencies:** Phases 1–3 complete. The contact step must be stable and visible before refining its content.
-
-**Tasks:**
-
-1. **Replace the section subtitle.** In `BookingSection.tsx`, in the `BookingSection` component (not `BookingConversation`), change:
-   ```tsx
-   // FROM:
-   <p className="booking__sub">Choose the basics, then send Aaron a lesson request by email.</p>
-   // TO:
-   <p className="booking__sub">Pick what works, and Aaron will take it from there.</p>
-   ```
-
-2. **Add warmth hint above the submit button.** In the contact step JSX (both the animated and reduced-motion versions), add a `conv-hint` paragraph between the phone input and the submit button:
-   ```tsx
-   <p className="conv-hint">Aaron will follow up within a day or two.</p>
-   <button type="button" className="conv-action" onClick={submitContact}>
-     Send to Aaron →
-   </button>
-   ```
-
-3. **Replace the submit button label.** Change `Open Email Draft →` to `Send to Aaron →` in both the animated contact step and the reduced-motion contact step.
-
-4. **Verify the hint text renders correctly.** The existing `.conv-hint` style is:
-   ```css
-   font-size: 0.82rem;
-   color: rgba(255, 255, 255, 0.52);
-   margin-top: 0.75rem;
-   line-height: 1.7;
-   ```
-   This is the correct register — small, quiet, reassuring. Do not increase the font size or change the color. The hint should not compete with the question heading or the submit button.
-
-**Completion criteria:**
-- Subtitle reads "Pick what works, and Aaron will take it from there."
-- Hint text "Aaron will follow up within a day or two." appears between phone input and submit button
-- Submit button reads "Send to Aaron →" in both animated and reduced-motion modes
-- Hint text is visible without scrolling (Phase 2 ensures this)
-- No other copy changes anywhere in the component
-
-**Validation requirements:** See Phase 4 Validation Checklist below.
-
----
-
-### Phase 5 — Transition Refinement
-**Objective:** Make the SeoContent → BookingSection transition intentional.
-
-**Rationale:** The transition currently works by fortunate layout behavior. This phase makes it designed. It is the lowest-risk, lowest-impact phase and belongs last.
-
-**Dependencies:** All previous phases complete. This phase touches a different component.
-
-**Tasks:**
-
-1. **Identify the SeoContent component.** Find `src/components/SeoContent/` (or equivalent). Locate its CSS file.
-
-2. **Add a bottom gradient to the SeoContent section.** In the SeoContent CSS, add a `::after` pseudo-element that fades the section's bottom edge to `#1a140d` (the color used in BookingSection's `booking::before` gradient):
-   ```css
-   .seo-content {
-     position: relative; /* ensure if not already set */
-   }
-
-   .seo-content::after {
-     content: '';
-     position: absolute;
-     bottom: 0;
-     left: 0;
-     right: 0;
-     height: 20vh;
-     background: linear-gradient(to bottom, transparent, #1a140d);
-     pointer-events: none;
-     z-index: 1;
-   }
-   ```
-   If the SeoContent section already has a background color set, confirm it matches or is compatible with `#1a140d`. If SeoContent uses a different dark value, use that value instead — the goal is a seamless color match at the boundary.
-
-3. **Verify the transition does not hide SeoContent content.** The `::after` gradient must be positioned behind text content (z-index lower than text) but above the section background. Check that FAQ accordion items near the bottom of SeoContent are not obscured.
-
-4. **Verify the gradient does not conflict with BookingSection's `booking::before` gradient.** The two gradients should produce a continuous fade: SeoContent fades out to `#1a140d`, BookingSection fades in from `#1a140d` with its own `booking::before`. There should be no visible seam or color discontinuity at the boundary.
-
-**Completion criteria:**
-- SeoContent bottom edge fades smoothly into the BookingSection background
-- No SeoContent content is obscured by the gradient
-- No visible color seam at the SeoContent/BookingSection boundary
-- Gradient does not appear on mobile where it may be too prominent relative to shorter section heights
-
-**Validation requirements:** See Phase 5 Validation Checklist below.
-
----
-
-## Validation Checklists
-
-### Phase 1 Validation — Panel Stabilization
-
-**Visual checks (run at 1440×900, 1280×800, 1024×768)**
-- [ ] Panel width and horizontal position are identical across all steps
-- [ ] Panel height does not visibly change between step 1 and step 2
-- [ ] Panel height does not visibly change between step 2 and step 3
-- [ ] Background image left strip (guitarist's shirt) is visible at the same width across all steps
-- [ ] Background image right strip (child with pink hat) is visible at the same width across all steps
-- [ ] Panel has no content overflow at any step
-
-**Interaction checks**
-- [ ] Tile selection still auto-advances (no regression)
-- [ ] Back button still functions correctly
-- [ ] History chips display correctly with new min-heights
-
-**Responsive checks**
-- [ ] At `max-width: 768px`, panel behaves correctly
-- [ ] At `max-width: 560px`, panel behaves correctly
-- [ ] At `max-width: 360px`, panel behaves correctly
-
-**Regression checks**
-- [ ] `margin-bottom: -1px` on `.booking` is unchanged
-- [ ] Footer color seam is intact
-- [ ] Reduced-motion form layout is unchanged
-
----
-
-### Phase 2 Validation — Overflow and Scroll
-
-**Scroll checks (at all three viewport sizes)**
-- [ ] Step 1 (group size): all 4 tiles and question visible without scrolling
-- [ ] Step 2 (instrument): both tiles, hint text visible without scrolling
-- [ ] Step 3 (duration): both tiles, prices visible without scrolling
-- [ ] Step 4 (date chips): all chips and "Sounds good →" button visible without scrolling
-- [ ] Step 5 (contact): question, all 3 inputs, hint text, and "Send to Aaron →" visible without scrolling
-- [ ] Footer is not visible during steps 1–5
-- [ ] "Book a Lesson" heading remains visible or is scrolled off gracefully (not jarringly)
-
-**Keyboard checks**
-- [ ] Enter on date input calls `submitDate()` (regression — must still work)
-- [ ] Enter on name input calls `submitContact()`
-- [ ] Enter on email input calls `submitContact()`
-- [ ] Enter on phone input calls `submitContact()`
-- [ ] Tab order is logical across all steps
-
-**Scroll behavior checks**
-- [ ] Scroll-into-view fires when panel bottom is below viewport
-- [ ] Scroll-into-view does NOT fire unnecessarily when panel is fully visible
-- [ ] `scroll-margin-top: 80px` prevents navbar from overlapping panel after scroll
-- [ ] Smooth scroll behavior is present (not instant jump)
-- [ ] Scroll behavior fires regardless of reduced-motion preference
-
-**Regression checks**
-- [ ] `advance()` function animation logic is unchanged
-- [ ] `goBack()` function is unchanged
-- [ ] `clearDataFrom()` function is unchanged
-
----
-
-### Phase 3 Validation — Date Chip Interface
-
-**Visual checks**
-- [ ] 7 day chips render in a single wrapped row (Mon–Sun)
-- [ ] 3 time chips render in a single row (Morning, Afternoon, Evening)
-- [ ] Chip visual matches tile visual style (border, background, selected state)
-- [ ] "Day" and "Time" labels render in uppercase at correct opacity
-- [ ] Optional note input renders below chips without gap issues
-- [ ] "Sounds good →" button is invisible when no chips selected
-- [ ] "Sounds good →" button appears after first chip selection
-- [ ] History chip for date step reads correctly (e.g. "Sat, Sun · Morning")
-
-**Interaction checks**
-- [ ] Selecting a day chip toggles it (click once = selected, click again = deselected)
-- [ ] Selecting a time chip replaces previous selection (only one time can be selected)
-- [ ] Selecting multiple days works correctly
-- [ ] Clicking "Sounds good →" advances to contact step
-- [ ] Back from contact step clears all chips (day, time, and note)
-
-**Email body checks**
-- [ ] `buildMailto` includes selected days by full name (e.g. "Saturday, Sunday")
-- [ ] `buildMailto` includes selected time (e.g. "Morning")
-- [ ] `buildMailto` includes note if entered, or "None" if not
-- [ ] Empty selection is not possible to submit (button hidden until selection made)
-
-**Reduced-motion checks**
-- [ ] Chip interface appears in the static stacked form
-- [ ] Chip selections work in reduced-motion mode
-- [ ] Validation error fires if static form is submitted without date selection
-
-**Responsive checks**
-- [ ] At mobile (`max-width: 560px`), day chips wrap across two rows cleanly
-- [ ] At mobile, time chips fit in one row or wrap cleanly
-- [ ] Chip tap targets are at least 44×44px on mobile
-
----
-
-### Phase 4 Validation — Copy and Contact Step
-
-**Copy checks**
-- [ ] Subtitle reads exactly: "Pick what works, and Aaron will take it from there."
-- [ ] Hint reads exactly: "Aaron will follow up within a day or two."
-- [ ] Submit button reads exactly: "Send to Aaron →"
-- [ ] All three copy changes appear in both animated and reduced-motion modes
-- [ ] No other copy has changed anywhere in the component
-
-**Visual checks**
-- [ ] Hint text is visually smaller than the question and larger than nothing — `.conv-hint` style unchanged
-- [ ] Hint text does not crowd the submit button — adequate margin between them
-- [ ] Submit button appearance (sand-light fill, dark text, uppercase, border) is unchanged
-
-**Regression checks**
-- [ ] Confirmation copy "We'll see you out there" is unchanged
-- [ ] History chip labels are unchanged
-- [ ] All step question text is unchanged except as explicitly specified
-
----
-
-### Phase 5 Validation — Transition
-
-**Visual checks at 1440×900**
-- [ ] SeoContent bottom fades smoothly — no hard edge
-- [ ] BookingSection background image appears seamlessly below the fade
-- [ ] No visible color seam or brightness discontinuity at boundary
-- [ ] FAQ accordion items near the bottom of SeoContent are fully readable
-
-**Responsive checks**
-- [ ] Transition gradient does not obscure content at `max-width: 768px`
-- [ ] At mobile, gradient height (`20vh`) is proportionally appropriate — reduce to `12vh` at `max-width: 560px` if needed
-
-**Regression checks**
-- [ ] SeoContent layout and content are unchanged
-- [ ] SeoContent padding and spacing are unchanged
-- [ ] BookingSection `booking::before` gradient is unchanged
-
----
-
-## Testing Requirements
-
-### Viewport sizes — test every phase at all of these
-- 1440 × 900 (primary)
-- 1280 × 800
-- 1024 × 768
-- 768 × 1024 (tablet portrait)
-- 390 × 844 (iPhone 14 — mobile primary)
-- 360 × 780 (Android baseline)
-
-### Interaction tests
-- Complete the full flow from step 1 through confirmation: Just me → Guitar → 30 minutes → [date chips] → contact → send
-- Complete the full flow as a group: Larger group (6–8) → Ukulele → [date chips] → contact → send (no duration step)
-- Complete the full flow as a duo: Two of us → Guitar → [date chips] → contact → send (no duration step)
-- Use Back at every step and verify state clears correctly
-- Begin flow, reach step 3, go back to step 1, re-select different group, verify downstream clears
-
-### Animation tests
-- Confirm step-exit animation fires on every forward advance
-- Confirm step-enter animation fires after exit completes
-- Confirm no blank panel flash between exit and enter (the animation gap issue)
-- Confirm history chips animate in correctly after each selection
-- Confirm Ken Burns animation is running on the background image (background-motion test)
-
-### Keyboard tests
-- Tab through entire form — focus order must be logical
-- Enter on date input → advances
-- Enter on name → submits contact
-- Enter on email → submits contact
-- Enter on phone → submits contact
-- Shift+Tab navigates backward through inputs
-- Space bar activates focused tile buttons
-- Space bar activates focused chip buttons
-
-### Scroll tests
-- At 1280×800: verify no step requires scrolling
-- At 1024×768: verify no step requires scrolling
-- Verify `scroll-margin-top` keeps panel below navbar after scroll
-- Verify scroll fires when panel bottom is below fold
-- Verify scroll does NOT fire when panel is fully visible
-
-### Reduced-motion tests
-- Enable `prefers-reduced-motion: reduce` in system settings or via DevTools
-- Verify static stacked form renders correctly
-- Verify all chip interactions work in static form
-- Verify submit works in static form
-- Verify Ken Burns animation is disabled
-
-### Edge cases
-- Submit contact with empty name → validation error fires
-- Submit contact with invalid email → validation error fires
-- Submit contact with valid name and email, empty phone → succeeds (phone is optional)
-- Submit date step with no chips selected → button is not visible (cannot submit)
-- Submit date step with only day selected (no time) → "Sounds good →" is visible and works
-- Submit date step with only time selected (no day) → "Sounds good →" is visible and works
-- Go back from contact to date — chips are cleared
-- Resize browser window during interaction — panel remains stable
+**Completion criteria:** The full flow — from initial arrival through confirmation — can be completed without friction, confusion, or any moment that feels unpolished.
 
 ---
 
 ## Definition of Done
 
-The BookingSection is complete when **all** of the following are observable. These are binary checks — pass or fail.
+The BookingSection is production complete when all of the following are true:
 
-### Structural
-- [ ] The panel (`booking__inner`) does not visibly resize between steps 1, 2, and 3
-- [ ] The panel does not visibly resize between steps 3 and 4
-- [ ] Background image flanking strips are visible and consistent width across all steps at 1440×900
-- [ ] Footer is not visible during any active booking step (steps 1–5)
-
-### Overflow
-- [ ] At 1440×900: zero steps require scrolling to reach a CTA
-- [ ] At 1280×800: zero steps require scrolling to reach a CTA
-- [ ] At 1024×768: zero steps require scrolling to reach a CTA
-- [ ] The contact step's "Send to Aaron →" button is fully visible without scrolling at all three viewports
-
-### Interaction
-- [ ] Steps 1–4 (group, instrument, duration, date) all use tile/chip interaction — no typing required to make a selection
-- [ ] The date step "Sounds good →" button is not visible until at least one chip is selected
-- [ ] Enter key on name input triggers `submitContact()`
-- [ ] Enter key on email input triggers `submitContact()`
-- [ ] Enter key on phone input triggers `submitContact()`
-- [ ] Enter key on date note input does not trigger submission (it is an optional field)
-- [ ] Back navigation at every step clears the correct downstream data
-
-### Copy
-- [ ] Subtitle: "Pick what works, and Aaron will take it from there."
-- [ ] Warmth hint: "Aaron will follow up within a day or two."
-- [ ] Submit button: "Send to Aaron →"
-- [ ] Confirmation: "We'll see you out there, [Name]." (unchanged)
-
-### Email output
-- [ ] `buildMailto` includes selected preferred days by full name
-- [ ] `buildMailto` includes selected preferred time
-- [ ] `buildMailto` includes optional note or "None"
-- [ ] Subject line format is unchanged
-- [ ] Recipient (`aaron@mauimusiclessons.com`) is unchanged
-
-### Reduced-motion
-- [ ] Static stacked form renders correctly with chip interface
-- [ ] All chips are interactive in reduced-motion mode
-- [ ] Submit works in reduced-motion mode
-- [ ] Ken Burns animation is absent when reduced-motion is enabled
-
-### Regression
-- [ ] `margin-bottom: -1px` on `.booking` is unchanged
-- [ ] Footer color seam is visually intact
-- [ ] All existing tile styles and states are unchanged
-- [ ] History chip display is unchanged
-- [ ] Step entry/exit animations are unchanged
-- [ ] `clearDataFrom` logic clears the correct fields
-
-### Transition
-- [ ] SeoContent bottom edge fades to BookingSection without a visible seam or hard edge
+- [ ] "Just me" chip shows "Just me" only — no price range
+- [ ] Group option chips (Two of us / Small group / Larger group) still show correct flat prices
+- [ ] Duration chip (solo path) correctly shows resolved pricing
+- [ ] Optional note capture is confirmed to the user before they advance
+- [ ] Note confirmation disappears correctly if the field is cleared
+- [ ] Note content passes correctly into the generated email
+- [ ] Final polish pass complete — no copy, layout, focus, or mobile issues outstanding
+- [ ] Full flow tested: solo path (Just me → Guitar → 1 hour → chips + note → contact → confirm)
+- [ ] Full flow tested: group path (Two of us → Guitar → chips → contact → confirm)
+- [ ] Back navigation tested at every step — state cascade correct
+- [ ] Reduced-motion path tested — complete and usable
+- [ ] No regressions to any previously working behavior
 
 ---
 
-## Future Considerations (Out of Scope)
+## What This Document Does Not Cover
 
-The following ideas were considered during the design review and explicitly excluded from this implementation. Do not implement these during this workplan. They are logged here for future reference only.
+The following are confirmed working and out of scope for this document:
 
-**Left-aligned panel layout.** Positioning `.booking__inner` to the left third of the viewport with the background image visible at right is a valid design direction. It was excluded because it requires compositional changes, mobile layout rework, and reduced-motion adjustments that are disproportionate to the current phase. Revisit after all five phases are shipped and validated.
+- Panel height stabilization
+- Overflow / scroll elimination
+- Contact step CTA visibility
+- Step transition timing
+- Day/time chip interface
+- Optional note field plumbing
+- Back navigation and state cascade
+- Group path and duration skip logic
+- Confirmation screen
 
-**Real-time availability system.** A calendar picker or availability API would replace the chip selection. This requires backend infrastructure that does not exist. The chip approach is a permanent solution for this business scale, not a placeholder.
+Issues deferred to future workplans (not blocking production):
 
-**Animated confirmation state.** Adding a checkmark animation, confetti, or other celebration to the confirmation screen. The current copy ("We'll see you out there") is the right ending. Adding animation risks cheapening it.
-
-**Parallax image effect.** Making the background image scroll at a different rate than the panel. This would require a scroll listener and could conflict with the existing Ken Burns animation and `overflow: hidden` containment. Not worth the risk.
-
-**Price surfacing in group tiles.** Showing price on the group size tiles (step 1) at point of selection rather than in the history chip after selection. This is a good idea but low priority relative to the structural work. Logging here for future reference.
-
-**FAQ → Booking transition redesign.** Beyond the Phase 5 gradient, a more elaborate transition (parallax, crossfade, video) was considered and rejected. The transition is a supporting detail, not a conversion driver.
-
----
-
-*End of document. All design decisions are final. Implementation proceeds in phase order. No phase begins until the preceding phase passes all validation checks.*
+- Real-time availability integration (requires backend)
+- Left-aligned panel layout variant
+- Animated confirmation state
+- Price display in group-size tiles
+- SeoContent → BookingSection transition refinement

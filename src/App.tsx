@@ -55,7 +55,7 @@ function App() {
           image={publicAsset('/images/aaron-pause.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.34}
+          imageRestOpacity={0.42}
           imageExitOpacity={0.4}
         />
         <BeachLessons />
@@ -66,8 +66,8 @@ function App() {
           image={publicAsset('/images/aaron-playing-1.jpg')}
           imageWidth={2200}
           imageHeight={1467}
-          imageRestOpacity={0.22}
-          imageExitOpacity={0.08}
+          imageRestOpacity={0.38}
+          imageExitOpacity={0.14}
           entryStart={0}
         />
         <WeeklyLessons />

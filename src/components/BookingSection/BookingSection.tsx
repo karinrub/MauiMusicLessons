@@ -292,7 +292,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
 
   const history: { question: string; answer: string }[] = []
   if (stepIdx > 0 && data.groupSize) {
-    history.push({ question: "Who's joining?", answer: groupSummary(data.groupSize) })
+    // Solo pricing is unresolved at this point — the duration chip carries it instead
+    const whoAnswer = data.groupSize === 'solo' ? groupLabel(data.groupSize) : groupSummary(data.groupSize)
+    history.push({ question: "Who's joining?", answer: whoAnswer })
   }
   if (stepIdx > 1 && data.instrument) {
     history.push({ question: 'Instrument', answer: data.instrument === 'guitar' ? 'Guitar' : 'Ukulele' })
@@ -373,7 +375,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             ))}
           </div>
           {contactErrors.instrument && <span className="conv-error">{contactErrors.instrument}</span>}
-          {data.groupSize && <p className="conv-hint">{groupSummary(data.groupSize)}</p>}
+          {data.groupSize && data.groupSize !== 'solo' && <p className="conv-hint">{groupSummary(data.groupSize)}</p>}
           <p className="conv-hint">Ukuleles available to borrow if you need one.</p>
         </div>
 
@@ -463,6 +465,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             value={data.preferredDateNote}
             onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
           />
+          {data.preferredDateNote.trim().length > 0 && (
+            <p className="note-confirm">We'll pass this along to Aaron.</p>
+          )}
           {contactErrors.preferredDate && <span className="conv-error">{contactErrors.preferredDate}</span>}
         </div>
 
@@ -673,6 +678,10 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                 value={data.preferredDateNote}
                 onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
               />
+              {/* Option A: inline acknowledgment — confirms receipt without touching the chip system */}
+              {data.preferredDateNote.trim().length > 0 && (
+                <p className="note-confirm">We'll pass this along to Aaron.</p>
+              )}
 
               {(data.preferredDays.length > 0 || data.preferredTime !== null) && (
                 <button type="button" className="conv-action" onClick={submitDate}>

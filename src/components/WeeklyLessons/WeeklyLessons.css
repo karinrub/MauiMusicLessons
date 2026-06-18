@@ -1,6 +1,6 @@
 .weekly {
   position: relative;
-  background: #13100a;
+  background: #1c1409;
   overflow: hidden;
   margin-top: -6vh;
   margin-bottom: -8vh;
@@ -16,7 +16,7 @@
   left: 0;
   right: 0;
   height: 10vh;
-  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.82));
+  background: linear-gradient(to bottom, transparent, rgba(28, 20, 9, 0.82));
   pointer-events: none;
   z-index: 2;
 }
@@ -26,7 +26,7 @@
 .weekly__title-card {
   position: relative;
   width: 100%;
-  background: #13100a;
+  background: #1c1409;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@
   inset: 0;
   background-size: cover;
   background-position: center 30%;
-  opacity: 0.15;
+  opacity: 0.30;
   pointer-events: none;
   z-index: 0;
 }
@@ -60,7 +60,7 @@
 .weekly__tc-fade {
   align-self: stretch;
   height: 52px;
-  background: linear-gradient(to bottom, rgba(19, 16, 10, 0), #13100a);
+  background: linear-gradient(to bottom, rgba(19, 16, 10, 0), #1c1409);
   pointer-events: none;
   position: relative;
   z-index: 1;

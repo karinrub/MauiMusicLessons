@@ -41,10 +41,10 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
 
       if (imageRef.current) {
         const imgOp = progress < 0.14
-          ? (progress / 0.14) * 0.18
+          ? (progress / 0.14) * 0.30
           : progress > 0.86
-            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.18
-            : 0.18
+            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.30
+            : 0.30
         imageRef.current.style.opacity = imgOp.toFixed(4)
       }
 

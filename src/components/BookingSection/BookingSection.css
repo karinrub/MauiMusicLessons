@@ -436,6 +436,22 @@
   margin-bottom: 0;
 }
 
+.note-confirm {
+  font-size: 0.8rem;
+  color: rgba(232, 213, 190, 0.7);
+  margin-top: 0.55rem;
+  line-height: 1.5;
+}
+
+/* ─── Keyboard focus ─────────────────────────────────────── */
+.booking-tile:focus-visible,
+.date-chip:focus-visible,
+.conv-back:focus-visible,
+.conv-action:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.72);
+  outline-offset: 2px;
+}
+
 /* ─── Reduced-motion static layout ──────────────────────── */
 .conv--reduced .conv-step {
   margin-bottom: 3rem;
