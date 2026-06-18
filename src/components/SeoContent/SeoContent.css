@@ -22,6 +22,18 @@
   );
 }
 
+.seo-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  background: linear-gradient(to bottom, transparent, #1a140d);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .seo-content__inner {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -235,6 +247,10 @@
 @media (max-width: 560px) {
   .seo-content {
     padding: 4rem 1.25rem 3rem;
+  }
+
+  .seo-content::after {
+    height: 12vh;
   }
 }
 

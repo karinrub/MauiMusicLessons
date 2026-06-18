@@ -63,6 +63,8 @@
   padding: clamp(1.75rem, 4vw, 2.6rem);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  min-height: 680px;
+  scroll-margin-top: 80px;
 }
 
 /* ─── Header ─────────────────────────────────────────────── */
@@ -91,7 +93,7 @@
 .conv {
   display: flex;
   flex-direction: column;
-  min-height: 24rem;
+  min-height: 480px;
 }
 
 /* ─── Conversation history ───────────────────────────────── */
@@ -383,6 +385,57 @@
   text-transform: uppercase;
 }
 
+/* ─── Date chip selection ────────────────────────────────── */
+.date-chip-group {
+  margin-bottom: 1.25rem;
+}
+
+.date-chip-label {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.65rem;
+}
+
+.date-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.date-chip {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.055);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 300;
+  cursor: pointer;
+  border-radius: 0;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease;
+}
+
+.date-chip:hover {
+  border-color: rgba(232, 213, 190, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-chip--selected {
+  border-color: rgba(232, 213, 190, 0.9);
+  background: rgba(232, 213, 190, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(232, 213, 190, 0.72);
+}
+
+.date-note-input {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 /* ─── Reduced-motion static layout ──────────────────────── */
 .conv--reduced .conv-step {
   margin-bottom: 3rem;
@@ -418,7 +471,7 @@
   }
 
   .conv {
-    min-height: 28rem;
+    min-height: 480px;
   }
 
   .conv:not(.conv--reduced) .conv-step {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import type React from 'react'
 import { publicAsset } from '../../utils/assets'
 import './BookingSection.css'
 
@@ -6,6 +7,8 @@ type Step = 'who' | 'type' | 'duration' | 'date' | 'contact' | 'confirm' | 'sent
 type GroupSize = 'solo' | 'duo' | 'group_small' | 'group_large'
 type Instrument = 'guitar' | 'ukulele'
 type Duration = '30' | '60'
+type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+type TimeOfDay = 'morning' | 'afternoon' | 'evening'
 
 const PRICING = {
   solo_30: 35,
@@ -21,7 +24,9 @@ interface BookingData {
   groupSize: GroupSize | null
   instrument: Instrument | null
   duration: Duration | null
-  preferredDate: string
+  preferredDays: DayOfWeek[]
+  preferredTime: TimeOfDay | null
+  preferredDateNote: string
   name: string
   email: string
   phone: string
@@ -101,6 +106,14 @@ function lessonSummary(data: BookingData): string {
   return parts.join(' · ')
 }
 
+const DAY_LABELS: Record<DayOfWeek, string> = {
+  mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday',
+  fri: 'Friday', sat: 'Saturday', sun: 'Sunday',
+}
+const TIME_LABELS: Record<TimeOfDay, string> = {
+  morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening',
+}
+
 function buildMailto(data: BookingData): string {
   const subject = encodeURIComponent(`Lesson request from ${data.name.trim()}`)
   const body = encodeURIComponent([
@@ -110,7 +123,9 @@ function buildMailto(data: BookingData): string {
     `Group: ${data.groupSize ? groupLabel(data.groupSize) : 'Not selected'}`,
     `Instrument: ${data.instrument === 'guitar' ? 'Guitar' : data.instrument === 'ukulele' ? 'Ukulele' : 'Not selected'}`,
     `Duration: ${data.duration === '30' ? '30 minutes' : data.duration === '60' ? '1 hour' : 'Not selected'}`,
-    `Preferred date/time: ${data.preferredDate.trim()}`,
+    `Preferred days: ${data.preferredDays.map((d) => DAY_LABELS[d]).join(', ') || 'Not specified'}`,
+    `Preferred time: ${data.preferredTime ? TIME_LABELS[data.preferredTime] : 'Not specified'}`,
+    `Timing note: ${data.preferredDateNote.trim() || 'None'}`,
   ].join('\n'))
 
   return `mailto:aaron@mauimusiclessons.com?subject=${subject}&body=${body}`
@@ -128,7 +143,7 @@ function useReducedMotion(): boolean {
   return reduced
 }
 
-function BookingConversation() {
+function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefObject<HTMLDivElement | null> }) {
   const [stepHistory, setStepHistory] = useState<Step[]>(['who'])
   const step = stepHistory[stepHistory.length - 1]
   const canGoBack = stepHistory.length > 1 && step !== 'sent' && step !== 'confirm'
@@ -137,12 +152,13 @@ function BookingConversation() {
     groupSize: null,
     instrument: null,
     duration: null,
-    preferredDate: '',
+    preferredDays: [],
+    preferredTime: null,
+    preferredDateNote: '',
     name: '',
     email: '',
     phone: '',
   })
-  const [dateInput, setDateInput] = useState('')
   const [contactErrors, setContactErrors] = useState<ContactErrors>({})
   const reduced = useReducedMotion()
 
@@ -165,6 +181,14 @@ function BookingConversation() {
       exitTimerRef.current = setTimeout(() => setExitHTML(null), 400)
     }
     setStepHistory((prev) => [...prev, next])
+    requestAnimationFrame(() => {
+      if (bookingInnerRef.current) {
+        const rect = bookingInnerRef.current.getBoundingClientRect()
+        if (rect.bottom > window.innerHeight - 16) {
+          bookingInnerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+    })
   }
 
   // Clears data for targetStep and all steps that follow it
@@ -173,16 +197,20 @@ function BookingConversation() {
       const d = { ...prev }
       if (targetStep === 'who') {
         d.groupSize = null; d.instrument = null; d.duration = null
-        d.preferredDate = ''; d.name = ''; d.email = ''; d.phone = ''
+        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'type') {
         // duration intentionally preserved — auto-set by 'who' for non-solo
         d.instrument = null
-        d.preferredDate = ''; d.name = ''; d.email = ''; d.phone = ''
+        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'duration') {
         d.duration = null
-        d.preferredDate = ''; d.name = ''; d.email = ''; d.phone = ''
+        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'date') {
-        d.preferredDate = ''; d.name = ''; d.email = ''; d.phone = ''
+        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'contact') {
         d.name = ''; d.email = ''; d.phone = ''
       }
@@ -196,9 +224,6 @@ function BookingConversation() {
     setStepHistory((prev) => prev.slice(0, -1))
     clearDataFrom(targetStep)
     setContactErrors({})
-    if (STEP_ORDER.indexOf(targetStep) <= STEP_ORDER.indexOf('date')) {
-      setDateInput('')
-    }
   }
 
   function selectGroup(g: GroupSize) {
@@ -234,8 +259,9 @@ function BookingConversation() {
   }
 
   function submitDate() {
-    if (!dateInput.trim()) return
-    setData((prev) => ({ ...prev, preferredDate: dateInput.trim() }))
+    const hasDay = data.preferredDays.length > 0
+    const hasTime = data.preferredTime !== null
+    if (!hasDay && !hasTime) return
     setContactErrors((prev) => {
       const next = { ...prev }
       delete next.preferredDate
@@ -249,7 +275,7 @@ function BookingConversation() {
     if (!data.groupSize) errs.groupSize = 'Group size is required'
     if (!data.instrument) errs.instrument = 'Instrument is required'
     if (!data.duration) errs.duration = 'Duration is required'
-    if (!data.preferredDate.trim()) errs.preferredDate = 'Preferred date is required'
+    if (data.preferredDays.length === 0 && data.preferredTime === null) errs.preferredDate = 'Please select at least one preferred day or time'
     if (!data.name.trim()) errs.name = 'Name is required'
     if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email)) errs.email = 'Valid email required'
     if (Object.keys(errs).length > 0) {
@@ -278,8 +304,14 @@ function BookingConversation() {
       answer: data.duration === '30' ? `30 min — $${price}` : `1 hour — $${price}`,
     })
   }
-  if (stepIdx > 3 && data.preferredDate) {
-    history.push({ question: 'When', answer: data.preferredDate })
+  if (stepIdx > 3 && (data.preferredDays.length > 0 || data.preferredTime)) {
+    const DAY_SHORT: Record<DayOfWeek, string> = {
+      mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun',
+    }
+    const dayPart = data.preferredDays.map((d) => DAY_SHORT[d]).join(', ')
+    const timePart = data.preferredTime ? TIME_LABELS[data.preferredTime] : ''
+    const whenAnswer = [dayPart, timePart].filter(Boolean).join(' · ')
+    history.push({ question: 'When', answer: whenAnswer })
   }
 
   const groupSizes: GroupSize[] = ['solo', 'duo', 'group_small', 'group_large']
@@ -366,20 +398,72 @@ function BookingConversation() {
         )}
 
         <div className="conv-step">
-          <p className="conv-question">When are you thinking?</p>
+          <p className="conv-question">When works for you?</p>
+
+          <div className="date-chip-group">
+            <p className="date-chip-label">Day</p>
+            <div className="date-chips">
+              {(['mon','tue','wed','thu','fri','sat','sun'] as DayOfWeek[]).map((day) => {
+                const labels: Record<DayOfWeek, string> = {
+                  mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu',
+                  fri: 'Fri', sat: 'Sat', sun: 'Sun',
+                }
+                const selected = data.preferredDays.includes(day)
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    className={`date-chip${selected ? ' date-chip--selected' : ''}`}
+                    onClick={() => {
+                      setData((prev) => ({
+                        ...prev,
+                        preferredDays: selected
+                          ? prev.preferredDays.filter((d) => d !== day)
+                          : [...prev.preferredDays, day],
+                      }))
+                      setContactErrors((p) => { const n = { ...p }; delete n.preferredDate; return n })
+                    }}
+                  >
+                    {labels[day]}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="date-chip-group">
+            <p className="date-chip-label">Time</p>
+            <div className="date-chips">
+              {(['morning','afternoon','evening'] as TimeOfDay[]).map((time) => {
+                const labels: Record<TimeOfDay, string> = {
+                  morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening',
+                }
+                const selected = data.preferredTime === time
+                return (
+                  <button
+                    key={time}
+                    type="button"
+                    className={`date-chip${selected ? ' date-chip--selected' : ''}`}
+                    onClick={() => {
+                      setData((prev) => ({ ...prev, preferredTime: selected ? null : time }))
+                      setContactErrors((p) => { const n = { ...p }; delete n.preferredDate; return n })
+                    }}
+                  >
+                    {labels[time]}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <input
             type="text"
-            className="conv-input"
-            placeholder="e.g. Dec 12, afternoon — or just a rough idea"
-            value={dateInput}
-            onChange={(e) => {
-              setDateInput(e.target.value)
-              setData((p) => ({ ...p, preferredDate: e.target.value.trim() }))
-              setContactErrors((p) => { const n = { ...p }; delete n.preferredDate; return n })
-            }}
+            className="conv-input date-note-input"
+            placeholder="Anything else about timing? (optional)"
+            value={data.preferredDateNote}
+            onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
           />
           {contactErrors.preferredDate && <span className="conv-error">{contactErrors.preferredDate}</span>}
-          <p className="conv-hint">Aaron books 2–3 days ahead. Flexible on timing.</p>
         </div>
 
         <div className="conv-step">
@@ -421,8 +505,9 @@ function BookingConversation() {
               />
             </div>
           </div>
+          <p className="conv-hint">Aaron will follow up within a day or two.</p>
           <button type="button" className="conv-action" onClick={submitContact}>
-            Open Email Draft →
+            Send to Aaron →
           </button>
         </div>
       </div>
@@ -525,20 +610,75 @@ function BookingConversation() {
 
           {step === 'date' && (
             <>
-              <p className="conv-question">When are you thinking?</p>
+              <p className="conv-question">When works for you?</p>
+
+              <div className="date-chip-group">
+                <p className="date-chip-label">Day</p>
+                <div className="date-chips">
+                  {(['mon','tue','wed','thu','fri','sat','sun'] as DayOfWeek[]).map((day) => {
+                    const labels: Record<DayOfWeek, string> = {
+                      mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu',
+                      fri: 'Fri', sat: 'Sat', sun: 'Sun',
+                    }
+                    const selected = data.preferredDays.includes(day)
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        className={`date-chip${selected ? ' date-chip--selected' : ''}`}
+                        onClick={() => {
+                          setData((prev) => ({
+                            ...prev,
+                            preferredDays: selected
+                              ? prev.preferredDays.filter((d) => d !== day)
+                              : [...prev.preferredDays, day],
+                          }))
+                        }}
+                      >
+                        {labels[day]}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="date-chip-group">
+                <p className="date-chip-label">Time</p>
+                <div className="date-chips">
+                  {(['morning','afternoon','evening'] as TimeOfDay[]).map((time) => {
+                    const labels: Record<TimeOfDay, string> = {
+                      morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening',
+                    }
+                    const selected = data.preferredTime === time
+                    return (
+                      <button
+                        key={time}
+                        type="button"
+                        className={`date-chip${selected ? ' date-chip--selected' : ''}`}
+                        onClick={() => {
+                          setData((prev) => ({ ...prev, preferredTime: selected ? null : time }))
+                        }}
+                      >
+                        {labels[time]}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <input
                 type="text"
-                className="conv-input"
-                placeholder="e.g. Dec 12, afternoon — or just a rough idea"
-                value={dateInput}
-                onChange={(e) => setDateInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') submitDate() }}
-                autoFocus
+                className="conv-input date-note-input"
+                placeholder="Anything else about timing? (optional)"
+                value={data.preferredDateNote}
+                onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
               />
-              <p className="conv-hint">Aaron books 2–3 days ahead. Flexible on timing.</p>
-              <button type="button" className="conv-action" onClick={submitDate}>
-                Sounds good →
-              </button>
+
+              {(data.preferredDays.length > 0 || data.preferredTime !== null) && (
+                <button type="button" className="conv-action" onClick={submitDate}>
+                  Sounds good →
+                </button>
+              )}
             </>
           )}
 
@@ -556,6 +696,7 @@ function BookingConversation() {
                       setData((p) => ({ ...p, name: e.target.value }))
                       setContactErrors((p) => { const n = { ...p }; delete n.name; return n })
                     }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
                     autoFocus
                   />
                   {contactErrors.name && <span className="conv-error">{contactErrors.name}</span>}
@@ -570,6 +711,7 @@ function BookingConversation() {
                       setData((p) => ({ ...p, email: e.target.value }))
                       setContactErrors((p) => { const n = { ...p }; delete n.email; return n })
                     }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
                   />
                   {contactErrors.email && <span className="conv-error">{contactErrors.email}</span>}
                 </div>
@@ -580,11 +722,13 @@ function BookingConversation() {
                     placeholder="Phone, optional"
                     value={data.phone}
                     onChange={(e) => setData((p) => ({ ...p, phone: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === 'Enter') submitContact() }}
                   />
                 </div>
               </div>
+              <p className="conv-hint">Aaron will follow up within a day or two.</p>
               <button type="button" className="conv-action" onClick={submitContact}>
-                Open Email Draft →
+                Send to Aaron →
               </button>
             </>
           )}
@@ -611,6 +755,8 @@ function BookingConversation() {
 }
 
 export default function BookingSection() {
+  const bookingInnerRef = useRef<HTMLDivElement>(null)
+
   return (
     <section className="booking" id="book">
       <div className="booking__bg">
@@ -623,13 +769,13 @@ export default function BookingSection() {
         <div className="booking__bg-overlay" />
       </div>
 
-      <div className="booking__inner">
+      <div className="booking__inner" ref={bookingInnerRef}>
         <div className="booking__header">
           <p className="section-eyebrow section-eyebrow--light">Ready when you are</p>
           <h2 className="booking__heading">Book a Lesson</h2>
-          <p className="booking__sub">Choose the basics, then send Aaron a lesson request by email.</p>
+          <p className="booking__sub">Pick what works, and Aaron will take it from there.</p>
         </div>
-        <BookingConversation />
+        <BookingConversation bookingInnerRef={bookingInnerRef} />
       </div>
     </section>
   )
