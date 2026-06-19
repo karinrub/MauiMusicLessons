@@ -24,7 +24,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior is handled by scrollToSection() in animation.ts — do not set here */
 }
 
 #hero,
