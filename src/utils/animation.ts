@@ -25,7 +25,10 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = 'smooth')
     return
   }
 
-  // scrollIntoView respects the scroll-margin-top values set in index.css,
-  // which correctly accounts for the navbar height across all section anchors.
-  target.scrollIntoView({ behavior, block: 'start' })
+  // scrollIntoView does not work reliably in this layout (sticky/transform
+  // ancestors prevent the browser from computing the scroll target correctly).
+  // Use window.scrollTo with offsetTop minus the computed scroll-margin-top,
+  // which accounts for the navbar height set in index.css.
+  const scrollMargin = parseInt(window.getComputedStyle(target).scrollMarginTop) || 0
+  window.scrollTo({ top: target.offsetTop - scrollMargin, behavior })
 }
