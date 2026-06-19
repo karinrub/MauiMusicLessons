@@ -128,6 +128,7 @@ function App() {
           image={publicAsset('/images/aaron-bookingForm.jpg')}
         />
         <BookingSection />
+        <SectionHandoff variant="closing" />
       </main>
       <Footer />
     </>

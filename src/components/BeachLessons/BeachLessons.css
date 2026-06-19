@@ -49,7 +49,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 6.25rem 2rem 1.5rem;
+  padding: 4rem 2rem 2rem;
   max-width: 640px;
   color: #ede8de;
 }
@@ -264,7 +264,7 @@
 
 @media (max-width: 768px) {
   .beach__tc-content {
-    padding: 5rem 1.5rem 1.5rem;
+    padding: 3.5rem 1.5rem 1.5rem;
   }
 
   .beach__tc-title {
@@ -314,7 +314,7 @@
   }
 
   .beach__tc-content {
-    padding: 5rem 1.5rem 1.5rem;
+    padding: 3.25rem 1.5rem 1.5rem;
   }
 }
 
@@ -324,7 +324,7 @@
   }
 
   .beach__tc-content {
-    padding: 4.75rem 1.25rem 1.75rem;
+    padding: 3rem 1.25rem 1.75rem;
   }
 
   .beach__editorial-text {

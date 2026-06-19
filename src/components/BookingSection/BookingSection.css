@@ -2,7 +2,7 @@
 .booking {
   position: relative;
   min-height: 96vh;
-  padding: 7rem 2rem 5.75rem;
+  padding: 7rem 2rem 3rem;
   overflow: hidden;
   margin-bottom: -1px;
 }

@@ -25,14 +25,7 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = 'smooth')
     return
   }
 
-  const nav = document.querySelector<HTMLElement>('.navbar')
-  const navHeight = nav?.getBoundingClientRect().height ?? 72
-  const targetTop = window.scrollY + target.getBoundingClientRect().top
-  const offset = Math.max(navHeight + 22, 86)
-  const visualShift = id === 'about' ? window.innerHeight * 0.28 : 0
-
-  window.scrollTo({
-    top: Math.max(0, Math.round(targetTop - offset + visualShift)),
-    behavior,
-  })
+  // scrollIntoView respects the scroll-margin-top values set in index.css,
+  // which correctly accounts for the navbar height across all section anchors.
+  target.scrollIntoView({ behavior, block: 'start' })
 }
