@@ -15,8 +15,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 10vh;
-  background: linear-gradient(to bottom, transparent, rgba(28, 20, 9, 0.82));
+  height: 22vh;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% 72%, rgba(196, 170, 133, 0.08), transparent 70%),
+    linear-gradient(to bottom, transparent, rgba(18, 14, 10, 0.9));
   pointer-events: none;
   z-index: 2;
 }
@@ -59,8 +61,9 @@
 /* Gradient dissolves title card into Beat 2 — no dead black gap */
 .weekly__tc-fade {
   align-self: stretch;
-  height: 52px;
-  background: linear-gradient(to bottom, rgba(19, 16, 10, 0), #1c1409);
+  height: clamp(64px, 10vh, 104px);
+  background:
+    linear-gradient(to bottom, rgba(19, 16, 10, 0), rgba(28, 20, 9, 0.72) 62%, #1c1409);
   pointer-events: none;
   position: relative;
   z-index: 1;

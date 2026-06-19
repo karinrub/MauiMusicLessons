@@ -29,6 +29,7 @@ export default function Navbar() {
       document.querySelector('#beach-lessons'),
       document.querySelector('.weekly'),
       document.querySelector('.cinematic-entry'),
+      ...Array.from(document.querySelectorAll<Element>('.section-handoff')),
       document.querySelector('#about'),
       document.querySelector('#book'),
       document.querySelector('#maui-music-lessons'),

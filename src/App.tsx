@@ -8,6 +8,7 @@ import AboutAaron from './components/AboutAaron/AboutAaron'
 import BookingSection from './components/BookingSection/BookingSection'
 import SeoContent from './components/SeoContent/SeoContent'
 import Footer from './components/Footer/Footer'
+import SectionHandoff from './components/SectionHandoff/SectionHandoff'
 import { publicAsset } from './utils/assets'
 
 const PANEL_1_LINES = [
@@ -58,7 +59,9 @@ function App() {
           imageRestOpacity={0.42}
           imageExitOpacity={0.4}
         />
+        <SectionHandoff variant="visitor" />
         <BeachLessons />
+        <SectionHandoff variant="audience" />
         <CinematicPanel
           lines={PANEL_3_LINES}
           height="136vh"
@@ -71,6 +74,7 @@ function App() {
           entryStart={0}
         />
         <WeeklyLessons />
+        <SectionHandoff variant="chapter" />
         <AboutAaron />
         <CinematicEntry
           lines={PANEL_2_LINES}
@@ -78,8 +82,11 @@ function App() {
           imageWidth={2200}
           imageHeight={1467}
         />
+        <SectionHandoff variant="practical" />
         <SeoContent />
+        <SectionHandoff variant="conversion" />
         <BookingSection />
+        <SectionHandoff variant="closing" />
       </main>
       <Footer />
     </>

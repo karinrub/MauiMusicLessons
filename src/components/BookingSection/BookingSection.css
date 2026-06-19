@@ -19,6 +19,20 @@
   background: linear-gradient(to bottom, #1a140d, rgba(26, 20, 13, 0));
 }
 
+.booking::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 24vh;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 48% at 50% 86%, rgba(232, 213, 190, 0.08), transparent 72%),
+    linear-gradient(to bottom, rgba(15, 13, 11, 0), #0f0d0b 86%);
+}
+
 .booking__bg {
   position: absolute;
   inset: 0;

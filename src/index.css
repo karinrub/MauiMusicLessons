@@ -27,6 +27,15 @@ html {
   scroll-behavior: smooth;
 }
 
+#hero,
+#beach-lessons,
+#weekly-lessons,
+#about,
+#maui-music-lessons,
+#book {
+  scroll-margin-top: 5.75rem;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #0a0a0a;

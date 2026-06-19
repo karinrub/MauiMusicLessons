@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useScrollY } from '../../hooks/useScrollY'
 import { easeOutCubic, lineOpacity } from '../../utils/animation'
 import { viewportProgress } from '../../utils/scroll'
 import './CinematicEntry.css'
@@ -16,78 +17,65 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
   const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const section = sectionRef.current
-    if (!section) return
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    lineRefs.current.forEach(el => {
+      if (!el) return
+      el.style.opacity = '1'
+      el.style.transform = 'none'
+    })
+    if (imageRef.current) imageRef.current.style.opacity = '0.18'
+  }, [lines])
 
-    if (prefersReducedMotion) {
+  const count = lines.length
+  const spread = 0.28
+  const entryPoints = lines.map((_, i) => 0.04 + i * (spread / Math.max(count - 1, 1)))
+
+  useScrollY(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       lineRefs.current.forEach(el => {
         if (!el) return
         el.style.opacity = '1'
         el.style.transform = 'none'
       })
-      if (imageRef.current) imageRef.current.style.opacity = '0.13'
+      if (imageRef.current) imageRef.current.style.opacity = '0.18'
       return
     }
 
-    const count = lines.length
-    const spread = 0.28
-    const entryPoints = lines.map((_, i) => 0.04 + i * (spread / Math.max(count - 1, 1)))
+    const section = sectionRef.current
+    if (!section) return
+    const progress = viewportProgress(section, 0.88, -0.55)
 
-    let rafId: number
+    if (imageRef.current) {
+      const imgOp = progress < 0.14
+        ? (progress / 0.14) * 0.30
+        : progress > 0.86
+          ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.30
+          : 0.30
+      imageRef.current.style.opacity = imgOp.toFixed(4)
+    }
 
-    const update = () => {
-      const progress = viewportProgress(section, 0.88, -0.55)
+    lineRefs.current.forEach((el, i) => {
+      if (!el) return
 
-      if (imageRef.current) {
-        const imgOp = progress < 0.14
-          ? (progress / 0.14) * 0.30
-          : progress > 0.86
-            ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.30
-            : 0.30
-        imageRef.current.style.opacity = imgOp.toFixed(4)
+      const enterStart = entryPoints[i]
+      const enterEnd = enterStart + 0.22
+      const exitStart = 0.84
+      const exitEnd = 1
+      const op = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
+
+      let ty = 0
+      if (progress <= enterEnd) {
+        const p = Math.max(0, (progress - enterStart) / Math.max(0.001, enterEnd - enterStart))
+        ty = (1 - easeOutCubic(Math.min(1, p))) * 18
+      } else if (progress >= exitStart) {
+        const p = Math.min(1, (progress - exitStart) / Math.max(0.001, exitEnd - exitStart))
+        ty = -easeOutCubic(p) * 12
       }
 
-      lineRefs.current.forEach((el, i) => {
-        if (!el) return
-
-        const enterStart = entryPoints[i]
-        const enterEnd = enterStart + 0.22
-        const exitStart = 0.84
-        const exitEnd = 1
-        const op = lineOpacity(progress, enterStart, enterEnd, exitStart, exitEnd)
-
-        let ty = 0
-        if (progress <= enterEnd) {
-          const p = Math.max(0, (progress - enterStart) / Math.max(0.001, enterEnd - enterStart))
-          ty = (1 - easeOutCubic(Math.min(1, p))) * 18
-        } else if (progress >= exitStart) {
-          const p = Math.min(1, (progress - exitStart) / Math.max(0.001, exitEnd - exitStart))
-          ty = -easeOutCubic(p) * 12
-        }
-
-        el.style.opacity = op.toFixed(4)
-        el.style.transform = `translateY(${ty.toFixed(2)}px)`
-      })
-    }
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(update)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    window.visualViewport?.addEventListener('resize', onScroll)
-    update()
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      window.visualViewport?.removeEventListener('resize', onScroll)
-      cancelAnimationFrame(rafId)
-    }
-  }, [lines])
+      el.style.opacity = op.toFixed(4)
+      el.style.transform = `translateY(${ty.toFixed(2)}px)`
+    })
+  })
 
   return (
     <section ref={sectionRef} className="cinematic-entry">

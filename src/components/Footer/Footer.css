@@ -1,4 +1,5 @@
 .footer {
+  position: relative;
   background:
     linear-gradient(to bottom, #0f0d0b 0%, #0b0907 100%);
   color: rgba(255, 255, 255, 0.68);

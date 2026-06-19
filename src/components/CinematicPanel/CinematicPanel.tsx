@@ -51,9 +51,10 @@ export default function CinematicPanel({
   const count = lines.length
   const spread = 0.2
   const defaultEntryPoints = lines.map((_, i) => entryStart + i * (spread / Math.max(count - 1, 1)))
-  const beachEntryPoints = [0, 0.1, 0.25]
-  const beachExitStarts = [0.48, 0.58, 0.78]
-  const beachExitEnds = [0.64, 0.72, 0.94]
+  const beachEntryPoints = [0.04, 0.22, 0.46]
+  const beachEntryDurations = [0.1, 0.12, 0.16]
+  const beachExitStarts = [0.54, 0.66, 0.86]
+  const beachExitEnds = [0.7, 0.8, 0.99]
 
   useScrollY(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -103,7 +104,7 @@ export default function CinematicPanel({
       if (!el) return
 
       const enterStart = isBeachEntry ? (beachEntryPoints[i] ?? 0.52) : defaultEntryPoints[i]
-      const enterDuration = isBeachEntry ? (i === 0 ? 0.04 : i === 1 ? 0.08 : 0.12) : 0.15
+      const enterDuration = isBeachEntry ? (beachEntryDurations[i] ?? 0.14) : 0.15
       const enterEnd = enterStart + enterDuration
       const exitStart = isBeachEntry ? (beachExitStarts[i] ?? 0.88) : 0.8
       const exitEnd = isBeachEntry ? (beachExitEnds[i] ?? 0.99) : 0.96

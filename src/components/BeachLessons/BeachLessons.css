@@ -6,6 +6,20 @@
   z-index: 2;
 }
 
+.beach::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 24vh;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 72% 54% at 50% 80%, rgba(196, 170, 133, 0.08), transparent 68%),
+    linear-gradient(to bottom, rgba(28, 20, 9, 0), #1c1409 86%);
+}
+
 /* ─── Beat 1: Title card ─────────────────────────────────── */
 
 .beach__title-card {
@@ -42,8 +56,9 @@
 
 .beach__tc-fade {
   align-self: stretch;
-  height: 52px;
-  background: linear-gradient(to bottom, rgba(14, 12, 9, 0), #1c1409);
+  height: clamp(64px, 10vh, 104px);
+  background:
+    linear-gradient(to bottom, rgba(14, 12, 9, 0), rgba(28, 20, 9, 0.72) 62%, #1c1409);
   pointer-events: none;
   position: relative;
   z-index: 1;
@@ -144,8 +159,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 88px;
-  background: linear-gradient(to bottom, rgba(14, 12, 9, 0.32) 0%, transparent 100%);
+  height: clamp(88px, 16vh, 150px);
+  background:
+    linear-gradient(to bottom, rgba(28, 20, 9, 0.78) 0%, rgba(28, 20, 9, 0.24) 54%, transparent 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -154,7 +170,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 64%, #1c1409 100%);
+  background: linear-gradient(to bottom, rgba(28, 20, 9, 0) 56%, rgba(28, 20, 9, 0.42) 78%, #1c1409 100%);
   pointer-events: none;
 }
 
