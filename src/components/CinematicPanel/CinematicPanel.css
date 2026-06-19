@@ -4,10 +4,10 @@
 }
 
 .cinematic-panel--beach-entry {
-  --beach-entry-hero-overlap: -48vh;
+  --beach-entry-hero-overlap: -50vh;
   min-height: 100vh;
   min-height: 100svh;
-  background-color: #0e0b08;
+  background-color: #12100c;
   /* Pulls the beach-entry panel into the hero's final veil so the handoff overlaps instead of cutting to black. */
   margin-top: var(--beach-entry-hero-overlap);
   z-index: 5;
@@ -31,8 +31,8 @@
   pointer-events: none;
   background:
     linear-gradient(to right, rgba(14, 11, 8, 0.76) 0%, rgba(14, 11, 8, 0.48) 38%, rgba(14, 11, 8, 0.12) 72%, rgba(14, 11, 8, 0.03) 100%),
-    linear-gradient(to bottom, rgba(14, 11, 8, 0.9) 0%, rgba(14, 11, 8, 0.76) 38%, rgba(14, 11, 8, 0.42) 68%, rgba(14, 11, 8, 0.14) 86%, rgba(10, 10, 10, 0.36) 100%),
-    radial-gradient(ellipse 70% 52% at 68% 64%, rgba(215, 231, 232, 0.2) 0%, rgba(14, 11, 8, 0) 62%);
+    linear-gradient(to bottom, rgba(18, 16, 12, 0.9) 0%, rgba(18, 16, 12, 0.74) 38%, rgba(18, 16, 12, 0.42) 68%, rgba(18, 16, 12, 0.16) 86%, rgba(20, 16, 10, 0.42) 100%),
+    radial-gradient(ellipse 70% 52% at 68% 64%, rgba(196, 170, 133, 0.16) 0%, rgba(18, 16, 12, 0) 62%);
 }
 
 .cinematic-panel--beach-entry .cinematic-panel__sticky::after {
@@ -47,16 +47,17 @@
   background: linear-gradient(
     to bottom,
     rgba(26, 20, 16, 0),
-    rgba(14, 11, 8, 0.14) 44%,
-    rgba(10, 10, 10, 0.72) 100%
+    rgba(18, 16, 12, 0.12) 40%,
+    rgba(28, 20, 9, 0.68) 100%
   );
 }
 
 /* Weekly-entry panel — centered, smaller type, quieter weight than beach-entry */
 
 .cinematic-panel--weekly-entry {
-  margin-top: -12vh;
+  margin-top: -10vh;
   z-index: 1;
+  background-color: #12100c;
 }
 
 .cinematic-panel--weekly-entry .cinematic-panel__lines {
@@ -95,7 +96,7 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 66% 48% at 50% 58%, rgba(196, 170, 133, 0.08), transparent 70%),
-    linear-gradient(to bottom, rgba(14, 11, 8, 0), rgba(28, 20, 9, 0.78));
+    linear-gradient(to bottom, rgba(18, 16, 12, 0), rgba(28, 20, 9, 0.78));
 }
 
 .cinematic-panel--weekly-entry .cinematic-panel__image {
@@ -189,7 +190,7 @@
 @media (max-width: 768px) {
   .cinematic-panel--beach-entry {
     --beach-entry-hero-overlap: -34vh;
-    height: 150vh !important;
+    height: 190vh !important;
   }
 
   .cinematic-panel__text {
@@ -228,7 +229,7 @@
 @media (max-width: 480px) {
   .cinematic-panel--beach-entry {
     --beach-entry-hero-overlap: -30vh;
-    height: 146vh !important;
+    height: 184vh !important;
   }
 
   .cinematic-panel--beach-entry .cinematic-panel__lines {

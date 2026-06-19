@@ -2,7 +2,7 @@
 .booking {
   position: relative;
   min-height: 96vh;
-  padding: 8rem 2rem 8.5rem;
+  padding: 7rem 2rem 5.75rem;
   overflow: hidden;
   margin-bottom: -1px;
 }
@@ -13,7 +13,7 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 28vh;
+  height: 18vh;
   z-index: 1;
   pointer-events: none;
   background: linear-gradient(to bottom, #1a140d, rgba(26, 20, 13, 0));
@@ -25,12 +25,12 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 24vh;
+  height: 12vh;
   z-index: 1;
   pointer-events: none;
   background:
     radial-gradient(ellipse 70% 48% at 50% 86%, rgba(232, 213, 190, 0.08), transparent 72%),
-    linear-gradient(to bottom, rgba(15, 13, 11, 0), #0f0d0b 86%);
+    linear-gradient(to bottom, rgba(15, 13, 11, 0), #0f0d0b 92%);
 }
 
 .booking__bg {
@@ -493,7 +493,7 @@
 
 @media (max-width: 560px) {
   .booking {
-    padding: 5rem 1.25rem 5rem;
+    padding: 4.5rem 1.25rem 4rem;
   }
 
   .booking__inner {
@@ -530,7 +530,7 @@
 
 @media (max-width: 360px) {
   .booking {
-    padding: 5rem 1.25rem 5rem;
+    padding: 4.5rem 1.25rem 4rem;
   }
 
   .booking__heading {

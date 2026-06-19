@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import CinematicPanel from './components/CinematicPanel/CinematicPanel'
@@ -10,6 +11,7 @@ import SeoContent from './components/SeoContent/SeoContent'
 import Footer from './components/Footer/Footer'
 import SectionHandoff from './components/SectionHandoff/SectionHandoff'
 import { publicAsset } from './utils/assets'
+import { scrollToSection } from './utils/animation'
 
 const PANEL_1_LINES = [
   'No experience.',
@@ -42,6 +44,31 @@ function Grain() {
 }
 
 function App() {
+  useEffect(() => {
+    let alignmentTimers: number[] = []
+    const alignHashTarget = () => {
+      const nextHash = window.location.hash.slice(1)
+      if (nextHash) scrollToSection(nextHash, 'auto')
+    }
+
+    const queueHashAlignment = () => {
+      alignmentTimers.forEach(window.clearTimeout)
+      alignmentTimers = [0, 120, 420, 900, 1600].map((delay) => (
+        window.setTimeout(alignHashTarget, delay)
+      ))
+    }
+
+    if (window.location.hash) queueHashAlignment()
+    window.addEventListener('load', alignHashTarget, { once: true })
+    window.addEventListener('hashchange', queueHashAlignment)
+
+    return () => {
+      alignmentTimers.forEach(window.clearTimeout)
+      window.removeEventListener('load', alignHashTarget)
+      window.removeEventListener('hashchange', queueHashAlignment)
+    }
+  }, [])
+
   return (
     <>
       <Grain />
@@ -51,7 +78,7 @@ function App() {
         <CinematicPanel
           lines={PANEL_1_LINES}
           variant="beachEntry"
-          height="156vh"
+          height="226vh"
           className="cinematic-panel--beach-entry"
           image={publicAsset('/images/aaron-pause.jpg')}
           imageWidth={2200}
@@ -59,12 +86,18 @@ function App() {
           imageRestOpacity={0.42}
           imageExitOpacity={0.4}
         />
-        <SectionHandoff variant="visitor" />
+        <SectionHandoff
+          variant="visitor"
+          image={publicAsset('/images/aaron-teaching-1.jpg')}
+        />
         <BeachLessons />
-        <SectionHandoff variant="audience" />
+        <SectionHandoff
+          variant="audience"
+          image={publicAsset('/images/aaron-playing-1.jpg')}
+        />
         <CinematicPanel
           lines={PANEL_3_LINES}
-          height="136vh"
+          height="154vh"
           className="cinematic-panel--weekly-entry"
           image={publicAsset('/images/aaron-playing-1.jpg')}
           imageWidth={2200}
@@ -74,7 +107,10 @@ function App() {
           entryStart={0}
         />
         <WeeklyLessons />
-        <SectionHandoff variant="chapter" />
+        <SectionHandoff
+          variant="chapter"
+          image={publicAsset('/images/aaron-portrait-1.jpg')}
+        />
         <AboutAaron />
         <CinematicEntry
           lines={PANEL_2_LINES}
@@ -82,11 +118,16 @@ function App() {
           imageWidth={2200}
           imageHeight={1467}
         />
-        <SectionHandoff variant="practical" />
+        <SectionHandoff
+          variant="practical"
+          image={publicAsset('/images/aaron-onlyMe.jpg')}
+        />
         <SeoContent />
-        <SectionHandoff variant="conversion" />
+        <SectionHandoff
+          variant="conversion"
+          image={publicAsset('/images/aaron-bookingForm.jpg')}
+        />
         <BookingSection />
-        <SectionHandoff variant="closing" />
       </main>
       <Footer />
     </>

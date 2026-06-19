@@ -71,7 +71,12 @@ export default function Navbar() {
   }, [])
 
   const handleNav = (id: string) => {
+    const shouldWaitForMenuClose = menuOpen
     setMenuOpen(false)
+    if (shouldWaitForMenuClose) {
+      window.setTimeout(() => scrollToSection(id), 80)
+      return
+    }
     scrollToSection(id)
   }
 

@@ -1,11 +1,11 @@
 .section-handoff {
   position: relative;
-  min-height: clamp(120px, 22vh, 230px);
+  min-height: clamp(76px, 13vh, 150px);
   margin-top: -1px;
   margin-bottom: -1px;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 80% 90% at var(--handoff-x, 50%) var(--handoff-y, 48%), var(--handoff-glow, rgba(196, 170, 133, 0.1)), transparent 68%),
+    radial-gradient(ellipse 80% 90% at var(--handoff-x, 50%) var(--handoff-y, 48%), var(--handoff-glow, rgba(196, 170, 133, 0.1)), transparent 70%),
     linear-gradient(to bottom, var(--handoff-from, #0e0b08), var(--handoff-mid, #17110b) 50%, var(--handoff-to, #1c1409));
   isolation: isolate;
 }
@@ -19,8 +19,8 @@
 
 .section-handoff::before {
   inset: 0;
-  z-index: 0;
-  opacity: var(--handoff-texture-opacity, 0.55);
+  z-index: 2;
+  opacity: var(--handoff-texture-opacity, 0.5);
   background:
     radial-gradient(ellipse 56% 82% at var(--handoff-soft-x, 22%) 42%, var(--handoff-soft, rgba(107, 158, 154, 0.08)), transparent 74%),
     linear-gradient(115deg, rgba(232, 213, 190, 0), var(--handoff-sheen, rgba(232, 213, 190, 0.045)) 46%, rgba(232, 213, 190, 0) 76%);
@@ -28,15 +28,38 @@
 
 .section-handoff::after {
   inset: auto 0 0;
-  z-index: 1;
-  height: 52%;
+  z-index: 3;
+  height: 58%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--handoff-bottom, rgba(10, 8, 6, 0.32)));
   opacity: 0.86;
 }
 
+.section-handoff__image,
+.section-handoff__tone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.section-handoff__image {
+  z-index: 0;
+  background-size: cover;
+  background-position: var(--handoff-image-position, center);
+  opacity: var(--handoff-image-opacity, 0.12);
+  filter: saturate(var(--handoff-image-saturation, 0.74)) contrast(var(--handoff-image-contrast, 0.92));
+  transform: scale(1.03);
+}
+
+.section-handoff__tone {
+  z-index: 1;
+  background:
+    linear-gradient(to right, var(--handoff-side-a, rgba(10, 8, 6, 0.18)), transparent 40%, var(--handoff-side-b, rgba(10, 8, 6, 0.12))),
+    linear-gradient(to bottom, var(--handoff-from, #0e0b08), rgba(18, 14, 10, 0.36) 48%, var(--handoff-to, #1c1409));
+}
+
 .section-handoff--visitor {
-  --handoff-from: #0e0b08;
-  --handoff-mid: #15100a;
+  --handoff-from: #12100c;
+  --handoff-mid: #17110a;
   --handoff-to: #1c1409;
   --handoff-x: 62%;
   --handoff-y: 18%;
@@ -44,23 +67,32 @@
   --handoff-soft: rgba(107, 158, 154, 0.09);
   --handoff-sheen: rgba(232, 213, 190, 0.05);
   --handoff-bottom: rgba(28, 20, 9, 0.44);
+  --handoff-image-opacity: 0.18;
+  --handoff-image-position: center 28%;
+  margin-top: -7vh;
+  margin-bottom: -7vh;
 }
 
 .section-handoff--audience {
   --handoff-from: #1c1409;
-  --handoff-mid: #160f08;
-  --handoff-to: #0e0b08;
+  --handoff-mid: #18110a;
+  --handoff-to: #12100c;
   --handoff-x: 46%;
   --handoff-y: 70%;
   --handoff-glow: rgba(196, 170, 133, 0.1);
   --handoff-soft-x: 72%;
-  --handoff-soft: rgba(10, 8, 6, 0.22);
+  --handoff-soft: rgba(232, 213, 190, 0.045);
   --handoff-sheen: rgba(232, 213, 190, 0.035);
-  --handoff-bottom: rgba(14, 11, 8, 0.5);
+  --handoff-bottom: rgba(18, 16, 12, 0.46);
+  --handoff-image-opacity: 0.14;
+  --handoff-image-position: center 42%;
+  min-height: clamp(64px, 10vh, 128px);
+  margin-top: -4vh;
+  margin-bottom: -5vh;
 }
 
 .section-handoff--chapter {
-  --handoff-from: #1c1409;
+  --handoff-from: #19130c;
   --handoff-mid: #17100a;
   --handoff-to: #0a0a0a;
   --handoff-x: 50%;
@@ -70,10 +102,15 @@
   --handoff-soft: rgba(232, 213, 190, 0.055);
   --handoff-sheen: rgba(232, 213, 190, 0.03);
   --handoff-bottom: rgba(10, 10, 10, 0.56);
+  --handoff-image-opacity: 0.1;
+  --handoff-image-position: center 35%;
+  min-height: clamp(80px, 14vh, 156px);
+  margin-top: -3vh;
+  margin-bottom: -1px;
 }
 
 .section-handoff--practical {
-  --handoff-from: #13100a;
+  --handoff-from: #17120c;
   --handoff-mid: #1a140d;
   --handoff-to: #1a140d;
   --handoff-x: 36%;
@@ -83,19 +120,30 @@
   --handoff-soft: rgba(232, 213, 190, 0.05);
   --handoff-sheen: rgba(184, 154, 112, 0.045);
   --handoff-bottom: rgba(26, 20, 13, 0.42);
+  --handoff-image-opacity: 0.12;
+  --handoff-image-position: center 55%;
+  min-height: clamp(76px, 12vh, 146px);
+  margin-top: -4vh;
+  margin-bottom: -4vh;
 }
 
 .section-handoff--conversion {
   --handoff-from: #1a140d;
-  --handoff-mid: #14100d;
+  --handoff-mid: #17120e;
   --handoff-to: #0f0d0b;
   --handoff-x: 58%;
   --handoff-y: 64%;
-  --handoff-glow: rgba(196, 170, 133, 0.09);
+  --handoff-glow: rgba(232, 213, 190, 0.13);
   --handoff-soft-x: 20%;
   --handoff-soft: rgba(107, 158, 154, 0.055);
   --handoff-sheen: rgba(232, 213, 190, 0.035);
   --handoff-bottom: rgba(15, 13, 11, 0.58);
+  --handoff-image-opacity: 0.2;
+  --handoff-image-position: center 30%;
+  --handoff-image-saturation: 0.7;
+  min-height: clamp(86px, 15vh, 168px);
+  margin-top: -2vh;
+  margin-bottom: -9vh;
 }
 
 .section-handoff--closing {
@@ -114,10 +162,15 @@
 
 @media (max-width: 720px) {
   .section-handoff {
-    min-height: clamp(88px, 16vh, 150px);
+    min-height: clamp(60px, 10vh, 112px);
   }
 
   .section-handoff--closing {
     min-height: clamp(76px, 14vh, 130px);
+  }
+
+  .section-handoff--conversion {
+    min-height: clamp(72px, 12vh, 132px);
+    margin-bottom: -6vh;
   }
 }
