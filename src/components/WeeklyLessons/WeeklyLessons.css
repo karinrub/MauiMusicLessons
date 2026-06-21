@@ -224,6 +224,7 @@
   height: clamp(460px, 58vh, 640px);
   object-fit: cover;
   object-position: center center;
+  filter: brightness(0.82) saturate(0.85) contrast(0.96);
 }
 
 /* Quote overlaid on right portion of the image — editorial caption feel */

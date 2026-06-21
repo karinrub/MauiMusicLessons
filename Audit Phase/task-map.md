@@ -1,5 +1,12 @@
 # MauiMusicLessons Audit Task Map
 
+## Implementation Status — June 2026
+
+Categories completed: 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+Remaining: Category 18 (Final Verification) — requires browser QA pass
+User-data dependencies outstanding: real testimonials, confirmed phone number
+Asset-decision dependencies outstanding: none — all image treatment applied via CSS filter
+
 Use this file as the implementation map for future coding tasks. `audit-findings.md` is the evidence archive; this file converts that evidence into actionable work categories.
 
 Priority levels:
