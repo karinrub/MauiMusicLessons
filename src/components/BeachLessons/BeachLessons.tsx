@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
-import { scrollToSection } from '../../utils/animation'
+import { scrollToSection, easeOutCubic } from '../../utils/animation'
+import { viewportProgress } from '../../utils/scroll'
 import { publicAsset } from '../../utils/assets'
 import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
+import { useScrollY } from '../../hooks/useScrollY'
 import './BeachLessons.css'
 
 function MutedIcon() {
@@ -32,8 +34,23 @@ export default function BeachLessons() {
   const eyebrowRef = useRef<HTMLParagraphElement>(null)
   const tcTitleRef = useRef<HTMLHeadingElement>(null)
   const subtextRef = useRef<HTMLParagraphElement>(null)
+  const editorialRef = useRef<HTMLDivElement>(null)
 
   useStaggeredReveal(cardRef, [eyebrowRef, tcTitleRef, subtextRef])
+
+  // Exit choreography: fade the editorial panel as it scrolls above the viewport.
+  // ScrollLines inside already exit their text; this fade removes the photo so the
+  // section exits with choreography rather than cutting to the next element.
+  useScrollY(() => {
+    const editorial = editorialRef.current
+    if (!editorial) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      editorial.style.opacity = '1'
+      return
+    }
+    const exitProgress = viewportProgress(editorial, 0.0, -0.5)
+    editorial.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
+  })
 
   const toggleMute = () => {
     const video = videoRef.current
@@ -104,7 +121,7 @@ export default function BeachLessons() {
       </div>
 
       {/* Beat 3 — Editorial panel */}
-      <div className="beach__editorial">
+      <div className="beach__editorial" ref={editorialRef}>
         <div className="beach__editorial-text">
           <div className="beach__heading-block">
             <ScrollLine size="xl" weight={300} delay={0.08} color="#ede8de">

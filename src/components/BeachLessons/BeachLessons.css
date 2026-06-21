@@ -181,6 +181,7 @@
   align-items: center;
   width: 100%;
   background: #1c1409;
+  will-change: opacity;
 }
 
 .beach__editorial-text {
@@ -350,5 +351,10 @@
 
   .beach__mute-btn {
     transition: none;
+  }
+
+  /* Ensure exit fade never hides content in reduced-motion mode */
+  .beach__editorial {
+    opacity: 1 !important;
   }
 }

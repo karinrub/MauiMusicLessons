@@ -16,7 +16,7 @@ export function lineOpacity(
   return 0
 }
 
-export function scrollToSection(id: string, behavior: ScrollBehavior = 'smooth'): void {
+export function scrollToSection(id: string, behavior: ScrollBehavior = 'auto'): void {
   const target = document.getElementById(id)
   if (!target) return
 

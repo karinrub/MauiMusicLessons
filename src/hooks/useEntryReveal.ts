@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
 
+// intentionally unused — useStaggeredReveal covers all active stagger-reveal needs;
+// useEntryReveal is retained as a re-entrant (resets on scroll-back) alternative
+// if a future section needs that behavior without the fire-once constraint.
 export function useEntryReveal(
   containerRef: { current: HTMLElement | null },
   staggerMs = 80

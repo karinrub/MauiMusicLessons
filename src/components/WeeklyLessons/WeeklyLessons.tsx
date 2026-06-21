@@ -1,8 +1,10 @@
 import { useRef } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
-import { scrollToSection } from '../../utils/animation'
+import { scrollToSection, easeOutCubic } from '../../utils/animation'
+import { viewportProgress } from '../../utils/scroll'
 import { publicAsset } from '../../utils/assets'
 import { useStaggeredReveal } from '../../hooks/useStaggeredReveal'
+import { useScrollY } from '../../hooks/useScrollY'
 import './WeeklyLessons.css'
 
 export default function WeeklyLessons() {
@@ -10,8 +12,35 @@ export default function WeeklyLessons() {
   const eyebrowRef = useRef<HTMLParagraphElement>(null)
   const tcTitleRef = useRef<HTMLHeadingElement>(null)
   const subtextRef = useRef<HTMLParagraphElement>(null)
+  const editorialRef = useRef<HTMLDivElement>(null)
+  const sceneRef = useRef<HTMLDivElement>(null)
 
   useStaggeredReveal(cardRef, [eyebrowRef, tcTitleRef, subtextRef])
+
+  // Exit choreography: fade editorial and scene panels as they scroll above the viewport.
+  // One subscription handles both panels so they exit with the same easing curve.
+  useScrollY(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const editorial = editorialRef.current
+    const scene = sceneRef.current
+
+    if (editorial) {
+      if (reduced) {
+        editorial.style.opacity = '1'
+      } else {
+        const exitProgress = viewportProgress(editorial, 0.0, -0.5)
+        editorial.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
+      }
+    }
+    if (scene) {
+      if (reduced) {
+        scene.style.opacity = '1'
+      } else {
+        const exitProgress = viewportProgress(scene, 0.0, -0.5)
+        scene.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
+      }
+    }
+  })
 
   return (
     <section className="weekly" id="weekly-lessons" aria-labelledby="weekly-title-heading">
@@ -38,7 +67,7 @@ export default function WeeklyLessons() {
       </div>
 
       {/* Beat 2 — Editorial two-column panel */}
-      <div className="weekly__editorial">
+      <div className="weekly__editorial" ref={editorialRef}>
         <div className="weekly__editorial-text">
           <div className="weekly__heading-block">
             <ScrollLine size="xl" weight={300} delay={0.08} color="#ede8de">
@@ -80,7 +109,7 @@ export default function WeeklyLessons() {
       </div>
 
       {/* Beat 3 — Full-width photograph with overlaid quote */}
-      <div className="weekly__scene">
+      <div className="weekly__scene" ref={sceneRef}>
           <img
             src={publicAsset('/images/aaron-weekly-1.jpg')}
             alt="Aaron and a young student sitting on a park bench, both playing ukulele and facing each other"

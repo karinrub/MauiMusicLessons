@@ -4,6 +4,10 @@ import { easeOutCubic, lineOpacity } from '../../utils/animation'
 import { viewportProgress } from '../../utils/scroll'
 import './CinematicEntry.css'
 
+// Scroll system: uses the shared useScrollY singleton (RAF-throttled, one listener for
+// the entire app). An earlier audit draft described this component as maintaining its
+// own isolated window.addEventListener; that was a prior version of this file.
+
 interface CinematicEntryProps {
   lines: string[]
   imageSrc?: string

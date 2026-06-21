@@ -107,6 +107,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  will-change: opacity;
 }
 
 .weekly__editorial-text {
@@ -190,6 +191,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  will-change: opacity;
 }
 
 .weekly__scene-img {
@@ -347,5 +349,11 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* Ensure exit fades never hide content in reduced-motion mode */
+  .weekly__editorial,
+  .weekly__scene {
+    opacity: 1 !important;
   }
 }
