@@ -1,5 +1,138 @@
 # MauiMusicLessons Baseline Verification
 
+## Execution-Stage Browser QA Update — June 21, 2026
+
+**Review method:** Local Chromium Playwright screenshot and interaction QA against `http://127.0.0.1:5173/MauiMusicLessons/`. Evidence artifacts are stored in `Audit Phase/execution-artifacts/phase1/`. Execution reports are stored in `Audit Phase/phase-1-execution-report.md` and `Audit Phase/phase-2-execution-report.md`.
+
+**Verification coverage completed:**
+- Local dev site ran successfully.
+- Screenshots captured at `360`, `390`, `768`, `1024`, `1280`, `1440`, and short landscape.
+- Reduced-motion screenshots captured for desktop and mobile.
+- Console check during interaction QA returned no warnings/errors.
+- Beach CTA context verified in booking as `BEACH LESSON — KIHEI, MAUI`.
+- Weekly CTA context verified in booking as `WEEKLY LESSON — KIHEI, MAUI`.
+- Booking paths for `Just me`, `Two of us`, `Small group (3–5)`, and `Larger group (6–8)` reached the sent/request state and showed cash/Venmo disclosure.
+- Invalid contact submission kept visible name/email errors.
+- About chapter keyboard access verified with `End` to Chapter 4 and `Home` to Chapter 1.
+- FAQ keyboard open verified with `aria-expanded="true"`.
+- Mobile menu open/link behavior verified; Escape close was initially missing, then implemented and verified.
+- `npm run typecheck`, `npm run build`, and `npm run smoke` passed after execution changes.
+
+**Source changes made from confirmed browser findings:**
+- `src/components/Navbar/Navbar.tsx`: mobile menu now closes on Escape; hamburger accessible name now reflects open/close state and references `aria-controls="mobile-navigation"`.
+- `src/components/BeachLessons/BeachLessons.css`: Beach right-panel image treatment strengthened with darker/desaturated warm grade and vignette overlay.
+
+**Current browser-confirmed resolutions:**
+- Beach/Weekly CTA context is no longer only source-verified; it is browser-verified.
+- Booking all group-size paths are browser-verified.
+- Booking validation errors are browser-verified.
+- FAQ keyboard opening is browser-verified.
+- About chapter Home/End keyboard behavior is browser-verified.
+- Mobile menu Escape close path is implemented and browser-verified.
+- Beach right-panel image no longer appears as bright/saturated as the previous browser screenshot; final art-direction acceptance remains pending.
+
+**Still requiring final verification:**
+- Full slow-scroll motion/handoff choreography from hero to footer.
+- Whether every SectionHandoff reads as distinct and intentional, not repeated filler.
+- Whether any naturally encountered near-black low-information segment exceeds `25vh`.
+- Complete reduced-motion top-to-bottom pass.
+- Exhaustive keyboard pass and contrast checks.
+- Full responsive top-to-bottom review at all required widths.
+- Booking background visual cohesion.
+- About chapter natural-scroll discoverability.
+- Footer closing-frame effectiveness.
+- Performance trace/media/network review.
+
+---
+
+## Post-Implementation QA Review — June 21, 2026
+
+**Review method:** Live site accessibility-tree read via Chrome MCP + full source file review. No headless browser scroll pass was performed. Visual output, timing, scroll continuity, contrast, and keyboard behavior cannot be confirmed from this review alone. This section documents what is known from the live site DOM structure and source evidence. The June 18 pre-implementation browser pass and the June 21 source-only update are preserved below.
+
+**Live site reviewed:** https://karinrub.github.io/MauiMusicLessons/
+
+---
+
+### What The Live Site Confirms (Accessibility Tree + Source)
+
+**Page structure — confirmed intact:**
+All major sections are present in the correct scroll order: Grain → Navbar → Hero → CinematicPanel(beach) → SectionHandoff(visitor) → BeachLessons → SectionHandoff(audience) → CinematicPanel(weekly) → WeeklyLessons → SectionHandoff(chapter) → AboutAaron → CinematicEntry → SectionHandoff(practical) → SeoContent → SectionHandoff(conversion) → BookingSection → SectionHandoff(closing) → Footer.
+
+**Navbar:** Brand button, Beach Lessons, Weekly Lessons, About, Book a Lesson — all present. Toggle menu button present.
+
+**Hero:** Image, location stamp (`Kihei, Maui · Hawaii`), headline (`Guitar & Ukulele Lessons on Maui`), subhead, `BOOK A LESSON` and `See lesson options →` CTAs — all confirmed in DOM.
+
+**CinematicPanel 1:** "No experience.", "No pressure.", "Just you, the ocean, and a song." — all three lines present as separate DOM nodes.
+
+**Beach Lessons:** Conversion row confirmed live — `From $35 · 30 min | $60 · 1 hr` (ref_36), `Mai Poina Beach Park, Kihei` (ref_37), `Most students play a complete song by the end` (ref_38). Mute/unmute button present (ref_31). `Book a beach lesson` CTA present (ref_39). Editorial copy and pull-right image confirmed.
+
+**CinematicPanel 2:** "And if you live here —", "the music can stay." — both lines present.
+
+**Weekly Lessons:** Conversion row confirmed live — `$60 · 1 hr | weekly cadence` (ref_51), `Kihei, Maui` (ref_52), `Student-paced — no syllabus` (ref_53). Pull quote present. `Let's find a time` CTA present (ref_54).
+
+**CinematicEntry:** "A quiet hour.", "A real Maui memory." — both lines present (ref_72, ref_73).
+
+**About Aaron:** All four chapter labels present — Early, Exploration, Focus, Maui (ref_66–69). Chapter 1 heading `Early Years` and body text visible. Slider with prev/next buttons confirmed. Chapter 1 opens with teaching-context sentence.
+
+**SeoContent:** Editorial paragraphs confirmed live (ref_77, ref_78). Persistent conversion line `Most first-time students leave playing a complete song.` present (ref_90). Five FAQ items present as accessible accordion. Lesson Types and Where Lessons Happen headings present.
+
+**BookingSection:** First step `Who's joining the lesson?` confirmed with four option buttons (ref_124–131). Back button present. Booking section heading and subhead present.
+
+**Footer:** Brand name `Aaron Grzanich`, subtitle `Guitar & Ukulele Lessons · Kihei, Maui, Hawaii`, five nav links, email link `aaron@mauimusiclessons.com`, location `Kihei, Maui`, copyright line — all confirmed.
+
+---
+
+### What Remains Unverified Or Partially Verified (Requires Final Browser Pass)
+
+The following cannot be confirmed from DOM structure or source alone. Every item below is a requirement for Category 18 Final Verification:
+
+**Motion and transitions:**
+- CinematicPanel line stagger — whether the three beach-entry lines reveal as distinct sequential beats or near-simultaneously
+- SectionHandoff visual continuity — whether each of the six variants reads as an intentional tonal bridge during slow scroll
+- Section exit choreography — whether BeachLessons, WeeklyLessons, and AboutAaron editorial panels fade correctly as they leave the viewport
+- Dead zone elimination — whether any scroll segment exceeds 25vh of near-black content-free space
+- Footer entry reveal via `useEntryReveal` — effectiveness in browser
+- Console errors during interaction QA — browser-verified clean; slow-scroll console pass still recommended
+
+**Visual cohesion:**
+- Beach right-panel image (`aaron-tourists-1.jpg`) — Phase 2 treatment strengthened and screenshots captured; final visual acceptance or asset decision still required
+- BookingSection background (`aaron-bookingForm.jpg`) — whether filter treatment (brightness 0.55, saturate 0.7, contrast 1.05) resolves the green foliage cohesion problem or leaves it as a foreign visual world
+- WeeklyLessons pull quote image (`aaron-teaching-1.jpg`) — whether the scene image reads as integrated at its opacity/filter level
+- Full overlay and color temperature consistency across all sections — requires visual review
+
+**Accessibility:**
+- Keyboard tab order through full page — sampled in browser; exhaustive pass still required
+- Visible focus states on nav, CTAs, booking tiles, date chips, FAQ items, About chapter controls, footer links — not visible in accessibility tree
+- Text contrast over image overlays — not measurable from DOM
+- Reduced-motion behavior — not testable without browser emulation
+
+**Responsive:**
+- No breakpoint testing performed at any width since implementation
+- Mobile layout now has screenshot evidence for Beach/Weekly, About, booking, and FAQ at sampled widths; full top-to-bottom responsive review remains pending
+- Mobile menu open/link/Escape behavior verified; full focus management pass still required
+
+**Booking flow:**
+- Group-size booking paths, validation, sent/request state, and Beach/Weekly context labels verified in browser. Instrument variations, back navigation from every step, and reduced-motion booking still need final verification.
+
+---
+
+### Outstanding Dependency-Blocked Items (Unchanged)
+
+These items cannot be implemented without user-provided data. They remain open and cap specific score ceilings:
+
+1. **Real testimonials or external review links** — not provided; blocks social proof in Conversion And Trust (Category 14) and Overall Conversion Score
+2. **Confirmed phone/text contact path** — not provided; blocks fast contact path in Footer (Category 13) and Conversion And Trust (Category 14)
+
+---
+
+### Critical Next Step
+
+A final holistic browser QA pass remains the highest-priority remaining action. Phase 1 browser QA has now covered the most important interaction and breakpoint checks, but final verification must still cover: desktop slow scroll (dead zones, SectionHandoff continuity, line stagger timing), complete reduced-motion emulation, exhaustive keyboard tab order, back-navigation booking paths, all required mobile breakpoints top-to-bottom, and visual cohesion assessment of remaining at-risk images.
+
+Until this final pass is complete, all categories currently marked Partial in `task-map.md` cannot be closed.
+
+---
+
 ## Document Purpose
 
 This file records the current website behavior before implementation begins. It compares the actual local site state against `Audit Phase/audit-findings.md` so future coding agents do not implement from assumptions, stale observations, or unresolved audit conflicts.
@@ -459,3 +592,181 @@ Specific scope for the next task:
    - Booking to Footer.
 4. Define acceptance criteria around browser-visible handoffs: no long low-information dark bands, no accidental seams, and section exits designed as intentionally as entries.
 5. Include desktop, mobile, and reduced-motion verification before marking that task complete.
+
+---
+
+## Post-Implementation Verification — June 2026
+
+**Verification method:** Source file review only (June 21, 2026). No browser pass was performed for this update. The findings below are grounded in what the TSX and CSS source files contain. Claims about visual output, timing, scroll behavior, or contrast cannot be confirmed without a browser pass.
+
+---
+
+### Hero
+
+**Improved since June 18 baseline:** No changes verifiable in source. Hero.tsx was not among the files modified in the implementation pass.
+
+**Audit findings resolved:** None confirmed.
+
+**Remains unresolved:** Above-fold clarity (price, duration, social proof, beginner reassurance) still absent. This is category 4 (Not started) in the task map.
+
+---
+
+### CinematicPanel 1 — Beach Entry
+
+**Improved since June 18 baseline:** Panel height increased from 156vh to 226vh in `App.tsx`. This directly addresses the June 18 finding that the beach-entry cinematic panel contributed to a prolonged low-information dark handoff. More scroll travel is now allocated to the three-line reveal.
+
+**Audit findings resolved:** Dead zone concern structurally addressed by increased panel height. Sequential line reveal structure (`PANEL_1_LINES`: "No experience.", "No pressure.", "Just you, the ocean, and a song.") is unchanged and intact.
+
+**Remains unresolved:** Whether stagger timing produces three distinct authored beats (vs. a near-simultaneous block reveal) requires browser verification. No changes to `CinematicPanel.tsx` timing constants are verifiable from the current pass.
+
+---
+
+### BeachLessons
+
+**Improved since June 18 baseline:**
+- Conversion row added directly in the editorial panel: price (`From $35 · 30 min | $60 · 1 hr`), location (`Mai Poina Beach Park, Kihei`), outcome (`Most students play a complete song by the end`) — all three now visible without opening FAQ.
+- CTA now passes `lessonContext = 'beach'` to the booking section before scrolling, enabling contextual booking entry.
+- Video upgraded with `aria-label`, accessible mute/unmute button using `aria-pressed`, and the video starts muted.
+- Exit choreography added: the editorial panel fades via `useScrollY` + `viewportProgress(editorial, 0.0, -0.5)` as it scrolls above the viewport.
+- A `SectionHandoff` (`variant="visitor"`) now precedes the section, and a `SectionHandoff` (`variant="audience"`) follows it — both with tonal gradient and ghosted image.
+
+**Audit findings resolved:**
+- Price not visible in section — resolved.
+- Location not visible in section — resolved.
+- Outcome "complete song" buried in FAQ — resolved.
+- CTA does not carry beach context into booking — resolved.
+- Dead void before section — structurally addressed via SectionHandoff.
+- Mute control accessible label — resolved.
+
+**Remains unresolved:** Bright right-panel photo (`aaron-tourists-1.jpg`) visual cohesion concern — CSS overlay treatment not verifiable from TSX. Browser verification needed for scroll continuity, mobile layout, and video performance.
+
+---
+
+### CinematicPanel 2 — Weekly Entry ("And if you live here —")
+
+**Improved since June 18 baseline:** Panel height updated to 154vh (was 136vh per technical audit). Visitor/local pivot copy unchanged and intact.
+
+**Audit findings resolved:** None confirmed — the height change addresses scroll budget but visual and timing behavior require browser verification.
+
+**Remains unresolved:** Hard seam before and after the panel, image opacity behavior, and exit timing require browser confirmation.
+
+---
+
+### WeeklyLessons
+
+**Improved since June 18 baseline:**
+- Conversion row added: price (`$60 · 1 hr | weekly cadence`), location (`Kihei, Maui`), cadence claim (`Student-paced — no syllabus`).
+- CTA now passes `lessonContext = 'weekly'` to the booking section.
+- Exit choreography added for both the editorial panel and the scene/quote panel via `useScrollY` + `viewportProgress`.
+- `SectionHandoff` (`variant="chapter"`) now follows the section before AboutAaron.
+- Editorial photo changed to `aaron-teaching-1.jpg` (portrait orientation, specific beach setting alt text).
+
+**Audit findings resolved:**
+- No visible weekly pricing — resolved.
+- CTA does not carry weekly context — resolved.
+- Pull quote image treatment — `aaron-teaching-1.jpg` replaces prior pull quote background; cohesion with surrounding system still requires CSS/browser verification.
+
+**Remains unresolved:** Concrete progress milestones (e.g., "able to play X songs after Y months") not added — no such claim was in verified business facts. "Student-paced — no syllabus" is present but is an approach claim, not a milestone. Weekly photo cohesion and mobile crop behavior require browser verification.
+
+---
+
+### AboutAaron
+
+**Improved since June 18 baseline:**
+- Chapter 1 text now leads with teaching context: "Aaron has been teaching guitar and ukulele on Maui for years — working with complete beginners and returning players to help them find their footing." This satisfies the requirement that "first visible About copy includes teaching purpose or student outcome."
+- Chapter 4 text includes the strongest trust line: "His goal is simple: help students of any age feel comfortable, confident, and connected through music." (no change from June 18 — this was already confirmed present).
+- Exit choreography via `useScrollY` + `viewportProgress(section, -0.15, -0.65)` confirmed in source (this matched the technical audit finding; was already present as of June 18).
+- Hint animation on first viewport entry confirmed in source.
+- `SectionHandoff` (`variant="chapter"`) placed between WeeklyLessons and AboutAaron.
+
+**Audit findings resolved:**
+- Opening About copy does not include teaching purpose — resolved (Chapter 1 text updated).
+- Chapter content is verifiably present for all four chapters.
+
+**Remains unresolved:** Chapter discoverability — the hint animation is a one-time, 700ms-delayed scrubber nudge. Most natural scrollers will still see Chapter 1 before scrolling past unless they interact. The "discoverable during natural browsing" acceptance criterion requires browser verification. Cold-grey/turquoise image concern for certain chapter backgrounds unverifiable from TSX.
+
+---
+
+### CinematicEntry ("A quiet hour. / A real Maui memory.")
+
+**Improved since June 18 baseline:** `SectionHandoff` (`variant="practical"`) placed after CinematicEntry and before SeoContent in `App.tsx`. This directly addresses the "cinematic panel exits and SEO block begins with no transition" finding.
+
+**Audit findings resolved:** About-to-SEO abrupt transition structurally addressed.
+
+**Remains unresolved:** Visual quality of the transition into SeoContent requires browser confirmation. CinematicEntry itself appears unchanged from June 18 baseline.
+
+---
+
+### SeoContent + FAQ
+
+**Improved since June 18 baseline:**
+- The keyword-list paragraph ("If you are searching for Maui ukulele lessons, guitar lessons in Kihei, beginner music lessons near Wailea…") has been removed from the source. This was the most damaging single piece of copy in the June 18 audit.
+- Replaced with two human editorial paragraphs: "Aaron teaches on Maui — beach lessons in Kihei for visitors passing through, and weekly sessions for locals who want to keep playing. Guitar and ukulele, any level, outdoors." and "Private lessons with a working musician who has been teaching on the island for years. One student at a time. One hour that belongs to you."
+- A persistent conversion line now appears outside the FAQ accordion: "Most first-time students leave playing a complete song." — surfacing one of the highest-value FAQ answers without requiring accordion interaction.
+- Info cards retain specific location facts (Mai Poina Beach Park, Kihei, Wailea, Makena).
+- FAQ accessible: `aria-expanded`, `aria-controls`, keyboard-operable buttons, one-open-at-a-time behavior.
+
+**Audit findings resolved:**
+- Visible keyword-list paragraph reads like crawler copy — resolved.
+- Critical FAQ answers hidden behind accordion interaction — partially resolved (one key answer surfaced).
+- Section reads as a different website — substantially improved by copy rewrite.
+
+**Remains unresolved:** Visual treatment of the section relative to surrounding cinematic sections requires CSS/browser verification. Two-column desktop FAQ layout and single-column mobile layout require browser confirmation.
+
+---
+
+### BookingSection
+
+**Improved since June 18 baseline (from June 18 state, not earliest audit):**
+- CTA context from Beach and Weekly sections is now displayed inside the booking card as a context label: `Beach lesson — Kihei, Maui` or `Weekly lesson — Kihei, Maui` when entering from a section-specific CTA.
+- Inquiry status made explicit in the confirmation/sent state: "This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details." — visible before and after submit.
+- Response time clarified in the contact step: "Aaron will follow up within a day or two to confirm your lesson."
+- Reduced-motion mode now renders a static all-steps form (no step-by-step animation dependency).
+- `SectionHandoff` (`variant="conversion"`) now precedes the section and `SectionHandoff` (`variant="closing"`) follows it before the Footer.
+- Payment method disclosed in confirmation: "Aaron accepts cash or Venmo."
+
+**Audit findings resolved:**
+- CTA context not carried into booking — resolved.
+- Inquiry/request status not explicit before submission — resolved.
+- Response time expectations unclear — resolved.
+- Booking to footer transition undesigned — structurally addressed via `closing` SectionHandoff.
+- Reduced-motion users dependent on animated flow — resolved.
+
+**Remains unresolved:** Price first appears at duration step for solo bookings — conversion audit preferred earlier exposure. Group prices are visible at the who-step via `groupPriceText()`. Submission destination is `mailto:` (email draft confirmed); no alternative backend — this is a user-data boundary, not a bug. Step transition animation polish requires browser verification.
+
+---
+
+### Footer
+
+**Improved since June 18 baseline:**
+- `useEntryReveal` is now active in Footer. The technical audit listed this hook as "defined but not currently called by any active component." Footer.tsx now imports and calls it on `innerRef`. This gives the footer a designed entry reveal.
+- `SectionHandoff` (`variant="closing"`) placed before Footer in `App.tsx`.
+
+**Audit findings resolved:**
+- Footer arrival lacks designed motion statement — `useEntryReveal` provides a reveal; `closing` SectionHandoff provides a visual bridge. Full effectiveness requires browser verification.
+
+**Remains unresolved:** Phone/text contact path — **dependency-blocked** (no confirmed phone number provided). Closing visual frame (beyond the entry reveal) requires browser observation. Footer nav buttons do not have explicit `type="button"` attributes — minor accessibility gap worth verifying in browser.
+
+---
+
+### Summary Of Outstanding Dependency-Blocked Items
+
+The following items cannot be implemented without user-provided data and are accurately tracked as dependency-blocked:
+
+1. Real testimonials or external review links — no fabrication permitted; none provided.
+2. Confirmed phone/text/WhatsApp contact path — not in source; not verifiable.
+3. Booking backend alternative to `mailto:` — current implementation uses email draft; confirmed as the working submission path.
+
+### Summary Of Items Requiring Final Browser Verification Before Marking Complete
+
+The following categories remain Partial because their full acceptance criteria require final browser output beyond the completed Phase 1/2 evidence:
+
+- Category 2 (Global Motion Architecture): slow-scroll dead zone elimination, full reduced-motion pass, final console check during motion pass.
+- Category 3 (Global Section Transitions): visual continuity, timing, slow/fast scroll readability.
+- Category 5 (Cinematic Panels): stagger sequencing, line timing as distinct beats.
+- Category 6 (Visual Asset And Overlay System): final overlay acceptance, full mobile crops, color temperature, Booking background.
+- Category 9 (About Aaron): chapter discoverability in natural scroll, rapid changes, pointer/touch checks.
+- Category 11 (FAQ): final visual treatment and reduced-motion accordion behavior.
+- Category 13 (Footer): closing visual frame, phone dependency.
+- Category 15 (Accessibility): exhaustive keyboard tab order, contrast ratios, reduced-motion behavior.
+- Category 16 (Responsive Behavior): full top-to-bottom verification at 360/390/768/1024/1280/1440.

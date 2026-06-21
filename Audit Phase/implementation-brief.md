@@ -2,6 +2,23 @@
 
 This brief is for future agents who will implement the audit remediation work. Do not start coding until the required reading order is complete.
 
+## Current Execution Status
+
+Execution-stage work has started. Before continuing, read:
+
+- `Audit Phase/phase-1-execution-report.md`
+- `Audit Phase/phase-2-execution-report.md`
+- `Audit Phase/execution-artifacts/phase1/phase1-interaction-qa.json`
+
+Current verified state as of June 21, 2026:
+
+- Phase 1 browser QA completed for key interaction paths and required screenshot widths.
+- Mobile menu Escape close behavior was implemented and verified.
+- Beach/Weekly CTA context, all booking group-size paths, booking validation, About Home/End keyboard navigation, and FAQ keyboard expansion were verified.
+- Phase 2 strengthened the Beach right-panel photo treatment with existing-asset CSS grading and overlay.
+- `npm run typecheck`, `npm run build`, and `npm run smoke` pass.
+- Final holistic motion, reduced-motion, responsive, accessibility, performance, and visual-cohesion verification is still required.
+
 ## Required Reading Order
 
 1. `Audit Phase/audit-findings.md`

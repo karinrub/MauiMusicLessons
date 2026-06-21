@@ -70,6 +70,17 @@ export default function Navbar() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [menuOpen])
+
   const handleNav = (id: string) => {
     const shouldWaitForMenuClose = menuOpen
     setMenuOpen(false)
@@ -97,7 +108,8 @@ export default function Navbar() {
         <button
           className="navbar__hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-controls="mobile-navigation"
           aria-expanded={menuOpen}
         >
           <span />
@@ -118,7 +130,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <ul className="navbar__mobile-menu">
+        <ul className="navbar__mobile-menu" id="mobile-navigation">
           <li><button onClick={() => handleNav('beach-lessons')}>Beach Lessons</button></li>
           <li><button onClick={() => handleNav('weekly-lessons')}>Weekly Lessons</button></li>
           <li><button onClick={() => handleNav('about')}>About</button></li>

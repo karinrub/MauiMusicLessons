@@ -8,6 +8,33 @@ The end goal is to bring every audited rating to `100 / 100` while preserving th
 
 This document is a project control document for autonomous coding agents. It defines the strategy, scoring framework, implementation sequence, decision rules, and completion standard. It does not authorize application source-code changes by itself.
 
+## Current Implementation State — June 21, 2026
+
+Implementation work is in progress. This is not a pre-implementation document. The following is a high-level status summary; `task-map.md` has the authoritative per-category breakdown.
+
+**Completed categories (source/browser-verified where applicable):** Beach Lessons conversion and CTA context (7), Weekly Lessons conversion and CTA context (8), SEO And Information Section source and sampled browser rendering (10), Booking Flow all group-size paths and validation (12).
+
+**Partial categories (some browser evidence now exists, final verification still pending):** Global Motion Architecture (2), Global Section Transitions (3), Cinematic Panels (5), Visual Asset And Overlay System (6), About Aaron (9), FAQ (11), Footer (13), Conversion And Trust (14), Accessibility (15), Responsive Behavior (16).
+
+**Not started or not complete:** Hero (4) remains intentionally unchanged; Performance (17) has successful build/smoke but no performance trace; Final Verification (18) has Phase 1 evidence but is not complete.
+
+**Execution reports now available:**
+- `Audit Phase/phase-1-execution-report.md`
+- `Audit Phase/phase-2-execution-report.md`
+- Browser evidence in `Audit Phase/execution-artifacts/phase1/`
+
+**Implemented during execution stage:**
+- Mobile menu Escape close behavior and state-specific hamburger accessible labels.
+- Stronger Beach Lessons right-panel image treatment using existing asset, filter, and warm vignette overlay.
+
+**Outstanding dependency-blocked items:**
+- Real testimonials or external review links — not provided; social proof cannot be fabricated.
+- Confirmed phone/text contact path — not provided; fast contact path cannot be added.
+
+**Critical next step:** Continue with Phase 3 motion and transition verification/tuning. Phase 1 browser QA covered key breakpoints, CTA context, all booking group-size paths, validation, FAQ keyboard behavior, About keyboard behavior, console errors, mobile menu behavior, and build/smoke. A final holistic browser QA pass is still required before the audit can close.
+
+---
+
 ## Document Role
 
 1. `Audit Phase/audit-findings.md` is the complete evidence archive. It preserves all observed findings, raw critique, baseline scores, technical notes, and conversion observations. Do not shorten it or rewrite its findings.
@@ -135,16 +162,18 @@ Do:
 
 ## Main Weaknesses Identified By The Audit
 
-1. Dead or under-designed scroll zones between major sections, especially around Beach Lessons and Weekly Lessons.
-2. No unified motion architecture across section entrances, exits, and handoffs.
-3. The SEO/info block breaks tone and reads like it belongs to a different site.
-4. The FAQ and info cards are structurally useful but visually generic.
-5. The About Aaron chapter system is not discoverable enough during natural scrolling.
-6. The booking flow is conceptually strong but needs clearer inquiry/confirmation expectations, contextual entry from CTAs, and stronger step feedback.
-7. Pricing, location, lesson outcomes, response time, and social proof appear too late or not at all.
-8. Photography and overlays are inconsistent, creating two competing visual worlds.
-9. The dark palette has insufficient tonal relief in the second half of the page.
-10. Footer contact and closing experience are too minimal for high-intent visitors.
+Original baseline weaknesses as of June 18, 2026 audit. Status updated June 21, 2026 after implementation pass. See `task-map.md` for per-category completion status.
+
+1. Dead or under-designed scroll zones between major sections, especially around Beach Lessons and Weekly Lessons. — **Structurally addressed:** `SectionHandoff` placed at all six transition points; CinematicPanel 1 height raised to 226vh. Browser verification of visual continuity still needed.
+2. No unified motion architecture across section entrances, exits, and handoffs. — **Partially addressed:** Exit choreography added to BeachLessons, WeeklyLessons, AboutAaron via `useScrollY`; section handoffs implemented. Phase 1 interaction console check was clean. Full choreography audit (slow-scroll dead zones, reduced-motion, handoff timing) still requires final browser pass.
+3. The SEO/info block breaks tone and reads like it belongs to a different site. — **Resolved:** Keyword-list paragraph removed; replaced with editorial copy. Info cards restyled with left-border accent treatment. Persistent conversion line surfaced outside FAQ accordion.
+4. The FAQ and info cards are structurally useful but visually generic. — **Partially addressed:** Info cards restyled; FAQ accessible accordion verified in source and keyboard expansion verified in browser. Final visual/reduced-motion confirmation remains.
+5. The About Aaron chapter system is not discoverable enough during natural scrolling. — **Partially addressed:** Chapter 1 now opens with teaching-purpose sentence; hint animation on viewport entry. One-time hint is still the only natural-scroll discoverability mechanism. Browser verification needed.
+6. The booking flow is conceptually strong but needs clearer inquiry/confirmation expectations, contextual entry from CTAs, and stronger step feedback. — **Resolved:** Context label from Beach/Weekly CTAs, explicit inquiry status before submit, response time at contact step, and payment method in sent state all implemented. Reduced-motion static form implemented.
+7. Pricing, location, lesson outcomes, response time, and social proof appear too late or not at all. — **Partially resolved:** Price, location, and outcome visible in Beach and Weekly conversion rows before booking. Response time in booking contact step. Social proof remains dependency-blocked (no real testimonials provided).
+8. Photography and overlays are inconsistent, creating two competing visual worlds. — **Partially addressed:** CSS filter treatment applied to BeachLessons editorial photo, WeeklyLessons scene image, and BookingSection background. Phase 2 strengthened Beach right-panel image (`aaron-tourists-1.jpg`) treatment and captured browser screenshots. Booking background and full-page art-direction acceptance remain open.
+9. The dark palette has insufficient tonal relief in the second half of the page. — **Structurally addressed:** SectionHandoff variants provide tonal gradient relief at every major handoff. Visual effectiveness requires browser confirmation.
+10. Footer contact and closing experience are too minimal for high-intent visitors. — **Partially addressed:** `useEntryReveal` closing reveal active; `closing` SectionHandoff placed before Footer. Phone/text path dependency-blocked (no confirmed phone number).
 
 ## Highest Priority Improvement Areas
 
@@ -156,49 +185,63 @@ Do:
 
 ## Score Blockers
 
-These are the lowest scoring or highest-leverage blockers. Future implementation must prioritize them before lower-impact refinements.
+These are the lowest scoring or highest-leverage blockers. Baseline scores are from the original June 2026 audit. Implementation work completed June 21, 2026 has partially addressed several blockers — remaining gaps are noted. All scores still target `100 / 100`. See the Rating Target Table for the full picture.
 
-### Transition Quality - 44 / 100
+### Transition Quality — Baseline 44 / 100
 
-This is the lowest recorded score. It blocks Motion Design, Scroll Experience, Emotional Impact, Portfolio Quality, and Overall Experience. The audit names hard section seams, content-free near-black gaps, missing section exits, weak FAQ-to-booking movement, and an unceremonious footer arrival.
+Original blockers: hard section seams, content-free near-black gaps, missing section exits, weak FAQ-to-booking movement, unceremonious footer arrival.
 
-This score must be prioritized because the website's strongest direction is cinematic. A cinematic site cannot reach `100 / 100` while section handoffs feel accidental.
+**Post-implementation state:** `SectionHandoff` placed at all six transition points with distinct tonal gradients and ghosted images. CinematicPanel 1 height raised to 226vh. `closing` SectionHandoff precedes Footer. `useEntryReveal` active in Footer.
 
-### Conversion Readiness - 52 / 100
+**Remaining blockers:** Visual continuity of every handoff, slow/fast scroll readability, and footer closing frame effectiveness require final browser verification. Phase 1 browser evidence exists for key interactions and screenshots, but not for the full motion choreography.
 
-This score is blocked by hidden pricing, no external social proof, no fast contact path, unclear booking/inquiry status, late location information, and insufficient weekly lesson value detail.
+### Conversion Readiness — Baseline 52 / 100
 
-This score must be prioritized because the page builds toward booking. If a ready visitor cannot understand price, location, next step, and response timing before submitting, the experience remains incomplete regardless of visual quality.
+Original blockers: hidden pricing, no external social proof, no fast contact path, unclear booking/inquiry status, late location information, insufficient weekly lesson value detail.
 
-### Photography - 52 / 100
+**Post-implementation state:** Price, location, and outcome surfaced in Beach and Weekly conversion rows. Explicit inquiry status and response time in booking flow. Context labels from Beach/Weekly CTAs. Payment method disclosed in sent state.
 
-This score is blocked by the "two photo worlds" problem: atmospheric coastal imagery sits beside bright, saturated documentary images without a unifying grade, crop, overlay, placement, scale, reduced visual dominance, or replacement with another existing project asset.
+**Remaining blockers:** Social proof (testimonials/reviews) is dependency-blocked — no real testimonials provided. Phone/text fast contact path is dependency-blocked — no confirmed number. These two items cap the score ceiling until user data is supplied.
 
-This score must be prioritized because images carry the site's atmosphere. One visually incompatible feature image can lower Visual Cohesion, Art Direction, Premium Feel, and Portfolio Visual Quality at the same time.
+### Photography — Baseline 52 / 100
 
-### Art Direction - 55 / 100
+Original blockers: "two photo worlds" problem — atmospheric coastal imagery beside bright saturated documentary images without unifying treatment.
 
-This score is blocked by inconsistent image selection and overlay discipline. Strong hero and About imagery coexist with beach lesson, pull quote, and booking imagery that do not consistently serve the same coastal cinematic system.
+**Post-implementation state:** CSS filters applied to BeachLessons editorial photo (brightness 0.72, saturate 0.78, contrast 0.94), WeeklyLessons scene image (brightness 0.82, saturate 0.85, contrast 0.96), and BookingSection background (brightness 0.55, saturate 0.7, contrast 1.05). Weekly editorial photo changed to `aaron-teaching-1.jpg`.
 
-This score must be prioritized because art direction controls whether individual design decisions feel intentional as a whole.
+**Remaining blockers:** Beach right-panel image (`aaron-tourists-1.jpg`) has improved treatment and browser screenshots but still needs final art-direction acceptance. Pull quote image integration remains partially verified. BookingSection background (green foliage composition) may still read as foreign despite filter treatment. Final browser QA required to assess effective resolution.
 
-### Overall Visual Cohesion - 58 / 100
+### Art Direction — Baseline 55 / 100
 
-This score is blocked by mixed photo worlds, generic functional sections, under-integrated FAQ/SEO layouts, and uneven visual rhythm.
+Original blockers: inconsistent image selection and overlay discipline across beach lesson, pull quote, and booking imagery.
 
-This score must be prioritized because cohesion is the bridge between strong isolated sections and a finished end-to-end experience.
+**Post-implementation state:** Filter treatment applied to multiple images. SectionHandoff ghosted images at 10–20% opacity with desaturate/contrast filters.
 
-### Interaction Design - 58 / 100
+**Remaining blockers:** Whether all treated images now read as belonging to the coastal cinematic system requires final browser observation. Beach image treatment is improved; no asset-replacement decision has been made for images where filter treatment may still be insufficient.
 
-This score is blocked by booking step motion that feels functional rather than authored, generic or under-animated microinteractions, mobile menu behavior, About chapter discoverability, and the need for keyboard/reduced-motion verification.
+### Overall Visual Cohesion — Baseline 58 / 100
 
-This score must be prioritized because the site's main differentiator is experiential. Interactions must feel intentional and must remain accessible.
+Original blockers: mixed photo worlds, generic functional sections, under-integrated FAQ/SEO layouts, uneven visual rhythm.
 
-### Overall Motion System - 65 / 100
+**Post-implementation state:** SEO copy replaced with editorial voice. FAQ info cards restyled with left-border accent. SectionHandoff system provides tonal rhythm across the full page.
 
-This score is blocked by multiple coexisting motion systems, no documented global choreography, opacity-heavy reveals, weak exits, and section transitions that are not coordinated.
+**Remaining blockers:** Visual continuity of the full page as a single authored experience requires final browser review. Beach photo cohesion is improved; Booking background and overall photo-world cohesion still need final acceptance.
 
-This score must be prioritized after the lowest blockers because it connects local transition fixes into a system that future agents can maintain.
+### Interaction Design — Baseline 58 / 100
+
+Original blockers: booking step motion functional but not authored, generic microinteractions, mobile menu behavior, About chapter discoverability, keyboard/reduced-motion verification needed.
+
+**Post-implementation state:** Booking flow context labels, explicit inquiry status, reduced-motion static form. About Aaron ARIA slider, keyboard nav (ArrowKeys, Home, End), hint animation on viewport entry.
+
+**Remaining blockers:** About chapter discoverability in natural scroll is the highest remaining gap here. Keyboard tab order, visible focus states, mobile menu polish, and reduced-motion behavior all require browser verification.
+
+### Overall Motion System — Baseline 65 / 100
+
+Original blockers: multiple coexisting motion systems, no documented global choreography, opacity-heavy reveals, weak exits, uncoordinated section transitions.
+
+**Post-implementation state:** Exit choreography added to BeachLessons, WeeklyLessons, AboutAaron via shared `useScrollY` singleton. `useEntryReveal` comment documenting intentional-unused status added. `CinematicEntry` confirmed on shared singleton (prior isolated-listener claim was stale).
+
+**Remaining blockers:** Full choreography read — whether the page now feels like one motion system rather than independent animated sections — requires a complete browser scroll pass. Cinematic panel line stagger timing, section exit timing, and dead zone elimination remain open for final motion QA.
 
 ## Recommended Implementation Order
 
@@ -583,37 +626,37 @@ This score must be prioritized after the lowest blockers because it connects loc
 
 ## Rating Target Table
 
-Every baseline score below targets `100 / 100`. `audit-findings.md` remains the evidence archive for the score rationale.
+Baseline scores are from the original June 2026 audit. All scores target `100 / 100`. The "Remaining blockers" column reflects execution-stage state as of June 21, 2026. Scores have not been re-rated; re-rating requires final holistic browser QA (Category 18).
 
-| Audit Area | Current Score | Target | Main Blockers Preventing 100 | Responsible Task Categories |
+| Audit Area | Baseline | Target | Remaining Blockers (Post-Implementation) | Responsible Task Categories |
 |---|---:|---:|---|---|
-| Storytelling | 74 | 100 | Hidden About chapters, SEO narrative break, booking story lacks clear resolution | About Aaron; SEO and information section; Booking flow; Global section transitions |
-| Emotional Impact | 78 | 100 | Dead scroll zones, wide emotional valleys, booking payoff ambiguity | Global motion architecture; Global section transitions; Beach Lessons; Booking flow |
-| Atmosphere | 82 | 100 | One-note darkness, SEO/info atmosphere drop, inconsistent image treatment | Cinematic panels; SEO and information section; Visual/section work in Beach, Weekly, Booking |
-| Cohesion | 66 | 100 | Functional sections diverge from cinematic sections; mixed photo worlds; uneven emotional register | Global section transitions; Cinematic panels; SEO and information section; FAQ; Footer |
-| Originality | 80 | 100 | FAQ/info cards feel generic; SEO block damages custom voice | SEO and information section; FAQ; Footer; Conversion and trust |
-| Premium Feel | 72 | 100 | Info cards, SEO paragraph, incomplete/unclear booking resolution, visual inconsistency | SEO and information section; Booking flow; Visual cohesion tasks; Footer |
-| Conversion Readiness | 52 | 100 | Price hidden, no social proof, no fast contact path, booking inquiry status unclear | Conversion and trust; Booking flow; Beach Lessons; Weekly Lessons; Footer |
-| Portfolio Quality | 77 | 100 | Dead scroll zone, booking gaps, SEO compromise, About chapters under-seen | Global motion architecture; Booking flow; SEO and information section; About Aaron |
-| Overall Experience | 73 | 100 | Strong start but unresolved lower-half journey and uneven functional sections | All categories, especially motion, booking, SEO/FAQ, visual cohesion |
-| Overall Motion System Rating | 68 | 100 | Strong moments but incomplete architecture and section handoffs | Global motion architecture; Global section transitions; Booking flow; Footer |
-| Motion Design | 72 | 100 | Section motion works locally but not as a unified choreography | Global motion architecture; Cinematic panels; Beach Lessons; Weekly Lessons |
-| Transition Quality | 44 | 100 | Hard cuts, dead voids, no designed exits or handoffs | Global section transitions; Cinematic panels; Footer |
-| Scroll Experience | 65 | 100 | Parallax and scrolljack are skilled; void zones and timing gaps are damaging | Global motion architecture; Beach Lessons; Weekly Lessons; Responsive behavior |
-| Interaction Design | 58 | 100 | Booking steps and menu/interactions lack motion polish and clarity | Booking flow; Accessibility; Responsive behavior |
-| Perceived Polish | 74 | 100 | Atmosphere carries polish, but generic blocks and unfinished transitions lower quality | Global section transitions; FAQ; SEO and information section; Footer |
-| Motion Originality | 77 | 100 | Cinematic language is distinctive, but lower sections and interactions are ordinary | Cinematic panels; Booking flow; FAQ; Footer |
-| Motion Portfolio Quality | 68 | 100 | No system-level motion evidence; weak closing moment | Global motion architecture; Global section transitions; Footer |
-| Overall Motion System | 65 | 100 | Motion aesthetic exists without architecture | Global motion architecture; Global section transitions; Final verification |
-| Overall Visual Cohesion Score | 58 | 100 | Two photo worlds, inconsistent overlays, generic functional sections | Cinematic panels; Beach Lessons; Weekly Lessons; Booking flow; FAQ |
-| Visual Identity | 62 | 100 | Typography/color work, but photo selection breaks identity | Cinematic panels; Beach Lessons; Weekly Lessons; Booking flow |
-| Art Direction | 55 | 100 | Image choices are not held to the same coastal cinematic standard | Beach Lessons; Weekly Lessons; About Aaron; Booking flow |
-| Photography | 52 | 100 | Bright documentary images clash with atmospheric world; overlays inconsistent | Cinematic panels; Beach Lessons; Weekly Lessons; Booking flow |
-| Typography | 74 | 100 | Strong system, but SEO hierarchy and generic blocks do not land | SEO and information section; FAQ; Responsive behavior |
-| Visual Rhythm | 60 | 100 | Dark rhythm lacks relief; bright candid photos interrupt the arc | Global section transitions; Cinematic panels; FAQ; Booking flow |
-| Portfolio Visual Quality | 63 | 100 | Visual edit feels unfinished; FAQ/SEO lack design intelligence | Beach Lessons; Weekly Lessons; SEO and information section; FAQ |
-| Overall Visual Quality | 59 | 100 | Concept is right; asset-level discipline is not complete | All visual categories; Final verification |
-| Overall Conversion Score | 62 | 100 | Warm visitors can convert, but comparison shoppers lack trust, pricing, location, and speed clarity | Conversion and trust; Booking flow; Beach Lessons; Weekly Lessons; Footer |
+| Storytelling | 74 | 100 | About chapter discoverability still depends on one-time hint; all content present | About Aaron; Final Verification |
+| Emotional Impact | 78 | 100 | SectionHandoff addresses dead zones structurally; full slow-scroll continuity still needs final verification | Global motion architecture; Global section transitions; Final Verification |
+| Atmosphere | 82 | 100 | SEO atmosphere drop resolved; Beach image improved; Booking background and full atmosphere pass remain | Cinematic panels; Final Verification |
+| Cohesion | 66 | 100 | SEO/FAQ integrated; Beach image improved; Booking/background photo-world cohesion still needs final acceptance | Visual Asset And Overlay System; Final Verification |
+| Originality | 80 | 100 | SEO voice resolved; FAQ keyboard/rendering sampled; final visual/reduced-motion treatment remains | FAQ; Final Verification |
+| Premium Feel | 72 | 100 | Booking resolution verified; visual consistency and handoff polish still need final pass | Visual cohesion; Final Verification |
+| Conversion Readiness | 52 | 100 | Price/location/outcome, CTA context, booking paths, validation verified; social proof and phone path dependency-blocked | Conversion And Trust (dependency); Final Verification |
+| Portfolio Quality | 77 | 100 | SEO resolved; booking verified; visual cohesion, motion, and About natural-scroll discoverability remain | Final Verification |
+| Overall Experience | 73 | 100 | Lower-half structural work and key interactions verified; holistic browser pass needed | Final Verification |
+| Overall Motion System Rating | 68 | 100 | Exit choreography added; system-level motion read still needs final slow-scroll pass | Global motion architecture; Final Verification |
+| Motion Design | 72 | 100 | Section-level exits added; unified choreography read still needs final verification | Global motion architecture; Final Verification |
+| Transition Quality | 44 | 100 | SectionHandoff and panel heights address structure; final visual continuity pass required | Global section transitions; Final Verification |
+| Scroll Experience | 65 | 100 | Dead zone structure addressed; real slow/normal scroll timing still needs final pass | Global motion architecture; Final Verification |
+| Interaction Design | 58 | 100 | Booking, FAQ, About keyboard, mobile menu verified; About natural-scroll discovery and exhaustive keyboard/reduced-motion remain | Accessibility; Responsive Behavior; Final Verification |
+| Perceived Polish | 74 | 100 | Generic blocks reduced; transition polish still needs final browser pass | Final Verification |
+| Motion Originality | 77 | 100 | Cinematic language preserved; lower-section motion polish still needs final pass | Final Verification |
+| Motion Portfolio Quality | 68 | 100 | Closing SectionHandoff + Footer reveal added; effectiveness still needs final verification | Footer; Final Verification |
+| Overall Motion System | 65 | 100 | Architecture improved but system-level coherence still needs final slow-scroll verification | Final Verification |
+| Overall Visual Cohesion Score | 58 | 100 | Beach image treatment improved; Booking background and full photo-world acceptance remain | Visual Asset And Overlay System; Final Verification |
+| Visual Identity | 62 | 100 | Typography/color intact; final photo identity cohesion pass remains | Visual Asset And Overlay System; Final Verification |
+| Art Direction | 55 | 100 | Beach image treatment improved; Booking/background and full art-direction read remain | Visual Asset And Overlay System; Final Verification |
+| Photography | 52 | 100 | Filters applied to multiple images; Beach right-panel improved; Booking background cohesion remains | Visual Asset And Overlay System; Final Verification |
+| Typography | 74 | 100 | SEO hierarchy improved; sampled desktop/mobile rendering good; exhaustive responsive typography pass remains | Responsive Behavior; Final Verification |
+| Visual Rhythm | 60 | 100 | SectionHandoff tonal rhythm added; full-page rhythm still needs final pass | Final Verification |
+| Portfolio Visual Quality | 63 | 100 | SEO/FAQ design improved; Beach image improved; final visual edit remains | Final Verification |
+| Overall Visual Quality | 59 | 100 | Structure and copy improved; browser visual pass needed for re-rating | Final Verification |
+| Overall Conversion Score | 62 | 100 | Price/location/outcome/status resolved; social proof dependency-blocked | Conversion And Trust (dependency); Final Verification |
 
 ## What 100/100 Means
 

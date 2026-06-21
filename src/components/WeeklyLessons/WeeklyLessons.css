@@ -350,6 +350,11 @@
 }
 
 @media (max-width: 560px) {
+  .weekly__tc-texture {
+    background-size: 270% auto;
+    background-position: 70% 28%;
+  }
+
   .weekly__tc-content {
     padding: 3.35rem 1.5rem 1.5rem;
   }
