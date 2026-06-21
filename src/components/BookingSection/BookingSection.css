@@ -81,6 +81,16 @@
   scroll-margin-top: 80px;
 }
 
+/* ─── Context label (pre-selected lesson type from CTA) ──── */
+.booking__context-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(200, 168, 130, 0.7);
+  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+}
+
 /* ─── Header ─────────────────────────────────────────────── */
 .booking__header {
   margin-bottom: 2.25rem;
@@ -261,6 +271,15 @@
   color: rgba(232, 213, 190, 0.86);
 }
 
+/* ─── Date availability note ─────────────────────────────── */
+.booking__date-note {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+  font-family: var(--font-sans);
+}
+
 /* ─── Hint text ──────────────────────────────────────────── */
 .conv-hint {
   font-size: 0.82rem;
@@ -356,6 +375,16 @@
   background: #fff3df;
   opacity: 1;
   transform: translateY(-1px);
+}
+
+/* ─── Inquiry status note (sent state) ──────────────────── */
+.booking__inquiry-note {
+  font-size: 0.75rem;
+  color: rgba(200, 168, 130, 0.65);
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+  line-height: 1.5;
 }
 
 /* ─── Sent / confirmation ────────────────────────────────── */

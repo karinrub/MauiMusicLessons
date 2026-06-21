@@ -96,9 +96,11 @@
 }
 
 .seo-content__info-card {
-  border: 1px solid rgba(237, 232, 222, 0.12);
-  background: rgba(255, 255, 255, 0.035);
-  padding: 1.25rem;
+  border: none;
+  background: none;
+  padding: 0;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(232, 213, 190, 0.22);
 }
 
 .seo-content__lesson-types ul {
@@ -142,6 +144,17 @@
 }
 
 
+.seo-content__conversion-line {
+  grid-column: 1 / -1;
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(232, 213, 190, 0.72);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
 .seo-content__faq {
   grid-column: 1 / -1;
   padding-top: 0.75rem;
@@ -158,8 +171,8 @@
 
 .seo-content__faq-item {
   border-top: 1px solid rgba(237, 232, 222, 0.16);
-  background: rgba(255, 255, 255, 0.025);
-  padding: 1rem 1rem 1.1rem;
+  background: none;
+  padding: 1rem 0 1.1rem;
 }
 
 .seo-content__faq-item:last-child:nth-child(odd) {
@@ -186,11 +199,11 @@
 
 .seo-content__faq-item h4 {
   margin-bottom: 0;
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  font-weight: 400;
-  line-height: 1.3;
-  color: #ede8de;
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(237, 232, 222, 0.9);
 }
 
 .seo-content__faq-icon {

@@ -140,8 +140,22 @@ export default function BeachLessons() {
               Solo travelers who want something that belongs only to them, couples looking to learn a song together, families who didn't expect this to be the favorite part of the trip — Aaron has taught all of them.
             </ScrollLine>
           </div>
+          <div className="beach__conversion-row">
+            <span className="beach__conversion-item">From $35 · 30 min &nbsp;|&nbsp; $60 · 1 hr</span>
+            <span className="beach__conversion-divider" aria-hidden="true" />
+            <span className="beach__conversion-item">Mai Poina Beach Park, Kihei</span>
+            <span className="beach__conversion-divider" aria-hidden="true" />
+            <span className="beach__conversion-item">Most students play a complete song by the end</span>
+          </div>
           <div className="beach__cta">
-            <button className="btn btn--dark beach__btn" onClick={() => scrollToSection('book')}>
+            <button
+              className="btn btn--dark beach__btn"
+              onClick={() => {
+                const bookEl = document.getElementById('book')
+                if (bookEl) bookEl.dataset.lessonContext = 'beach'
+                scrollToSection('book')
+              }}
+            >
               Book a beach lesson
             </button>
           </div>

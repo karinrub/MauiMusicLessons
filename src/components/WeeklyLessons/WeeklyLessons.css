@@ -185,6 +185,30 @@
   pointer-events: none;
 }
 
+/* ─── Conversion row ─────────────────────────────────────── */
+
+.weekly__conversion-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.weekly__conversion-item {
+  font-size: clamp(0.7rem, 1.1vw, 0.82rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(200, 168, 130, 0.72);
+  font-family: var(--font-sans);
+}
+
+.weekly__conversion-divider {
+  width: 1px;
+  background: rgba(200, 168, 130, 0.28);
+  align-self: stretch;
+}
+
 /* ─── Beat 3: Full-width scene + overlaid quote ───────────── */
 
 .weekly__scene {
@@ -251,6 +275,10 @@
 /* ─── Responsive ─────────────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .weekly__conversion-divider {
+    display: none;
+  }
+
   .weekly__tc-content {
     padding: 3.75rem 1.5rem 1.5rem;
   }

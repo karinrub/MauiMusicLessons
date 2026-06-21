@@ -40,14 +40,13 @@ export default function SeoContent() {
           <p className="section-eyebrow">Maui Music Lessons</p>
           <h2 id="seo-content-heading" ref={headingRef} className="seo-content__entrance">Guitar and Ukulele Lessons on Maui</h2>
           <p>
-            Aaron Grzanich teaches private music lessons on Maui for visitors, locals, families,
-            couples, and beginners. Lessons are available for guitar and ukulele, with beach
-            sessions in Kihei and weekly instruction for students who want steady progress.
+            Aaron teaches on Maui — beach lessons in Kihei for visitors passing through, and
+            weekly sessions for locals who want to keep playing. Guitar and ukulele, any level,
+            outdoors.
           </p>
           <p>
-            If you are searching for Maui ukulele lessons, guitar lessons in Kihei, beginner music
-            lessons near Wailea, or a memorable musical activity while visiting Hawaii, these
-            lessons are built around a simple goal: help you feel comfortable, musical, and present.
+            Private lessons with a working musician who has been teaching on the island for years.
+            One student at a time. One hour that belongs to you.
           </p>
           <button className="btn btn--dark seo-content__button" onClick={() => scrollToSection('book')}>
             Book Maui Music Lessons
@@ -77,6 +76,10 @@ export default function SeoContent() {
             </p>
           </div>
         </div>
+
+        <p className="seo-content__conversion-line">
+          Most first-time students leave playing a complete song.
+        </p>
 
         <div className="seo-content__faq">
           <h3>Music Lessons on Maui FAQ</h3>

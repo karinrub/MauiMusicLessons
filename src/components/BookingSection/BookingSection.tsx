@@ -148,6 +148,33 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
   const step = stepHistory[stepHistory.length - 1]
   const canGoBack = stepHistory.length > 1 && step !== 'sent' && step !== 'confirm'
 
+  const [lessonContext, setLessonContext] = useState<'beach' | 'weekly' | null>(null)
+
+  useEffect(() => {
+    const sectionEl = document.getElementById('book')
+    const ctxNow = sectionEl?.dataset.lessonContext as 'beach' | 'weekly' | undefined
+    if (ctxNow) {
+      setLessonContext(ctxNow)
+      delete sectionEl!.dataset.lessonContext
+      return
+    }
+    const el = document.getElementById('book')
+    if (!el) return
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          const ctx = el.dataset.lessonContext as 'beach' | 'weekly' | undefined
+          if (ctx) {
+            setLessonContext(ctx)
+            delete el.dataset.lessonContext
+          }
+        }
+      }
+    }, { threshold: 0.1 })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const [data, setData] = useState<BookingData>({
     groupSize: null,
     instrument: null,
@@ -320,12 +347,19 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
   const instruments: Instrument[] = ['guitar', 'ukulele']
   const durations: Duration[] = ['30', '60']
 
+  const contextLabel = lessonContext === 'beach'
+    ? 'Beach lesson — Kihei, Maui'
+    : lessonContext === 'weekly'
+      ? 'Weekly lesson — Kihei, Maui'
+      : null
+
   // Reduced-motion: static stacked form — all steps visible at once, no back needed
   if (reduced) {
     if (step === 'confirm' || step === 'sent') {
       return (
         <div className="conv conv--reduced">
           <div className="conv-sent">
+            <p className="booking__inquiry-note">This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details.</p>
             <p className="conv-sent__headline">
               We'll see you out there{firstName ? `, ${firstName}` : ''}.
             </p>
@@ -343,6 +377,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
 
     return (
       <div className="conv conv--reduced">
+        {contextLabel && (
+          <p className="booking__context-label">{contextLabel}</p>
+        )}
         <div className="conv-step">
           <p className="conv-question">Who's joining the lesson?</p>
           <div className="booking-tiles booking-tiles--2col">
@@ -401,6 +438,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
 
         <div className="conv-step">
           <p className="conv-question">When works for you?</p>
+          <p className="booking__date-note">
+            Aaron books 2–3 days ahead. Share your preferred window and he'll confirm availability.
+          </p>
 
           <div className="date-chip-group">
             <p className="date-chip-label">Day</p>
@@ -476,6 +516,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
           <div className="conv-inputs">
             <div>
               <input
+                aria-label="Your name"
                 type="text"
                 className={`conv-input${contactErrors.name ? ' conv-input--error' : ''}`}
                 placeholder="Your name"
@@ -489,6 +530,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             </div>
             <div>
               <input
+                aria-label="Email address"
                 type="email"
                 className={`conv-input${contactErrors.email ? ' conv-input--error' : ''}`}
                 placeholder="your@email.com"
@@ -502,6 +544,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             </div>
             <div>
               <input
+                aria-label="Phone number (optional)"
                 type="tel"
                 className="conv-input"
                 placeholder="Phone, optional"
@@ -512,7 +555,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
           </div>
           <p className="conv-hint">Aaron will follow up within a day or two.</p>
           <button type="button" className="conv-action" onClick={submitContact}>
-            Send to Aaron →
+            Send lesson request
           </button>
         </div>
       </div>
@@ -522,6 +565,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
   // Normal animated mode — one step at a time
   return (
     <div className="conv">
+      {contextLabel && step === 'who' && (
+        <p className="booking__context-label">{contextLabel}</p>
+      )}
       {step !== 'confirm' && step !== 'sent' && history.length > 0 && (
         <div className="conv-history" aria-label="Booking selections">
           {history.map((entry) => (
@@ -616,6 +662,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
           {step === 'date' && (
             <>
               <p className="conv-question">When works for you?</p>
+              <p className="booking__date-note">
+                Aaron books 2–3 days ahead. Share your preferred window and he'll confirm availability.
+              </p>
 
               <div className="date-chip-group">
                 <p className="date-chip-label">Day</p>
@@ -697,6 +746,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
               <div className="conv-inputs">
                 <div>
                   <input
+                    aria-label="Your name"
                     type="text"
                     className={`conv-input${contactErrors.name ? ' conv-input--error' : ''}`}
                     placeholder="Your name"
@@ -712,6 +762,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                 </div>
                 <div>
                   <input
+                    aria-label="Email address"
                     type="email"
                     className={`conv-input${contactErrors.email ? ' conv-input--error' : ''}`}
                     placeholder="your@email.com"
@@ -726,6 +777,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                 </div>
                 <div>
                   <input
+                    aria-label="Phone number (optional)"
                     type="tel"
                     className="conv-input"
                     placeholder="Phone, optional"
@@ -735,9 +787,9 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                   />
                 </div>
               </div>
-              <p className="conv-hint">Aaron will follow up within a day or two.</p>
+              <p className="conv-hint">Aaron will follow up within a day or two to confirm your lesson.</p>
               <button type="button" className="conv-action" onClick={submitContact}>
-                Send to Aaron →
+                Send lesson request
               </button>
             </>
           )}
@@ -747,6 +799,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
 
       {step === 'sent' && (
         <div key="confirmation" className="conv-sent conv-step--enter">
+          <p className="booking__inquiry-note">This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details.</p>
           <p className="conv-sent__headline">
             We'll see you out there{firstName ? `, ${firstName}` : ''}.
           </p>

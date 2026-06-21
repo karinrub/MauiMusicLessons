@@ -250,20 +250,49 @@
   object-position: center 22%;
   opacity: 1;
   visibility: visible;
+  filter: brightness(0.72) saturate(0.78) contrast(0.94);
 }
 
 .beach__editorial-photo-edge {
   position: absolute;
   inset: 0 auto 0 0;
   width: 80px;
-  background: linear-gradient(to right, rgba(10, 10, 10, 0.3), transparent);
+  background: linear-gradient(to right, rgba(28, 20, 9, 0.72), transparent);
   z-index: 1;
   pointer-events: none;
+}
+
+/* ─── Conversion row ─────────────────────────────────────── */
+
+.beach__conversion-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.beach__conversion-item {
+  font-size: clamp(0.7rem, 1.1vw, 0.82rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(200, 168, 130, 0.72);
+  font-family: var(--font-sans);
+}
+
+.beach__conversion-divider {
+  width: 1px;
+  background: rgba(200, 168, 130, 0.28);
+  align-self: stretch;
 }
 
 /* ─── Responsive ─────────────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .beach__conversion-divider {
+    display: none;
+  }
+
   .beach__tc-content {
     padding: 3.5rem 1.5rem 1.5rem;
   }

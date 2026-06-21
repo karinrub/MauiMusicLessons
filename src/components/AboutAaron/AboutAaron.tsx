@@ -11,7 +11,7 @@ const chapters = [
     title: 'Early Years',
     label: 'Early',
     image: publicAsset('/images/aaron-portrait-1.jpg'),
-    text: 'Aaron began his journey in music education over two decades ago. While studying at Illinois State University, he explored guitar, piano, and music theory, discovering a love for collaboration and live performance.',
+    text: 'Aaron has been teaching guitar and ukulele on Maui for years — working with complete beginners and returning players to help them find their footing. Aaron began his journey in music education over two decades ago. While studying at Illinois State University, he explored guitar, piano, and music theory, discovering a love for collaboration and live performance.',
   },
   {
     title: 'Exploration & Growth',

@@ -91,7 +91,21 @@ export default function WeeklyLessons() {
               most look forward to: the one where showing up and staying curious is the whole job.
             </ScrollLine>
           </div>
-          <button className="btn btn--dark weekly__btn" onClick={() => scrollToSection('book')}>
+          <div className="weekly__conversion-row">
+            <span className="weekly__conversion-item">$60 · 1 hr &nbsp;|&nbsp; weekly cadence</span>
+            <span className="weekly__conversion-divider" aria-hidden="true" />
+            <span className="weekly__conversion-item">Kihei, Maui</span>
+            <span className="weekly__conversion-divider" aria-hidden="true" />
+            <span className="weekly__conversion-item">Student-paced — no syllabus</span>
+          </div>
+          <button
+            className="btn btn--dark weekly__btn"
+            onClick={() => {
+              const bookEl = document.getElementById('book')
+              if (bookEl) bookEl.dataset.lessonContext = 'weekly'
+              scrollToSection('book')
+            }}
+          >
             Let's find a time
           </button>
         </div>
