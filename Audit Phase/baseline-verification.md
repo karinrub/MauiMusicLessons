@@ -4,9 +4,7 @@
 
 **Review method:** JavaScript injection into live site at `https://karinrub.github.io/MauiMusicLessons/` via Chrome MCP. Accessibility tree reads, DOM queries, computed style inspection, and manual observation. WCAG 2.1 conformance level AA. Four principles evaluated: Perceivable (1.x), Operable (2.x), Understandable (3.x), Robust (4.x).
 
-**Status:** This audit supersedes the Category 15 "Complete" status in `task-map.md`. Category 15 was marked complete based on ARIA attribute verification (accessible names, tab order, keyboard interaction, reduced-motion). The WCAG audit covers a broader set of success criteria and found confirmed failures that were outside the scope of the earlier Playwright pass.
-
-**WCAG findings are deferred to a future implementation phase.** They are documented here and in `task-map.md` but will not be addressed in the current Phase 3 → Phase 5 motion/performance/final-verification workflow. They must be resolved before the site can claim WCAG 2.1 AA conformance.
+**Status:** Audit completed June 21, 2026. Four confirmed failures remediated and browser-verified June 21, 2026 (see `task-map.md` Category 15 for implementation details). Three partial/risk findings remain deferred — require measurement or additional verification before a fix decision. This document is the evidence archive for the WCAG findings; remediation details are in `task-map.md` and `completion-report.md`.
 
 ---
 
@@ -69,15 +67,16 @@ The following success criteria were verified as passing:
 
 ---
 
-### WCAG Implementation Priority Order
+### WCAG Remediation Status — June 21, 2026
 
-When the WCAG remediation phase begins, address in this order:
+**Completed (browser-verified):**
+1. Video pause control (2.2.2) — pause/play toggle added to Beach video controls ✓
+2. Skip link (2.4.1) — visually hidden skip-to-main link added before Navbar ✓
+3. Focus rings on navbar/hero CTAs/footer nav (2.4.7 / 1.4.11) — `focus-visible` rules added to Navbar.css, Hero.css, Footer.css ✓
+4. Autocomplete on booking contact inputs (1.3.5) — `autocomplete="name"/"email"/"tel"` added ✓
 
-1. Video pause control (2.2.2) — Level A; straightforward toggle addition
-2. Skip link (2.4.1) — Level A; low-risk addition before Navbar
-3. Focus rings on navbar/hero CTAs/footer nav (2.4.7 / 1.4.11) — Level A + AA; CSS-only fix
-4. Autocomplete on booking contact inputs (1.3.5) — AA; attribute addition only
-5. Unlabeled landmark sections (4.1.2) — aria-label addition; low risk
+**Still deferred (require measurement or verification before fix):**
+5. Unlabeled landmark sections (4.1.2) — aria-label addition; low risk; deferred
 6. Contrast verification on navbar/footer at variable scroll positions (1.4.3) — requires measurement before implementation decision
 7. Booking back button accessible name (4.1.2) — verify then fix if needed
 

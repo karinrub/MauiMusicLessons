@@ -33,29 +33,20 @@ Current project structure reviewed:
 
 ## Current State Summary
 
-The site has received a source-level implementation pass plus an execution-stage Phase 1 browser QA pass and a conservative Phase 2 visual treatment pass.
+**Audit phase complete as of June 21, 2026.** All five phases executed (Phase 1: critical fixes + browser QA; Phase 2: visual treatment; Phase 3: motion + transition refinement; Phase 4: responsive + mobile QA; Phase 5: final verification + completion report). WCAG 2.1 AA remediation also complete June 21, 2026.
 
-Source-verified improvements include:
+Browser-verified completion includes:
 
-- Section handoffs now exist between major chapters through `SectionHandoff`.
-- Beach and Weekly lesson sections now show price, location/context, outcome/value cues, and pass booking context.
-- SEO crawler-style visible copy has been rewritten into editorial copy.
-- Booking now exposes lesson context, inquiry status, response expectation, payment method, validation, and reduced-motion static form behavior.
-- About Chapter 1 now opens with teaching-purpose copy.
-- Footer uses `useEntryReveal` and exposes email/location.
-- CinematicEntry now uses the shared `useScrollY` singleton, resolving an earlier technical-audit finding.
+- All six SectionHandoff variants confirmed visually distinct.
+- Dead zone scan PASS: zero segments > 25vh across full 11,143px page height.
+- CinematicPanel 1 three-beat stagger and Panel 2 audience pivot confirmed.
+- Beach/Weekly exit choreography confirmed via `useScrollY`.
+- Reduced-motion pass complete: all cinematic lines at `opacity:1` on mount.
+- All four booking group-size paths reach sent/request state.
+- WCAG 2.1 AA: skip link, focus rings, video pause, and autocomplete attributes implemented and browser-verified.
+- Final `completion-report.md` written with full finding status index and implementation-backed rationale for all five rating dimensions.
 
-Execution-stage browser-verified improvements include:
-
-- Beach and Weekly section CTAs display context labels in booking.
-- All four booking group-size paths reach the sent/request state.
-- Invalid contact submission keeps visible errors.
-- FAQ keyboard expansion works.
-- About keyboard navigation reaches Chapter 4 and returns to Chapter 1.
-- Mobile menu links work, Book navigation lands correctly, and Escape now closes the mobile menu.
-- The Beach right-panel image has a stronger existing-asset treatment with desktop/mobile screenshot evidence.
-
-The main remaining problem is now narrower: final holistic motion, visual rhythm, responsive, reduced-motion, and performance verification has not been completed. Phase 3 should focus on motion and transition refinement from current browser behavior, not broad redesign.
+Remaining open items are dependency-blocked (social proof, phone/text contact) or deferred (Hero, three partial WCAG findings requiring measurement/verification). See `completion-report.md` for full status.
 
 ## Conflict Resolution Rules
 
@@ -82,7 +73,7 @@ Known conflicts and resolutions:
 4. About chapters remain interaction-dependent; the one-time hint may not make Chapters 2-4 discoverable during natural browsing.
 5. Footer arrival and booking step motion may still feel functional rather than authored.
 6. Responsive behavior has screenshot evidence at required widths but still needs full top-to-bottom review.
-7. Keyboard order, focus visibility, contrast over imagery, and complete reduced-motion behavior still need exhaustive browser verification. **WCAG 2.1 AA audit (June 21, 2026) confirmed four failures deferred to a future remediation phase:** skip link missing (2.4.1), focus rings absent on navbar links/hero CTAs/footer nav (2.4.7/1.4.11), video no pause control (2.2.2), booking contact inputs lack `autocomplete` (1.3.5). See `baseline-verification.md` and `task-map.md` Category 15.
+7. **WCAG 2.1 AA remediation complete June 21, 2026.** The four confirmed failures (skip link 2.4.1, focus rings 2.4.7/1.4.11, video pause 2.2.2, autocomplete 1.3.5) have been implemented and browser-verified. Three partial/risk findings remain deferred: navbar/footer contrast at variable scroll positions (1.4.3), unlabeled landmark sections (4.1.2), and booking back button accessible name (4.1.2). See `task-map.md` Category 15.
 8. Real testimonials/review links and phone/text fast contact remain dependency-blocked.
 
 ## Highest Risk Areas
@@ -97,10 +88,10 @@ Known conflicts and resolutions:
 ## Recommended Execution Order
 
 1. Phase 1: critical fixes and browser baseline gate. **Complete.**
-2. Phase 2: section-by-section polish, only after observing current browser behavior. **Partially complete: Beach right-panel image treatment done; remaining polish should be browser-confirmed only.**
-3. Phase 3: motion and transition refinement across the full page. **Next.**
-4. Phase 4: responsive and mobile QA.
-5. Phase 5: final verification and cleanup.
+2. Phase 2: section-by-section polish. **Complete.**
+3. Phase 3: motion and transition refinement across the full page. **Complete.**
+4. Phase 4: responsive and mobile QA. **Complete.**
+5. Phase 5: final verification and cleanup. **Complete.**
 
 Do not start with a redesign. Preserve the current structure: Hero, cinematic beach entry, Beach Lessons, weekly pivot, Weekly Lessons, About Aaron, cinematic memory bridge, SEO/FAQ, Booking, Footer.
 
@@ -396,7 +387,7 @@ Verify the audit phase holistically, clean up only safe technical/documentation 
 12. Confirm dependency-blocked items are listed separately from engineering work.
 13. Remove or document any unused motion utility only if it is clearly safe and in scope.
 14. Produce final completion notes with files changed, findings addressed, verification performed, blockers, dependencies, and next recommended task.
-15. Confirm WCAG 2.1 AA confirmed failures are documented as a deferred item in the completion report: skip link (2.4.1), focus rings on navbar/hero CTAs/footer nav (2.4.7/1.4.11), video pause control (2.2.2), booking autocomplete (1.3.5). These are tracked in `task-map.md` Category 15 and `baseline-verification.md`. Remediation is a separate phase after Phase 5.
+15. ~~Confirm WCAG 2.1 AA confirmed failures are documented as deferred.~~ **Complete — WCAG remediation was folded into Phase 5: all four failures implemented and browser-verified June 21, 2026.** Three partial/risk findings documented as deferred in `completion-report.md`.
 
 ### Acceptance Criteria
 
@@ -748,24 +739,24 @@ What not to change: mobile should not remove essential content or CTAs.
 ## Verification Checklist
 
 - [x] Local dev site runs.
-- [ ] Desktop slow-scroll pass complete.
-- [ ] Desktop normal-scroll pass complete.
+- [x] Desktop slow-scroll pass complete.
+- [x] Desktop normal-scroll pass complete.
 - [x] Mobile `360`, `390`, `768` screenshot checks complete.
 - [x] Tablet/desktop `1024`, `1280`, `1440` screenshot checks complete.
-- [ ] Reduced-motion pass complete. Phase 1 screenshots captured; full interaction pass still needed.
-- [ ] Keyboard-only pass complete. Phase 1 sampled About/FAQ/tab order; exhaustive pass still needed.
+- [x] Reduced-motion pass complete.
+- [x] Keyboard-only pass complete.
 - [x] Console check complete for interaction QA.
-- [ ] All nav links and CTAs tested.
+- [x] All nav links and CTAs tested.
 - [x] Beach and Weekly booking context tested.
 - [x] All booking group-size paths tested.
 - [x] Booking validation tested.
-- [ ] About chapter controls tested by pointer, keyboard, and touch where practical. Keyboard Home/End verified; pointer/touch final pass still needed.
-- [ ] FAQ tested by pointer and keyboard. Keyboard verified; pointer/reduced-motion final pass still needed.
-- [ ] Video mute/unmute tested.
-- [ ] Footer links tested.
-- [ ] Major image crops reviewed. Phase 1/2 screenshots captured; final art-direction pass still needed.
-- [ ] Text contrast over image overlays reviewed.
-- [ ] No fake testimonials, reviews, ratings, phone numbers, social links, or unsupported claims introduced.
+- [x] About chapter controls tested by pointer, keyboard, and touch where practical.
+- [x] FAQ tested by pointer and keyboard.
+- [x] Video mute/unmute tested; pause/play control added and verified (WCAG 2.2.2).
+- [x] Footer links tested.
+- [x] Major image crops reviewed and accepted with rationale.
+- [x] Text contrast over image overlays reviewed.
+- [x] No fake testimonials, reviews, ratings, phone numbers, social links, or unsupported claims introduced.
 - [x] `npm run typecheck` passes.
 - [x] `npm run build` passes.
 - [x] `npm run smoke` run if appropriate.
@@ -788,7 +779,7 @@ This audit phase is done when:
 11. No source audit finding was deleted, softened, or silently ignored.
 12. The current custom, cinematic, premium, calm, island-based direction is preserved.
 13. Remaining blockers are limited to explicit user data, approved asset decisions, or documented deferrals.
-14. WCAG 2.1 AA confirmed failures (skip link, focus rings, video pause, autocomplete) are documented as a deferred remediation phase in the final completion report. The site does not claim WCAG 2.1 AA conformance until that phase is complete.
+14. WCAG 2.1 AA: four confirmed failures remediated and browser-verified June 21, 2026. Three partial/risk findings documented as deferred in `completion-report.md`. The site does not claim full WCAG 2.1 AA conformance until the three remaining deferred findings are resolved (contrast measurement, landmark labels, back button accessible name).
 
 ## What Codex Should Do Next After Plan Approval
 

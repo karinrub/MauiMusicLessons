@@ -213,6 +213,40 @@
   background: rgba(255, 255, 255, 0.85);
 }
 
+/* WCAG 2.4.7 / 1.4.11 — visible focus rings on navbar controls */
+.navbar__brand:focus-visible,
+.navbar__links li button:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.65);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+.navbar--scrolled .navbar__brand:focus-visible,
+.navbar--scrolled .navbar__links li button:focus-visible {
+  outline-color: rgba(44, 36, 24, 0.6);
+}
+
+.navbar__cta:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.65);
+  outline-offset: 2px;
+}
+
+.navbar__mobile-menu li button:focus-visible {
+  outline: 2px solid rgba(44, 36, 24, 0.5);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+.navbar__hamburger:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.65);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.navbar--scrolled .navbar__hamburger:focus-visible {
+  outline-color: rgba(44, 36, 24, 0.6);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .navbar {
     transition: opacity 0.8s ease;

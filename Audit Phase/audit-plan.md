@@ -10,28 +10,27 @@ This document is a project control document for autonomous coding agents. It def
 
 ## Current Implementation State — June 21, 2026
 
-Implementation work is in progress. This is not a pre-implementation document. The following is a high-level status summary; `task-map.md` has the authoritative per-category breakdown.
+The audit phase engineering work is complete. See `completion-report.md` for the full finding status index and `task-map.md` for the authoritative per-category breakdown.
 
-**Completed categories (source/browser-verified where applicable):** Beach Lessons conversion and CTA context (7), Weekly Lessons conversion and CTA context (8), SEO And Information Section source and sampled browser rendering (10), Booking Flow all group-size paths and validation (12).
+**Completed categories (browser-verified):** Baseline Verification (0), Global Rating Targets (1), Global Motion Architecture (2), Global Section Transitions (3), Cinematic Panels (5), Visual Asset And Overlay System (6), Beach Lessons (7), Weekly Lessons (8), About Aaron (9), SEO And Information Section (10), FAQ (11), Booking Flow (12), Responsive Behavior (16), Performance (17), Final Verification (18).
 
-**Partial categories (some browser evidence now exists, final verification still pending):** Global Motion Architecture (2), Global Section Transitions (3), Cinematic Panels (5), Visual Asset And Overlay System (6), About Aaron (9), FAQ (11), Footer (13), Conversion And Trust (14), Accessibility (15), Responsive Behavior (16).
+**Partial categories — dependency-blocked:** Footer (13), Conversion And Trust (14).
 
-**Not started or not complete:** Hero (4) remains intentionally unchanged; Performance (17) has successful build/smoke but no performance trace; Final Verification (18) has Phase 1 evidence but is not complete.
+**Partial categories — WCAG remediation in progress:** Accessibility (15) — WCAG 2.1 AA failures confirmed and documented; remediation phase underway (skip link, focus rings, video pause control, autocomplete).
 
-**Execution reports now available:**
+**Deferred:** Hero (4) — intentional; no structural changes identified as necessary.
+
+**Execution reports:**
 - `Audit Phase/phase-1-execution-report.md`
 - `Audit Phase/phase-2-execution-report.md`
+- `Audit Phase/completion-report.md`
 - Browser evidence in `Audit Phase/execution-artifacts/phase1/`
-
-**Implemented during execution stage:**
-- Mobile menu Escape close behavior and state-specific hamburger accessible labels.
-- Stronger Beach Lessons right-panel image treatment using existing asset, filter, and warm vignette overlay.
 
 **Outstanding dependency-blocked items:**
 - Real testimonials or external review links — not provided; social proof cannot be fabricated.
 - Confirmed phone/text contact path — not provided; fast contact path cannot be added.
 
-**Critical next step:** Continue with Phase 3 motion and transition verification/tuning. Phase 1 browser QA covered key breakpoints, CTA context, all booking group-size paths, validation, FAQ keyboard behavior, About keyboard behavior, console errors, mobile menu behavior, and build/smoke. A final holistic browser QA pass is still required before the audit can close.
+**Active work:** WCAG 2.1 AA remediation (Category 15). See `baseline-verification.md` WCAG section and `task-map.md` Category 15 for full detail.
 
 ---
 

@@ -98,6 +98,19 @@
   line-height: 1.6;
 }
 
+/* WCAG 2.4.7 / 1.4.11 — visible focus rings on footer nav (dark background) */
+.footer__nav button:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.55);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+.footer__link:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.55);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
 @media (max-width: 720px) {
   .footer__inner {
     grid-template-columns: 1fr;

@@ -161,6 +161,13 @@
   animation: heroIn 1.0s cubic-bezier(0.22, 1, 0.36, 1) 2.25s forwards;
 }
 
+/* WCAG 2.4.7 / 1.4.11 — visible focus rings on hero CTAs (dark background) */
+.hero__actions .btn:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.65);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero__dark-veil {
     display: none;

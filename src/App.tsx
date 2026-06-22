@@ -71,9 +71,10 @@ function App() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Grain />
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}

@@ -518,6 +518,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
               <input
                 aria-label="Your name"
                 type="text"
+                autoComplete="name"
                 className={`conv-input${contactErrors.name ? ' conv-input--error' : ''}`}
                 placeholder="Your name"
                 value={data.name}
@@ -532,6 +533,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
               <input
                 aria-label="Email address"
                 type="email"
+                autoComplete="email"
                 className={`conv-input${contactErrors.email ? ' conv-input--error' : ''}`}
                 placeholder="your@email.com"
                 value={data.email}
@@ -546,6 +548,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
               <input
                 aria-label="Phone number (optional)"
                 type="tel"
+                autoComplete="tel"
                 className="conv-input"
                 placeholder="Phone, optional"
                 value={data.phone}
@@ -748,6 +751,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                   <input
                     aria-label="Your name"
                     type="text"
+                    autoComplete="name"
                     className={`conv-input${contactErrors.name ? ' conv-input--error' : ''}`}
                     placeholder="Your name"
                     value={data.name}
@@ -764,6 +768,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                   <input
                     aria-label="Email address"
                     type="email"
+                    autoComplete="email"
                     className={`conv-input${contactErrors.email ? ' conv-input--error' : ''}`}
                     placeholder="your@email.com"
                     value={data.email}
@@ -779,6 +784,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                   <input
                     aria-label="Phone number (optional)"
                     type="tel"
+                    autoComplete="tel"
                     className="conv-input"
                     placeholder="Phone, optional"
                     value={data.phone}

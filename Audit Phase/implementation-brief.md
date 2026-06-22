@@ -4,20 +4,20 @@ This brief is for future agents who will implement the audit remediation work. D
 
 ## Current Execution Status
 
-Execution-stage work has started. Before continuing, read:
+**Audit phase complete as of June 21, 2026.** All five phases executed. Before any future work, read:
 
 - `Audit Phase/phase-1-execution-report.md`
 - `Audit Phase/phase-2-execution-report.md`
 - `Audit Phase/execution-artifacts/phase1/phase1-interaction-qa.json`
+- `Audit Phase/completion-report.md`
 
 Current verified state as of June 21, 2026:
 
-- Phase 1 browser QA completed for key interaction paths and required screenshot widths.
-- Mobile menu Escape close behavior was implemented and verified.
-- Beach/Weekly CTA context, all booking group-size paths, booking validation, About Home/End keyboard navigation, and FAQ keyboard expansion were verified.
-- Phase 2 strengthened the Beach right-panel photo treatment with existing-asset CSS grading and overlay.
+- All five execution phases complete.
+- WCAG 2.1 AA: four confirmed failures remediated and browser-verified.
 - `npm run typecheck`, `npm run build`, and `npm run smoke` pass.
-- Final holistic motion, reduced-motion, responsive, accessibility, performance, and visual-cohesion verification is still required.
+- Final completion report written: `Audit Phase/completion-report.md`.
+- Remaining open items: dependency-blocked (social proof, phone/text contact); three partial WCAG findings deferred (contrast measurement, landmark labels, back button accessible name).
 
 ## Required Reading Order
 
@@ -290,7 +290,7 @@ Before considering the audit complete:
 - Verify direct contact and response-time messaging.
 - Verify no fake testimonials or unsupported claims were introduced.
 - Revisit the rating target table in `audit-plan.md` and confirm every blocker has been addressed or documented as a user-data dependency.
-- Verify WCAG 2.1 AA confirmed failures (skip link 2.4.1, focus rings 2.4.7/1.4.11, video pause control 2.2.2, booking autocomplete 1.3.5) are resolved before any WCAG conformance claim. These failures were confirmed June 21, 2026 and are documented in `baseline-verification.md` and `task-map.md` Category 15. They are deferred to a future remediation phase after Phase 3–5 completion.
+- Verify WCAG 2.1 AA status: four confirmed failures (skip link 2.4.1, focus rings 2.4.7/1.4.11, video pause 2.2.2, autocomplete 1.3.5) were remediated and browser-verified June 21, 2026. Three partial/risk findings remain deferred: contrast at variable scroll positions (1.4.3), unlabeled landmark sections (4.1.2), booking back button accessible name (4.1.2). The site does not claim full WCAG 2.1 AA conformance until these three remaining items are resolved. See `task-map.md` Category 15 and `completion-report.md`.
 
 ## Stopping Rule
 

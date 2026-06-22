@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import ScrollLine from '../ScrollLine/ScrollLine'
 import { scrollToSection, easeOutCubic } from '../../utils/animation'
 import { viewportProgress } from '../../utils/scroll'
@@ -27,9 +27,39 @@ function UnmutedIcon() {
   )
 }
 
+function PauseIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </svg>
+  )
+}
+
+function PlayIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polygon points="5 3 19 12 5 21 5 3" />
+    </svg>
+  )
+}
+
 export default function BeachLessons() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isMuted, setIsMuted] = useState(true)
+  const [isPaused, setIsPaused] = useState(false)
+  // WCAG 2.2.2: under reduced-motion, start paused so autoplay is suppressed
+  const [showPauseControl, setShowPauseControl] = useState(true)
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reducedMotion) {
+      const video = videoRef.current
+      if (video) video.pause()
+      setIsPaused(true)
+      setShowPauseControl(false)
+    }
+  }, [])
   const cardRef = useRef<HTMLDivElement>(null)
   const eyebrowRef = useRef<HTMLParagraphElement>(null)
   const tcTitleRef = useRef<HTMLHeadingElement>(null)
@@ -66,6 +96,18 @@ export default function BeachLessons() {
         video.muted = true
         setIsMuted(true)
       })
+    }
+  }
+
+  const togglePause = () => {
+    const video = videoRef.current
+    if (!video) return
+    if (video.paused) {
+      video.play().catch(() => {})
+      setIsPaused(false)
+    } else {
+      video.pause()
+      setIsPaused(true)
     }
   }
 
@@ -109,15 +151,28 @@ export default function BeachLessons() {
           aria-label="Aaron teaching ukulele on a Maui beach"
         />
         <div className="beach__video-overlay" />
-        <button
-          type="button"
-          className="beach__mute-btn"
-          onClick={toggleMute}
-          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-          aria-pressed={!isMuted}
-        >
-          {isMuted ? <MutedIcon /> : <UnmutedIcon />}
-        </button>
+        <div className="beach__video-controls">
+          {showPauseControl && (
+            <button
+              type="button"
+              className="beach__video-btn"
+              onClick={togglePause}
+              aria-label={isPaused ? 'Play video' : 'Pause video'}
+              aria-pressed={isPaused}
+            >
+              {isPaused ? <PlayIcon /> : <PauseIcon />}
+            </button>
+          )}
+          <button
+            type="button"
+            className="beach__video-btn"
+            onClick={toggleMute}
+            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+            aria-pressed={!isMuted}
+          >
+            {isMuted ? <MutedIcon /> : <UnmutedIcon />}
+          </button>
+        </div>
       </div>
 
       {/* Beat 3 — Editorial panel */}

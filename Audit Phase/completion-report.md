@@ -25,7 +25,7 @@
 | 12 | Booking Flow | **Complete** | — |
 | 13 | Footer | **Partial** | Dependency-blocked (phone/text) |
 | 14 | Conversion And Trust | **Partial** | Dependency-blocked (social proof, phone/text) |
-| 15 | Accessibility | **Partial** | Deferred — WCAG remediation phase |
+| 15 | Accessibility | **Complete** | WCAG 4 confirmed failures remediated June 21, 2026; 3 partial/risk findings deferred |
 | 16 | Responsive Behavior | **Complete** | — |
 | 17 | Performance | **Complete** | Tooling-limited (WebP, srcset documented) |
 | 18 | Final Verification | **Complete** | — |
@@ -61,18 +61,19 @@ These items cannot be resolved without user-provided data. They are accurately t
 **Status:** `Deferred — intentional`  
 **Re-entry condition:** If a future pass finds conversion metrics are still blocked after all other categories are complete, targeted minimal additions (e.g., single trust line below CTA) could be evaluated.
 
-### Category 15 — Accessibility (WCAG Remediation)
-**Reason:** The WCAG 2.1 AA audit (June 21, 2026) confirmed four implementable failures plus three risk findings. These were documented in full in `baseline-verification.md` and `task-map.md`. The decision was made to address them in a dedicated future remediation phase rather than interleaving accessibility fixes with the motion/performance/final-verification workflow.  
-**Confirmed failures deferred:**
-1. **2.4.1** — No skip link (keyboard users must tab through full navbar)
-2. **2.4.7 / 1.4.11** — Focus rings absent on navbar links, hero CTAs, footer nav
-3. **2.2.2** — Video has no pause control (mute only)
-4. **1.3.5** — Booking contact inputs lack `autocomplete` attributes
+### Category 15 — Accessibility (WCAG Partial Findings)
+**Status:** Four confirmed failures remediated June 21, 2026 and browser-verified. Three partial/risk findings remain deferred — require measurement or additional verification before a fix decision.
 
-**Partial findings deferred:**
-5. **1.4.3** — Navbar/footer contrast at variable scroll positions (requires measurement)
-6. **4.1.2** — Unlabeled landmark sections (#hero, #about, #book)
-7. **4.1.2** — Booking back button accessible name per step
+**Remediated June 21, 2026:**
+1. **2.4.1** — Skip link added as first focusable element, visually hidden, appears on focus
+2. **2.4.7 / 1.4.11** — `focus-visible` rules added to Navbar, Hero, and Footer CSS
+3. **2.2.2** — Pause/play toggle added to Beach Lessons video controls adjacent to mute button
+4. **1.3.5** — `autocomplete="name"`, `autocomplete="email"`, `autocomplete="tel"` added to booking contact inputs
+
+**Partial/risk findings still deferred (require measurement or verification):**
+5. **1.4.3** — Navbar/footer contrast at variable scroll positions (requires pixel-level measurement)
+6. **4.1.2** — Unlabeled landmark sections (#hero, #about, #book) — low-effort fix, deferred
+7. **4.1.2** — Booking back button accessible name per step — needs verification
 
 **Passing criteria (no action needed):** Alt text, heading hierarchy, DOM order, no keyboard traps, page title, language attribute, error identification, no duplicate IDs, reduced-motion system.
 
@@ -195,12 +196,12 @@ Every major finding from `audit-findings.md` has been assigned a status type per
 ### Accessibility Findings
 | Finding | Status Type | Resolution |
 |---|---|---|
-| No skip link (2.4.1) | 7 — Deferred | WCAG remediation phase; documented |
-| Focus rings absent on navbar/hero/footer (2.4.7) | 7 — Deferred | WCAG remediation phase; documented |
-| Video no pause control (2.2.2) | 7 — Deferred | WCAG remediation phase; documented |
-| Booking autocomplete missing (1.3.5) | 7 — Deferred | WCAG remediation phase; documented |
-| Navbar contrast at scroll positions (1.4.3) | 7 — Deferred | Needs measurement before fix decision |
-| Unlabeled landmark sections (4.1.2) | 7 — Deferred | WCAG remediation phase; low-effort fix |
+| No skip link (2.4.1) | 6 — Resolved | Skip link implemented and browser-verified June 21, 2026 |
+| Focus rings absent on navbar/hero/footer (2.4.7) | 6 — Resolved | `focus-visible` rules added to Navbar/Hero/Footer CSS; browser-verified |
+| Video no pause control (2.2.2) | 6 — Resolved | Pause/play toggle added to Beach video controls; browser-verified |
+| Booking autocomplete missing (1.3.5) | 6 — Resolved | `autocomplete` attrs added to contact inputs (animated + reduced-motion forms); browser-verified |
+| Navbar contrast at scroll positions (1.4.3) | 7 — Deferred | Requires pixel-level contrast measurement at failure-risk scroll positions |
+| Unlabeled landmark sections (4.1.2) | 7 — Deferred | Needs verification and low-effort fix in a future pass |
 | Booking back button accessible name (4.1.2) | 7 — Deferred | Needs verification before fix decision |
 | Tab order, ARIA, reduced-motion, focus on interactive controls | 6 — Resolved | Browser-verified in Phase 4 |
 
@@ -230,7 +231,7 @@ All P0 categories have browser verification evidence recorded in `baseline-verif
 | 11 — FAQ | Phase 4 (open-state visual treatment, keyboard operation, aria-expanded) |
 | 12 — Booking Flow | Execution-stage Phase 1 (all 4 group-size paths, validation, sent state) |
 | 14 — Conversion And Trust | Documented as dependency-blocked in all prior phases |
-| 15 — Accessibility | Phase 4 (ARIA pass) + WCAG audit (confirmed failures deferred) |
+| 15 — Accessibility | Phase 4 (ARIA pass) + WCAG audit June 21, 2026 (4 confirmed failures remediated and browser-verified; 3 partial findings deferred) |
 | 16 — Responsive Behavior | Phase 4 (390px/768px, mobile menu, no overflow) |
 | 17 — Performance | Phase 5 (build output, image sizes, preload addition) |
 
