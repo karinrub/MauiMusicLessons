@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://karinrubin.github.io/MauiMusicLessons/sitemap.xml
+Sitemap: https://karinrub.github.io/MauiMusicLessons/sitemap.xml
