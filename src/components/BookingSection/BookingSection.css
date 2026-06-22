@@ -422,11 +422,20 @@
   margin-bottom: 1.25rem;
 }
 
+.conv-sent .conv-action {
+  margin: 0.35rem auto 1.5rem;
+}
+
+.conv-action--mailto {
+  text-decoration: none;
+}
+
 .conv-sent__meta {
   font-size: 0.78rem;
   color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  margin-bottom: 1rem;
 }
 
 /* ─── Date chip selection ────────────────────────────────── */
@@ -450,7 +459,11 @@
 }
 
 .date-chip {
-  padding: 0.5rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(255, 255, 255, 0.055);
   color: #fff;

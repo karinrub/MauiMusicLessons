@@ -40,7 +40,7 @@ export default function Hero() {
 
   return (
     <div className="hero-scroll-container" ref={containerRef}>
-      <section className="hero" id="hero" ref={heroRef}>
+      <section className="hero" id="hero" ref={heroRef} aria-labelledby="hero-heading">
         <div className="hero__media">
           <img
             ref={imgRef}
@@ -57,7 +57,7 @@ export default function Hero() {
 
         <div className="hero__content" ref={contentRef}>
           <p className="hero__eyebrow">Kihei, Maui · Hawaii</p>
-          <h1 className="hero__headline">
+          <h1 className="hero__headline" id="hero-heading">
             <span className="hero__headline-line">Guitar &amp; Ukulele </span>
             <span className="hero__headline-line">Lessons on Maui</span>
           </h1>

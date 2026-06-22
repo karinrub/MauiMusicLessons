@@ -50,6 +50,7 @@ function progressForChapter(chapter: number) {
 
 export default function AboutAaron() {
   const [activeChapter, setActiveChapter] = useState(0)
+  const [backgroundChapter, setBackgroundChapter] = useState(0)
   const [displayedChapter, setDisplayedChapter] = useState(0)
   const [dragProgress, setDragProgress] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -60,7 +61,9 @@ export default function AboutAaron() {
   const sectionRef = useRef<HTMLElement>(null)
   const foregroundRef = useRef<HTMLDivElement>(null)
   const railRef = useRef<HTMLDivElement>(null)
+  const imageRefs = useRef<(HTMLImageElement | null)[]>([])
   const activeChapterRef = useRef(0)
+  const requestedBackgroundRef = useRef(0)
   const dragProgressRef = useRef(0)
   const hasInteractedRef = useRef(false)
   const textHasMountedRef = useRef(false)
@@ -69,6 +72,35 @@ export default function AboutAaron() {
   const textFadeInRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hintDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hintEndRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const requestBackgroundChapter = (chapter: number) => {
+    requestedBackgroundRef.current = chapter
+    const img = imageRefs.current[chapter]
+
+    if (!img) return
+
+    if (img.complete && img.naturalWidth > 0) {
+      setBackgroundChapter(chapter)
+      return
+    }
+
+    img.loading = 'eager'
+    img.fetchPriority = 'high'
+
+    img.decode()
+      .then(() => {
+        if (requestedBackgroundRef.current === chapter) setBackgroundChapter(chapter)
+      })
+      .catch(() => {
+        if (
+          requestedBackgroundRef.current === chapter &&
+          img.complete &&
+          img.naturalWidth > 0
+        ) {
+          setBackgroundChapter(chapter)
+        }
+      })
+  }
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -183,6 +215,7 @@ export default function AboutAaron() {
     if (nextChapter !== activeChapterRef.current) {
       activeChapterRef.current = nextChapter
       setActiveChapter(nextChapter)
+      requestBackgroundChapter(nextChapter)
     }
   }
 
@@ -207,6 +240,7 @@ export default function AboutAaron() {
     activeChapterRef.current = nextChapter
     dragProgressRef.current = nextProgress
     setActiveChapter(nextChapter)
+    requestBackgroundChapter(nextChapter)
     setDragProgress(nextProgress)
   }
 
@@ -245,16 +279,18 @@ export default function AboutAaron() {
     dragProgressRef.current = snappedProgress
     setIsDragging(false)
     setActiveChapter(snappedChapter)
+    requestBackgroundChapter(snappedChapter)
     setDragProgress(snappedProgress)
   }
 
   return (
-    <section ref={sectionRef} className="about" id="about">
+    <section ref={sectionRef} className="about" id="about" aria-label="About Aaron">
       <div className="about__backgrounds" aria-hidden="true">
         {chapters.map((chapter, index) => (
           <img
             key={chapter.title}
-            className={`about__background${index === activeChapter ? ' about__background--active' : ''}`}
+            ref={(el) => { imageRefs.current[index] = el }}
+            className={`about__background${index === backgroundChapter ? ' about__background--active' : ''}`}
             src={chapter.image}
             alt=""
             width="2200"
@@ -262,6 +298,9 @@ export default function AboutAaron() {
             loading={index === 0 ? 'eager' : 'lazy'}
             decoding="async"
             draggable="false"
+            onLoad={() => {
+              if (requestedBackgroundRef.current === index) setBackgroundChapter(index)
+            }}
           />
         ))}
       </div>

@@ -99,7 +99,7 @@ export default function Navbar() {
   ].filter(Boolean).join(' ')
 
   return (
-    <nav className={classes}>
+    <nav className={classes} aria-label="Primary navigation">
       <div className="navbar__inner">
         <button className="navbar__brand" onClick={() => handleNav('hero')}>
           Aaron Grzanich

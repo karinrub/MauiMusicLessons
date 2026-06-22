@@ -9,7 +9,7 @@ export default function Footer() {
   useEntryReveal(innerRef)
 
   return (
-    <footer className="footer">
+    <footer className="footer" aria-label="Site footer">
       <div className="footer__inner" ref={innerRef}>
         <div className="footer__brand">
           <p className="footer__name">Aaron Grzanich</p>

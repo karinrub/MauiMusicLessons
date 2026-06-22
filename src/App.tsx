@@ -74,7 +74,7 @@ function App() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Grain />
       <Navbar />
-      <main id="main-content">
+      <main id="main-content" aria-label="Maui music lesson page">
         <Hero />
         <CinematicPanel
           lines={PANEL_1_LINES}

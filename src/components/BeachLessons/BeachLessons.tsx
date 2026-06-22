@@ -46,8 +46,10 @@ function PlayIcon() {
 
 export default function BeachLessons() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const videoWrapRef = useRef<HTMLDivElement>(null)
   const [isMuted, setIsMuted] = useState(true)
   const [isPaused, setIsPaused] = useState(false)
+  const [videoState, setVideoState] = useState<'idle' | 'loading' | 'ready' | 'unavailable'>('idle')
   // WCAG 2.2.2: under reduced-motion, start paused so autoplay is suppressed
   const [showPauseControl, setShowPauseControl] = useState(true)
 
@@ -58,6 +60,54 @@ export default function BeachLessons() {
       if (video) video.pause()
       setIsPaused(true)
       setShowPauseControl(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    const video = videoRef.current
+    const wrap = videoWrapRef.current
+    if (!video || !wrap) return
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const markReady = () => {
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) setVideoState('ready')
+    }
+    const markUnavailable = () => setVideoState('unavailable')
+    const startLoading = () => {
+      setVideoState((current) => current === 'ready' ? current : 'loading')
+      video.preload = 'auto'
+      video.load()
+      if (!reducedMotion) {
+        video.play()
+          .then(() => setIsPaused(false))
+          .catch(() => setIsPaused(true))
+      }
+    }
+
+    video.addEventListener('loadeddata', markReady)
+    video.addEventListener('canplay', markReady)
+    video.addEventListener('playing', markReady)
+    video.addEventListener('error', markUnavailable)
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) markReady()
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        startLoading()
+        observer.disconnect()
+      },
+      { rootMargin: '900px 0px', threshold: 0 }
+    )
+
+    observer.observe(wrap)
+
+    return () => {
+      observer.disconnect()
+      video.removeEventListener('loadeddata', markReady)
+      video.removeEventListener('canplay', markReady)
+      video.removeEventListener('playing', markReady)
+      video.removeEventListener('error', markUnavailable)
     }
   }, [])
   const cardRef = useRef<HTMLDivElement>(null)
@@ -136,21 +186,28 @@ export default function BeachLessons() {
       </div>
 
       {/* Beat 2 — Video */}
-      <div className="beach__video-wrap">
+      <div
+        className={`beach__video-wrap beach__video-wrap--${videoState}`}
+        ref={videoWrapRef}
+      >
         <video
           ref={videoRef}
           className="beach__video"
           src={publicAsset('/videos/aaron-ukelele-vid.mp4')}
           width="1920"
           height="1080"
-          autoPlay
           muted={isMuted}
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           aria-label="Aaron teaching ukulele on a Maui beach"
         />
         <div className="beach__video-overlay" />
+        {videoState !== 'ready' && videoState !== 'idle' && (
+          <p className="beach__video-status" role="status">
+            {videoState === 'unavailable' ? 'Beach video unavailable' : 'Beach video loading'}
+          </p>
+        )}
         <div className="beach__video-controls">
           {showPauseControl && (
             <button

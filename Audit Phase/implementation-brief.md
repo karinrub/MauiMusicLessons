@@ -21,11 +21,10 @@ Current verified state as of June 21, 2026:
 
 ## Required Reading Order
 
-1. `Audit Phase/audit-findings.md`
-2. `Audit Phase/audit-plan.md`
-3. `Audit Phase/task-map.md`
-4. `Audit Phase/baseline-verification.md`
-5. Relevant source files for the task category being implemented
+1. `Audit Phase/audit-report-june2026.md`
+2. `Audit Phase/completion-report.md`
+3. `Audit Phase/next-phase-workplan.md`
+4. Relevant source files for the task category being implemented
 
 If `Audit Phase/baseline-verification.md` does not exist, create it before editing application source code. Future agents must not start implementation from source files before reading the four Audit Phase documents above.
 
@@ -169,44 +168,43 @@ Do not remove or replace these core elements:
 
 You may refine copy, motion, layout, imagery, overlays, routing, and interaction details only when the change directly maps to audit findings and preserves the concept.
 
-## How To Use audit-findings.md
+## How To Use audit-report-june2026.md
 
 Use it to answer:
 
-- What was observed?
-- Which score did the issue affect?
-- Which moments are strongest and must be protected?
-- Which weaknesses are explicitly named?
-- Which technical files and animation systems were identified?
+- What defects are confirmed and require fixing?
+- What is the current score for each dimension?
+- Which 15 fixes are prioritized and in what order?
+- Which items are dependency-blocked (social proof, phone/text)?
+- Which WCAG items remain deferred?
 
-Do not summarize it away. When implementing a task, cite the specific finding category in your working notes or final response.
-
-## How To Use audit-plan.md
+## How To Use completion-report.md
 
 Use it to understand:
 
-- The purpose of the audit phase.
-- The global target of `100 / 100`.
-- The non-negotiable direction constraints.
-- The rating target table.
-- The recommended implementation order.
-- The definition of done.
+- What was implemented in the five prior phases (June 21, 2026).
+- Which findings are already resolved vs. still open.
+- Which dependency-blocked items cannot be addressed without user data.
+- The full finding status index (every finding from the original audit assigned a status type).
 
-If a proposed code change conflicts with `audit-plan.md`, do not make that change without explicit user approval.
+## How To Use next-phase-workplan.md
 
-## How To Use task-map.md
+Use it to understand:
 
-Use it as the implementation checklist. Each category includes:
+- The recommended execution sequence for the next implementation pass.
+- Conflict resolution rules between older and newer audit notes.
+- The highest-risk areas to verify before implementing.
+- Known remaining problems and their severity.
 
-- Relevant findings.
-- Current problem.
-- Required outcome.
-- Priority level.
-- Likely files/components.
-- Acceptance criteria.
-- Verification steps.
+## Archived documents
 
-Do not mark a category complete until its acceptance criteria and verification steps have been satisfied.
+The following files have been moved to `Audit Phase/archive/` and are historical reference only. Do not treat them as action documents:
+
+- `audit-findings.md` — Original June 18 raw evidence archive. Preserved as provenance.
+- `audit-plan.md` — Strategy document for the completed first implementation pass.
+- `task-map.md` — 18-category checklist for the completed phases.
+- `baseline-verification.md` — Pre-implementation browser state record.
+- `next-audit-instructions.md` — Spec for the June 22 audit (consumed).
 
 ## Required Implementation Order
 

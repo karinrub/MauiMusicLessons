@@ -19,6 +19,15 @@ const PRICING = {
 }
 
 const STEP_ORDER: Step[] = ['who', 'type', 'duration', 'date', 'contact', 'confirm', 'sent']
+const BACK_STEP_LABELS: Record<Step, string> = {
+  who: "Back to who's joining",
+  type: 'Back to instrument selection',
+  duration: 'Back to lesson duration',
+  date: 'Back to preferred day and time',
+  contact: 'Back to contact information',
+  confirm: 'Back to lesson request review',
+  sent: 'Back to sent request',
+}
 
 interface BookingData {
   groupSize: GroupSize | null
@@ -310,12 +319,15 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
       return
     }
 
-    window.location.href = buildMailto(data)
+    window.location.href = mailtoHref
     advance('confirm')
   }
 
   const firstName = data.name.split(' ')[0]
   const stepIdx = STEP_ORDER.indexOf(step)
+  const backTargetStep = canGoBack ? stepHistory[stepHistory.length - 2] : null
+  const backLabel = backTargetStep ? BACK_STEP_LABELS[backTargetStep] : 'Back'
+  const mailtoHref = buildMailto(data)
 
   const history: { question: string; answer: string }[] = []
   if (stepIdx > 0 && data.groupSize) {
@@ -353,24 +365,33 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
       ? 'Weekly lesson — Kihei, Maui'
       : null
 
+  function SentState({ className = '' }: { className?: string }) {
+    return (
+      <div className={`conv-sent${className ? ` ${className}` : ''}`}>
+        <p className="booking__inquiry-note">This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details after you send the email.</p>
+        <p className="conv-sent__headline">
+          We'll see you out there{firstName ? `, ${firstName}` : ''}.
+        </p>
+        <p className="conv-sent__sub">Your email app should now have a draft addressed to Aaron. Please send that email to complete your lesson request.</p>
+        <a className="conv-action conv-action--mailto" href={mailtoHref}>
+          Open email draft again
+        </a>
+        {data.instrument && data.groupSize && (
+          <p className="conv-sent__meta">
+            {lessonSummary(data)}
+          </p>
+        )}
+        <p className="conv-sent__sub">Aaron accepts cash or Venmo.</p>
+      </div>
+    )
+  }
+
   // Reduced-motion: static stacked form — all steps visible at once, no back needed
   if (reduced) {
     if (step === 'confirm' || step === 'sent') {
       return (
         <div className="conv conv--reduced">
-          <div className="conv-sent">
-            <p className="booking__inquiry-note">This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details.</p>
-            <p className="conv-sent__headline">
-              We'll see you out there{firstName ? `, ${firstName}` : ''}.
-            </p>
-            <p className="conv-sent__sub">Your email app should now have a draft addressed to Aaron.</p>
-            {data.instrument && data.groupSize && (
-              <p className="conv-sent__meta">
-                {lessonSummary(data)}
-              </p>
-            )}
-            <p className="conv-sent__sub">Aaron accepts cash or Venmo.</p>
-          </div>
+          <SentState />
         </div>
       )
     }
@@ -601,6 +622,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             className={`conv-back${canGoBack ? '' : ' conv-back--hidden'}`}
             onClick={goBack}
             aria-hidden={!canGoBack}
+            aria-label={backLabel}
             tabIndex={canGoBack ? 0 : -1}
           >
             ← Back
@@ -804,19 +826,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
       )}
 
       {step === 'sent' && (
-        <div key="confirmation" className="conv-sent conv-step--enter">
-          <p className="booking__inquiry-note">This is a lesson request, not a confirmed booking. Aaron will reply within a day or two to confirm details.</p>
-          <p className="conv-sent__headline">
-            We'll see you out there{firstName ? `, ${firstName}` : ''}.
-          </p>
-          <p className="conv-sent__sub">Your email app should now have a draft addressed to Aaron.</p>
-          {data.instrument && data.groupSize && (
-            <p className="conv-sent__meta">
-              {lessonSummary(data)}
-            </p>
-          )}
-          <p className="conv-sent__sub">Aaron accepts cash or Venmo.</p>
-        </div>
+        <SentState className="conv-step--enter" />
       )}
     </div>
   )
@@ -826,7 +836,7 @@ export default function BookingSection() {
   const bookingInnerRef = useRef<HTMLDivElement>(null)
 
   return (
-    <section className="booking" id="book">
+    <section className="booking" id="book" aria-labelledby="booking-heading">
       <div className="booking__bg">
         <img
           src={publicAsset('/images/aaron-bookingForm.jpg')}
@@ -840,7 +850,7 @@ export default function BookingSection() {
       <div className="booking__inner" ref={bookingInnerRef}>
         <div className="booking__header">
           <p className="section-eyebrow section-eyebrow--light">Ready when you are</p>
-          <h2 className="booking__heading">Book a Lesson</h2>
+          <h2 className="booking__heading" id="booking-heading">Book a Lesson</h2>
           <p className="booking__sub">Pick what works, and Aaron will take it from there.</p>
         </div>
         <BookingConversation bookingInnerRef={bookingInnerRef} />
