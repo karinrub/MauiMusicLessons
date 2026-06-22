@@ -250,6 +250,9 @@
   color: #ede8de;
   line-height: 1.7;
   margin: 0 0 0.75rem 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 480ms ease, transform 580ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .weekly__quote-cite {
@@ -259,6 +262,17 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-style: normal;
+  opacity: 0;
+  transition: opacity 380ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly__quote-text,
+  .weekly__quote-cite {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Fades scene bottom toward section exit */

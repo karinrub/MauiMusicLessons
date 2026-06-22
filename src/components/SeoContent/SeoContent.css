@@ -173,6 +173,14 @@
   border-top: 1px solid rgba(237, 232, 222, 0.16);
   background: none;
   padding: 1rem 0 1.1rem;
+  padding-left: 0;
+  border-left: 2px solid transparent;
+  transition: border-left-color 280ms ease, padding-left 280ms ease;
+}
+
+.seo-content__faq-item--open {
+  border-left-color: rgba(232, 213, 190, 0.4);
+  padding-left: 0.85rem;
 }
 
 .seo-content__faq-item:last-child:nth-child(odd) {
@@ -274,7 +282,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .seo-content__faq-answer,
-  .seo-content__faq-icon {
+  .seo-content__faq-icon,
+  .seo-content__faq-item {
     transition: none;
   }
 }

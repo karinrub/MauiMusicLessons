@@ -286,22 +286,42 @@
 }
 
 .about__scrubber--hint {
-  animation: about-scrubber-hint 1000ms both;
+  animation: about-scrubber-hint 1600ms both;
+}
+
+.about__chapter-button--hinting {
+  animation: about-next-hint 1600ms both;
+}
+
+@keyframes about-next-hint {
+  0% { opacity: 0.5; transform: translateX(0); }
+  30% { opacity: 1; transform: translateX(5px); animation-timing-function: ease-out; }
+  55% { opacity: 1; transform: translateX(3px); }
+  100% { opacity: 0.5; transform: translateX(0); }
 }
 
 @keyframes about-scrubber-hint {
   0% {
     left: 0%;
-    animation-timing-function: ease-out;
+    box-shadow: none;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  60% {
-    left: 6.667%;
-    animation-timing-function: ease-in;
+  44% {
+    left: 20%;
+    box-shadow: 0 0 10px rgba(196, 170, 133, 0.7);
+    animation-timing-function: ease;
+  }
+
+  58% {
+    left: 20%;
+    box-shadow: 0 0 10px rgba(196, 170, 133, 0.5);
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
   }
 
   100% {
     left: 0%;
+    box-shadow: none;
   }
 }
 
@@ -363,7 +383,8 @@
     transition: none;
   }
 
-  .about__scrubber--hint {
+  .about__scrubber--hint,
+  .about__chapter-button--hinting {
     animation: none;
   }
 }

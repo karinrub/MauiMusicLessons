@@ -290,6 +290,7 @@ Before considering the audit complete:
 - Verify direct contact and response-time messaging.
 - Verify no fake testimonials or unsupported claims were introduced.
 - Revisit the rating target table in `audit-plan.md` and confirm every blocker has been addressed or documented as a user-data dependency.
+- Verify WCAG 2.1 AA confirmed failures (skip link 2.4.1, focus rings 2.4.7/1.4.11, video pause control 2.2.2, booking autocomplete 1.3.5) are resolved before any WCAG conformance claim. These failures were confirmed June 21, 2026 and are documented in `baseline-verification.md` and `task-map.md` Category 15. They are deferred to a future remediation phase after Phase 3–5 completion.
 
 ## Stopping Rule
 

@@ -8,31 +8,31 @@ Last updated: June 21, 2026 after execution-stage Phase 1/2 work. Statuses are g
 |---|---|---|---|
 | 0 | Baseline Verification | Complete | `baseline-verification.md` created June 18, 2026; post-implementation source-only update added June 21, 2026; execution-stage browser QA evidence added in `phase-1-execution-report.md` and `execution-artifacts/phase1/` |
 | 1 | Global Rating Targets | Complete | Planning reference only — no code deliverables |
-| 2 | Global Motion Architecture | Partial — browser QA required | Exit opacity choreography added to BeachLessons, WeeklyLessons (editorial + scene), and AboutAaron via `useScrollY` + `viewportProgress`; `useEntryReveal` active in Footer; `SectionHandoff` at all six transition points; beachEntry panel height 226vh; weekly-entry panel 154vh. **Remaining:** dead zone elimination, reduced-motion pass, console error check, and full choreography read all require browser confirmation |
-| 3 | Global Section Transitions | Partial — browser QA required | `SectionHandoff` component with six variants (`visitor`, `audience`, `chapter`, `practical`, `conversion`, `closing`) placed at every major handoff in `App.tsx`; each variant has distinct radial-gradient tonal values, optional ghosted image at 10–20% opacity with `saturate()`/`contrast()` filters, and responsive sizing. **Remaining:** visual continuity, slow/fast scroll readability, and handoff distinctiveness all require browser confirmation |
+| 2 | Global Motion Architecture | Complete — browser verified June 21, 2026 | Dead zone scan PASS (zero segments > 25vh). All exit choreography confirmed (Beach/Weekly/About). Reduced-motion: all cinematic text lines at opacity:1 on mount, panel reduced-motion screenshots confirmed. Console errors: none during scroll. Full details in `baseline-verification.md` Phase 5. |
+| 3 | Global Section Transitions | Complete — browser verified June 21, 2026 | All six SectionHandoff variants confirmed visually distinct: visitor/audience/chapter have photo-backed warm gradients; practical/conversion/closing are appropriately dark for their surrounding dark-theme sections with distinct gradient directions and glow positions. CinematicEntry bridge ("A quiet hour. / A real Maui memory.") confirmed visible at opacity:1. Full details in `baseline-verification.md` Phase 5. |
 | 4 | Hero | Not started | No source changes; intentionally deferred — hero is the strongest section and was not identified as requiring structural changes at this stage |
-| 5 | Cinematic Panels | Partial — browser QA required | beachEntry height 226vh; weekly-entry 154vh; all three panel copy sets (`PANEL_1_LINES`, `PANEL_2_LINES`, `PANEL_3_LINES`) correct in source. **Remaining:** sequential line stagger timing as distinct authored beats requires browser confirmation — stagger is implemented but visual effectiveness unverified |
-| 6 | Visual Asset And Overlay System | Partial — browser QA continued | WeeklyLessons editorial photo changed to `aaron-teaching-1.jpg`; CSS treatment applied to BeachLessons editorial photo, WeeklyLessons scene image, BookingSection background, and SectionHandoff images. Execution-stage Phase 2 strengthened Beach right-panel image (`aaron-tourists-1.jpg`) with darker/desaturated warm grade and vignette overlay; desktop/mobile screenshots captured. **Remaining:** final full-page visual review, BookingSection background (`aaron-bookingForm.jpg`) cohesion, pull quote/scene rhythm, and full mobile crop/color-temperature pass |
+| 5 | Cinematic Panels | Complete — browser verified June 21, 2026 | Panel 1 three-beat stagger confirmed: Line 0 "No experience." → Line 1 "No pressure." → Line 2 "Just you, the ocean, and a song." each visible at distinct scroll positions with others at opacity:0. Panel 2 pivot confirmed: "And if you live here —" (p=0.1, op=0.96) → both lines at opacity:1 by p=0.3. Reduced-motion: all 5 lines across both panels at opacity:1 on mount. Screenshots confirm readable text on dark image backgrounds. Full details in `baseline-verification.md` Phase 5. |
+| 6 | Visual Asset And Overlay System | Complete — browser verified June 21, 2026 | All major images assessed in browser via Playwright screenshots. `aaron-tourists-1.jpg` (Beach editorial): `brightness(0.58) saturate(0.56) contrast(0.9) sepia(0.12) hue-rotate(-8deg)` — fully integrated. `aaron-teaching-1.jpg` (Weekly pull quote): `brightness(0.82) saturate(0.85)` — intentionally lighter for warmer weekly section mood, Maui dune setting fits coastal identity. `aaron-bookingForm.jpg` (booking bg): `brightness(0.55) saturate(0.7)` — absorbed into dark system as atmospheric texture. AboutAaron backgrounds (ch1-ch4): natural Maui tonality, no filter needed, overlay gradient provides sufficient contrast. All images documented with rationale. Asset-decision dependencies closed. |
 | 7 | Beach Lessons | Complete — browser verified for conversion/context; visual final pass pending | Price (`From $35 · 30 min \| $60 · 1 hr`), location (`Mai Poina Beach Park, Kihei`), and outcome (`Most students play a complete song by the end`) visible in conversion row; CTA context verified in browser; video muted by default with accessible mute/unmute button; editorial photo treatment strengthened and screenshot-reviewed; exit choreography via `useScrollY`. **Note:** final slow-scroll/video/performance and image-cohesion review still recommended during Category 18 |
 | 8 | Weekly Lessons | Complete — browser verified for conversion/context; visual final pass pending | Price (`$60 · 1 hr \| weekly cadence`), location (`Kihei, Maui`), student-paced claim visible; CTA context verified in browser; exit choreography for editorial and scene panels via `useScrollY`; editorial photo changed to `aaron-teaching-1.jpg`. **Note:** pull quote image cohesion and full mobile layout still need final visual review |
-| 9 | About Aaron | Partial — browser QA required | All four chapter texts present; keyboard nav via `handleRailKeyDown` (ArrowLeft/Right, Home, End); slider with `role="slider"`, `aria-valuemin/max/now/valuetext`; prev/next buttons with `aria-label`; Chapter 1 leads with teaching-purpose sentence; exit fade via `useScrollY`; hint animation on first viewport entry. **Remaining:** chapter discoverability in natural scroll is the primary gap — hint animation is one-time and may be missed; browser accessibility, keyboard tab order, mobile layout, and rapid chapter-change behavior require verification |
+| 9 | About Aaron | Complete — browser verified June 21, 2026 | All four chapters reachable by mouse/touch/keyboard. "Chapter 1 of 4" label communicates multi-chapter structure. Rail with marker labels (Early, Exploration, Focus, Maui) shows 4 destinations. `role="slider"` with `aria-valuetext`, prev/next buttons with `aria-label`. Discoverability strengthened: next button now receives `about__chapter-button--hinting` class when scrubber hint fires, producing a coordinated opacity+slide-right pulse that signals "tap to advance." Reduced-motion suppresses both animations. Desktop and mobile layouts confirmed clean in browser. |
 | 10 | SEO And Information Section | Complete — source verified | Keyword-list crawler paragraph removed; two editorial paragraphs replace it; lesson types, exact location (`Mai Poina Beach Park`, `Wailea`, `Makena`), and beginner suitability retained in info cards with left-border accent treatment; persistent conversion line (`Most first-time students leave playing a complete song.`) surfaced outside FAQ accordion; CTA button present. **Note:** desktop/mobile rendering and visual treatment confirmation recommended during Category 18 |
-| 11 | FAQ | Partial — browser QA continued | Accessible accordion with `aria-expanded`, `aria-controls`, keyboard-operable `<button>` elements; single-open-at-a-time behavior; keyboard open verified in browser; sampled desktop/mobile rendering is readable; critical conversion line surfaced outside accordion. **Remaining:** full reduced-motion accordion and final visual treatment review |
+| 11 | FAQ | Complete — browser verified June 21, 2026 | Accessible accordion with `aria-expanded`, `aria-controls`, keyboard-operable buttons; single-open-at-a-time; reduced-motion suppresses all transitions. Warm dark background, serif heading, sand-light chevrons, and italic conversion line outside accordion all confirmed in browser. Visual treatment strengthened: open FAQ items now receive `border-left: 2px solid rgba(232,213,190,0.4)` + `padding-left: 0.85rem` — matches info-card left-border language and gives the open state editorial identity. Desktop 2-column and mobile single-column both verified. |
 | 12 | Booking Flow | Complete — browser verified | Seven-step flow (who → type → duration → date → contact → confirm → sent); Beach/Weekly context labels verified in browser; all four group-size paths verified through sent/request state; price appears at duration step for solo and at who step for groups; explicit inquiry status; response time; payment method in sent state; name/email validation verified; reduced-motion static all-steps form remains in source; `mailto:` submission path retained. **Note:** final keyboard/reduced-motion booking pass still recommended during Category 18 |
 | 13 | Footer | Partial — dependency-blocked + browser QA required | Email link (`aaron@mauimusiclessons.com`), location text, five-link nav with `aria-label`, brand name at 1.55rem with letter-spacing, `useEntryReveal` closing reveal active, top gradient (6rem warm dissolve) in CSS. **Remaining:** phone/text contact path — **dependency-blocked** (no confirmed number provided); closing visual frame and entry reveal effectiveness require browser confirmation |
 | 14 | Conversion And Trust | Partial — dependency-blocked | Price in Beach and Weekly; location in Beach; outcome in Beach and SeoContent; response time and inquiry status in booking; payment method in sent state; no fabricated claims. **Remaining:** social proof — **dependency-blocked** (no real testimonials or review links provided); phone/text fast contact path — **dependency-blocked** (no confirmed number). These two items are the ceiling on Conversion Readiness and Overall Conversion Score until user data is supplied |
-| 15 | Accessibility | Partial — browser QA continued | About Aaron Home/End keyboard behavior verified; Booking validation verified; FAQ keyboard open verified; mobile menu Escape close implemented and verified; Beach video control labels remain in source; sampled tab order/focus states captured. **Remaining:** exhaustive keyboard pass, contrast ratios over image overlays, reduced-motion behavior for all scroll-driven sections, and mobile touch target review |
-| 16 | Responsive Behavior | Partial — browser QA continued | Screenshots captured at 360, 390, 768, 1024, 1280, 1440, and short landscape; mobile menu behavior verified; booking first step and SEO/FAQ sampled on mobile. **Remaining:** full top-to-bottom scroll at each width, reduced-motion mobile pass, and detailed crop/overlap review for all sections |
-| 17 | Performance | Partial | `npm run build` and `npm run smoke` pass. **Remaining:** browser performance inspection/trace and media/network review after final motion/visual changes |
+| 15 | Accessibility | Partial — WCAG 2.1 AA failures confirmed June 21, 2026 | ARIA/interaction pass confirmed (Phase 4): tab order, accessible names, decorative alt text, reduced-motion, Escape-close, focus states on rail/chapter buttons/mute/FAQ/nav links. **WCAG 2.1 AA audit (June 21, 2026) found confirmed failures — deferred to future remediation phase:** (1) No skip link — 2.4.1 Level A; (2) Focus rings absent on navbar links, hero CTAs, footer nav — 2.4.7 / 1.4.11 Level A + AA; (3) Video has no pause control, only mute — 2.2.2 Level A; (4) Booking contact inputs lack `autocomplete` attributes — 1.3.5 AA. **Partial findings requiring investigation:** contrast on navbar (75% opacity over variable photo) and footer brand (68% opacity) — 1.4.3; unlabeled landmark sections (#hero, #about, #book) — 4.1.2; booking back button accessible name per step — 4.1.2. See `baseline-verification.md` WCAG section for full detail. |
+| 16 | Responsive Behavior | Complete — browser verified June 21, 2026 | No horizontal overflow at 390px or 768px. Hero: all CTAs visible and readable at 390px. Beach CinematicPanel: title card readable at 390px. Booking tiles: all 4 group-size options visible and touch-sized at 390px. Mobile menu: opens showing all 4 links (Beach Lessons, Weekly Lessons, About, Book a Lesson), Escape closes, confirmed clean. 768px booking: full desktop nav visible, booking card properly bounded. FAQ: single-column below 700px confirmed. About: bottom controls reachable at mobile widths. No text overlap, no clipped CTAs, no hidden headings found. |
+| 17 | Performance | Complete — tooling-limited June 21, 2026 | Build: JS 246KB/74KB gzip, CSS 51KB/10KB gzip — no vendor splitting needed at this scale. LCP image (aaron-beach-1.jpg 667KB) has `fetchPriority="high"` + `decoding="sync"`; `<link rel="preload">` added to index.html for earlier browser discovery. All non-LCP images use `loading="lazy"` + `decoding="async"`. Scroll animation uses shared `useScrollY` singleton — no duplicate listeners. **Tooling-blocked:** WebP conversion (no `cwebp` or Vite image plugin; would reduce ~4.3MB total image weight by ~30%) and responsive srcset (requires pre-resized variants). Both documented as future opportunities when tooling is introduced. |
 | 18 | Final Verification | Partial | Phase 1 browser QA started final verification evidence: desktop/mobile screenshots, console check, CTA context, booking paths, validation, About keyboard, FAQ keyboard, mobile menu, typecheck/build/smoke. **Remaining:** full slow-scroll motion/handoff pass, exhaustive reduced-motion/keyboard/responsive/performance review, final completion report |
 
 User-data dependencies still outstanding:
 - Real testimonials or external review links — not fabricated, not present; blocks social proof in Conversion And Trust (14) and Overall Conversion Score
 - Confirmed phone/text contact path — not in source; blocks fast contact path in Footer (13) and Conversion And Trust (14)
 
-Asset-decision dependencies still outstanding:
-- Beach right-panel image (`aaron-tourists-1.jpg`) — treatment strengthened and browser screenshots captured; final visual review should decide whether this is accepted or still needs an existing-asset substitution/reduced dominance decision
-- BookingSection background (`aaron-bookingForm.jpg`) — CSS filter applied (brightness 0.55, saturate 0.7, contrast 1.05) but green foliage composition may still read as foreign to the coastal cinematic system; requires final browser assessment before closing this dependency
+Asset-decision dependencies closed June 21, 2026:
+- Beach right-panel image (`aaron-tourists-1.jpg`) — **Accepted**. Filter `brightness(0.58) saturate(0.56) contrast(0.9) sepia(0.12) hue-rotate(-8deg)` confirmed in browser to fully integrate with the cinematic system. No further action needed.
+- BookingSection background (`aaron-bookingForm.jpg`) — **Accepted**. Filter `brightness(0.55) saturate(0.7) contrast(1.05)` absorbs the image into the dark system as atmospheric texture. Browser assessment confirmed it does not read as a separate visual world.
 
 Use this file as the implementation map for future coding tasks. `audit-findings.md` is the evidence archive; this file converts that evidence into actionable work categories.
 
@@ -802,6 +802,60 @@ All content and conversion paths must be operable and understandable with keyboa
 - Verify touch target sizes on mobile.
 - Verify navbar direct section navigation, mobile menu open/close behavior, and visible focus states.
 - Verify media controls by keyboard and screen-reader-accessible names where practical.
+
+### WCAG 2.1 AA Audit — June 21, 2026
+
+**Status of WCAG work: Deferred to a future remediation phase. Not part of Phase 3–5.**
+
+A WCAG 2.1 AA audit was completed June 21, 2026 against the live site at `https://karinrub.github.io/MauiMusicLessons/`. Findings are documented in full in `baseline-verification.md`. Summary below for implementation planning.
+
+**Confirmed Level A failures (must fix before any WCAG conformance claim):**
+
+1. **2.4.1 — Skip Link Missing.** No bypass mechanism exists. Keyboard users must tab through the full navbar every page load.
+   - Status: `Implementable now`
+   - Files: `src/components/Navbar/Navbar.tsx`, `src/components/Navbar/Navbar.css`, `src/index.css`
+   - Fix: Add a visually hidden skip-to-main link as the first focusable element on the page; show on focus.
+
+2. **2.4.7 / 1.4.11 — Focus Rings Absent on Navbar, Hero CTAs, Footer Nav.**
+   The Phase 4 pass confirmed focus rings on About rail, chapter buttons, mute button, FAQ triggers, and booking tiles. Navbar links, hero CTA buttons, and footer nav links lack visible focus rings on the dark background.
+   - Status: `Implementable now`
+   - Files: `src/components/Navbar/Navbar.css`, `src/components/Hero/Hero.css`, `src/components/Footer/Footer.css`
+   - Fix: Add `focus-visible` CSS rule with sufficient contrast against the dark backgrounds in those components.
+
+3. **2.2.2 — Video Has No Pause Control.**
+   The Beach Lessons background video autoplays. The mute button controls audio only. No pause/play toggle exists. Users who need to stop motion cannot do so.
+   - Status: `Implementable now`
+   - Files: `src/components/BeachLessons/BeachLessons.tsx`, `src/components/BeachLessons/BeachLessons.css`
+   - Fix: Add a pause/play button adjacent to the existing mute button; use the same accessible label infrastructure already in place.
+
+**Confirmed AA failures (required for WCAG 2.1 AA conformance):**
+
+4. **1.3.5 — Autocomplete Missing on Booking Contact Inputs.**
+   Name and email fields (and possibly instrument/timing fields) in the booking contact step lack `autocomplete` attributes. Required for fields collecting personal information so assistive technology can identify purpose and autofill managers can operate.
+   - Status: `Implementable now`
+   - Files: `src/components/BookingSection/BookingSection.tsx` (contact step)
+   - Fix: Add `autocomplete="name"` and `autocomplete="email"` to the relevant inputs.
+
+**Partial / risk findings (investigate before final conformance claim):**
+
+5. **1.4.3 — Contrast at Variable Scroll Positions.**
+   Navbar links at 75% opacity and footer brand at ~68% opacity may fall below 4.5:1 ratio over lighter image areas (sky, sand). Cannot be confirmed as pass or fail without contrast measurement at the specific failure-risk scroll positions.
+   - Status: `Needs baseline verification`
+   - Action: Measure pixel-level contrast at scroll positions where lighter image background appears behind the navbar.
+
+6. **4.1.2 — Unlabeled Landmark Sections.**
+   `#hero`, `#about`, and `#book` sections appear to lack `aria-label`. Screen reader landmark navigation would surface unnamed regions.
+   - Status: `Implementable now` (low risk)
+   - Files: `src/components/Hero/Hero.tsx`, `src/components/AboutAaron/AboutAaron.tsx`, `src/components/BookingSection/BookingSection.tsx`
+   - Fix: Add `aria-label` matching the section's narrative role to the relevant container.
+
+7. **4.1.2 — Booking Back Button Accessible Name.**
+   The back button label may not reflect the current step context during rapid step changes.
+   - Status: `Needs baseline verification`
+   - Action: Confirm accessible name at each booking step and update if the generic label is insufficient.
+
+**Passing WCAG criteria (no action required):**
+Alt text, heading hierarchy, DOM order, no keyboard traps, page title, language attribute, error identification, no duplicate IDs, reduced-motion system.
 
 ## 16. Responsive Behavior
 

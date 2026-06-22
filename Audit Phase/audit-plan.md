@@ -536,9 +536,22 @@ Original blockers: multiple coexisting motion systems, no documented global chor
 
 ### 14. Accessibility Pass
 
-**Purpose:** Verify that the cinematic experience remains usable for keyboard, screen-reader, reduced-motion, and touch users.
+**Purpose:** Verify that the cinematic experience remains usable for keyboard, screen-reader, reduced-motion, and touch users. Includes WCAG 2.1 AA conformance remediation (deferred to a future phase after Phase 3–5 completion).
 
 **Why this phase comes after interaction work:** Accessibility must be checked after controls and motion are implemented, not before.
+
+**WCAG 2.1 AA status:** A WCAG 2.1 AA audit was completed June 21, 2026. Confirmed failures are documented in `baseline-verification.md` and `task-map.md` Category 15. These are deferred to a future remediation phase and will not block Phases 3–5 from proceeding. The site cannot claim WCAG 2.1 AA conformance until all confirmed failures are resolved.
+
+Confirmed failures (deferred):
+1. Skip link missing — 2.4.1 Level A
+2. Focus rings absent on navbar links, hero CTAs, footer nav — 2.4.7 / 1.4.11 Level A + AA
+3. Video no pause control — 2.2.2 Level A
+4. Booking contact inputs lack `autocomplete` — 1.3.5 AA
+
+Partial findings requiring investigation (deferred):
+5. Contrast on navbar/footer at variable scroll positions — 1.4.3
+6. Unlabeled landmark sections (#hero, #about, #book) — 4.1.2
+7. Booking back button accessible name per step — 4.1.2
 
 **Required outcomes:**
 
@@ -547,6 +560,7 @@ Original blockers: multiple coexisting motion systems, no documented global chor
 3. Motion alternatives are complete.
 4. Forms have labels, validation messages, and accessible errors.
 5. Text contrast is sufficient against image overlays.
+6. WCAG 2.1 AA confirmed failures resolved (deferred phase).
 
 **Score categories affected:** Interaction Design, Conversion Readiness, Overall Experience, Accessibility-dependent task-map categories.
 
@@ -555,6 +569,7 @@ Original blockers: multiple coexisting motion systems, no documented global chor
 1. Keyboard-only full-page navigation succeeds.
 2. Reduced-motion mode shows all content.
 3. FAQ, About chapters, booking tiles, date chips, nav, and footer controls pass interaction checks.
+4. All WCAG 2.1 AA confirmed failures resolved and re-verified (deferred — required before WCAG conformance claim).
 
 ### 15. Responsive Pass
 
@@ -643,7 +658,7 @@ Baseline scores are from the original June 2026 audit. All scores target `100 / 
 | Motion Design | 72 | 100 | Section-level exits added; unified choreography read still needs final verification | Global motion architecture; Final Verification |
 | Transition Quality | 44 | 100 | SectionHandoff and panel heights address structure; final visual continuity pass required | Global section transitions; Final Verification |
 | Scroll Experience | 65 | 100 | Dead zone structure addressed; real slow/normal scroll timing still needs final pass | Global motion architecture; Final Verification |
-| Interaction Design | 58 | 100 | Booking, FAQ, About keyboard, mobile menu verified; About natural-scroll discovery and exhaustive keyboard/reduced-motion remain | Accessibility; Responsive Behavior; Final Verification |
+| Interaction Design | 58 | 100 | Booking, FAQ, About keyboard, mobile menu verified; About natural-scroll discovery and exhaustive keyboard/reduced-motion remain; **WCAG 2.1 AA failures confirmed June 21, 2026 (deferred): skip link missing (2.4.1), focus rings absent on navbar/hero CTAs/footer nav (2.4.7/1.4.11), video no pause control (2.2.2), autocomplete missing on booking contact inputs (1.3.5)** | Accessibility; Responsive Behavior; Final Verification |
 | Perceived Polish | 74 | 100 | Generic blocks reduced; transition polish still needs final browser pass | Final Verification |
 | Motion Originality | 77 | 100 | Cinematic language preserved; lower-section motion polish still needs final pass | Final Verification |
 | Motion Portfolio Quality | 68 | 100 | Closing SectionHandoff + Footer reveal added; effectiveness still needs final verification | Footer; Final Verification |

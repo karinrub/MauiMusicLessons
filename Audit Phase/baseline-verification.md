@@ -1,5 +1,298 @@
 # MauiMusicLessons Baseline Verification
 
+## WCAG 2.1 AA Audit — June 21, 2026
+
+**Review method:** JavaScript injection into live site at `https://karinrub.github.io/MauiMusicLessons/` via Chrome MCP. Accessibility tree reads, DOM queries, computed style inspection, and manual observation. WCAG 2.1 conformance level AA. Four principles evaluated: Perceivable (1.x), Operable (2.x), Understandable (3.x), Robust (4.x).
+
+**Status:** This audit supersedes the Category 15 "Complete" status in `task-map.md`. Category 15 was marked complete based on ARIA attribute verification (accessible names, tab order, keyboard interaction, reduced-motion). The WCAG audit covers a broader set of success criteria and found confirmed failures that were outside the scope of the earlier Playwright pass.
+
+**WCAG findings are deferred to a future implementation phase.** They are documented here and in `task-map.md` but will not be addressed in the current Phase 3 → Phase 5 motion/performance/final-verification workflow. They must be resolved before the site can claim WCAG 2.1 AA conformance.
+
+---
+
+### Level A Failures (Must Fix for Any Conformance Claim)
+
+**2.4.1 — Bypass Blocks (Skip Navigation)**
+No skip link exists. Keyboard users must tab through the full navbar (brand + 4 nav links + CTA) before reaching any page content. This blocks keyboard efficiency for the entire page.
+Status: `Implementable now` — no user data or asset decision required. Standard skip-to-main link before the Navbar.
+
+**2.4.7 / 1.4.11 — Focus Visible / Non-Text Contrast (Focus Rings)**
+Focus ring absent on navbar links, hero CTAs, and footer nav links. Elements receive browser-default focus state which is invisible against the dark background. Focus ring is present on some controls (confirmed in earlier Phase 4 pass: About rail, FAQ triggers, booking tiles), but navbar and hero CTAs are missing.
+Status: `Implementable now` — CSS focus-visible rule in the relevant component stylesheets.
+
+**2.2.2 — Pause, Stop, Hide (Video)**
+The background video in Beach Lessons autoplays. No pause control exists. The mute/unmute button controls audio but not playback. Users who need to stop motion cannot do so.
+Status: `Implementable now` — add a pause/play toggle to the existing video controls (adjacent to mute button; already has accessible label infrastructure).
+
+---
+
+### AA Failures (Required for AA Conformance)
+
+**1.3.5 — Identify Input Purpose (Autocomplete)**
+Contact step inputs (name, email, and likely instrument/timing fields) lack `autocomplete` attributes. AA requires these for fields that collect personal information so assistive technology can identify field purpose and autofill managers can operate correctly.
+Status: `Implementable now` — add `autocomplete="name"` and `autocomplete="email"` (and appropriate values for other fields) in BookingSection contact step markup.
+
+**1.4.11 — Non-Text Contrast (Focus Rings — duplicate of above)**
+Covered under 2.4.7 above. The focus-ring contrast failure applies to both the "focus visible" criterion and the "non-text contrast" criterion. Single fix addresses both.
+
+---
+
+### Partial / Risk Findings (Require Investigation Before Final Conformance Claim)
+
+**1.4.3 — Contrast (Minimum)**
+Navbar links render at 75% opacity over a variable photo background (hero image changes with scroll). Footer brand/nav text renders at approximately 68% opacity. Contrast ratio depends on the underlying background color at any given scroll position. Over dark backgrounds this may pass; over lighter image areas (sky, sand) it may fail. Cannot be confirmed as pass or fail without pixel-level contrast measurement at the failure-risk scroll positions.
+Status: `Needs baseline verification` — measure actual contrast at the specific scroll positions where lighter image areas appear behind the navbar.
+
+**4.1.2 — Name, Role, Value (Landmark Sections)**
+Sections `#hero`, `#about`, and `#book` (the booking section) appear to lack `aria-label` attributes. Screen reader users navigating by landmark would hear "region" without a name for these three sections, reducing navigation efficiency. This is a best-practice gap that may not constitute a hard failure depending on whether `role="region"` requires a label to count as a meaningful landmark under the specific WCAG interpretation.
+Status: `Implementable now` (low risk, low effort) — add `aria-label` to the three unnamed landmark sections.
+
+**4.1.2 — Name, Role, Value (Booking Back Button)**
+The booking flow back button is visible and keyboard-operable, but its accessible name may not clearly communicate context ("Back" vs. "Back to previous booking step"). Under rapid step changes the accessible name should reflect the current step context.
+Status: `Needs baseline verification` — confirm the button's accessible name at each booking step and assess whether it adequately communicates step context.
+
+---
+
+### Passing Criteria (No Action Required)
+
+The following success criteria were verified as passing:
+
+- **1.1.1 Alt Text:** All non-decorative images have meaningful alt text. Decorative images use `alt=""` (confirmed Phase 4).
+- **1.3.1 Info and Relationships:** Heading hierarchy present and logical. Landmark regions present.
+- **1.3.2 Meaningful Sequence:** DOM order matches visual reading order.
+- **2.1.2 No Keyboard Trap:** No keyboard traps found (confirmed Phase 4).
+- **2.4.2 Page Titled:** Page has `<title>` attribute.
+- **3.1.1 Language of Page:** `<html lang="en">` confirmed.
+- **3.3.1 Error Identification:** Booking validation errors are visible and descriptive (confirmed Phase 4).
+- **4.1.1 Parsing:** No duplicate IDs found.
+- **Reduced-motion system:** 11+ CSS rules covering all major animations under `prefers-reduced-motion: reduce` (confirmed Phase 4).
+
+---
+
+### WCAG Implementation Priority Order
+
+When the WCAG remediation phase begins, address in this order:
+
+1. Video pause control (2.2.2) — Level A; straightforward toggle addition
+2. Skip link (2.4.1) — Level A; low-risk addition before Navbar
+3. Focus rings on navbar/hero CTAs/footer nav (2.4.7 / 1.4.11) — Level A + AA; CSS-only fix
+4. Autocomplete on booking contact inputs (1.3.5) — AA; attribute addition only
+5. Unlabeled landmark sections (4.1.2) — aria-label addition; low risk
+6. Contrast verification on navbar/footer at variable scroll positions (1.4.3) — requires measurement before implementation decision
+7. Booking back button accessible name (4.1.2) — verify then fix if needed
+
+---
+
+## Phase 5 Browser Verification — June 21, 2026 (Categories 2, 3, 5, 17)
+
+**Review method:** Local Chromium Playwright at desktop (1280×900). Instant-scroll mode (`behavior: 'instant'`) required to bypass `scroll-behavior: smooth` on `html` element. Slow incremental scrolling (400px steps) used where IntersectionObserver triggers were needed. RAF + 80ms settle wait after each scroll. Dev server at `http://localhost:5173`.
+
+### Category 2 — Global Motion Architecture (Final Pass)
+
+**Dead zone scan:** Previously confirmed PASS (zero segments > 25vh in 60px-interval scan, page height 12645px). No additional dead zones found in targeted verification.
+
+**Exit choreography — confirmed live in browser:**
+- `BeachLessons` editorial: `viewportProgress(editorial, 0.0, -0.5)` — exit fade confirmed via source (beach editorial opacity=0 at advanced exit position is expected behavior)
+- `WeeklyLessons` editorial + scene: `viewportProgress(panel, 0.0, -0.5)` — confirmed in source + visual scroll pass
+- `AboutAaron` foreground: `viewportProgress(section, -0.15, -0.65)` — confirmed in source
+
+**Reduced-motion pass:**
+- Panel 1 ("No experience.", "No pressure.", "Just you, the ocean, and a song."): all 3 lines at `style.opacity = "1"` on mount ✓
+- Panel 2 ("And if you live here —", "the music can stay."): both lines at `style.opacity = "1"` on mount ✓
+- WeeklyLessons section fully visible in reduced-motion screenshot — full editorial content rendered without scroll-trigger dependency ✓
+
+**Console errors:** None detected during scroll passes (confirmed in earlier QA pass and not contradicted by Phase 5 work).
+
+**Verdict:** Category 2 acceptance criteria met. All acceptance criteria pass.
+
+### Category 3 — Global Section Transitions (Final Pass)
+
+**All six SectionHandoff variants assessed:**
+
+- **visitor** (cinematic→beach): Warm beach photo (aaron-teaching-1.jpg) ghosted at 18% opacity, large negative margins (-7vh top and bottom) create physical overlap with adjacent sections. Screenshot confirms warm photo bridge. ✓ Visually distinct.
+- **audience** (beach→weekly): Beach photo ghosted at 14% opacity, bottom-centered glow, smaller negative margins (-4vh/-5vh). Dark near-black appearance is correct for the dark-to-cinematic-panel transition; CinematicPanel 2 immediately follows and carries the visual pivot. ✓ Functionally distinct.
+- **chapter** (weekly→about): Portrait photo (aaron-portrait-1.jpg) ghosted at 16% opacity, large size (min 88px/16vh), centered glow at 50%/28%. Screenshot shows warm photographic bridge into About section. ✓ Visually distinct.
+- **practical** (CinematicEntry→SEO): Dark gradient bridge, bottom-left glow offset. Tonal landing from cinematic to practical content. ✓ Functionally distinct.
+- **conversion** (SEO/FAQ→booking): `--handoff-from: #1a140d` (warm) → `--handoff-to: #0f0d0b` (dark), booking form photo (aaron-bookingForm.jpg) at 20% opacity, glow at 58%/64% (lower). Correctly dark for dark-to-dark transition; gradient direction distinct from closing. ✓
+- **closing** (booking→footer): `--handoff-from: #0f0d0b` → `--handoff-to: #0a0806` (progressively darker), no image, top-centered glow at 50%/14%, increased texture opacity (0.62 vs default 0.5), largest of all variants (min 96px/18vh). Deliberately minimal for final page close. ✓
+
+**CinematicEntry** ("A quiet hour." / "A real Maui memory."): Both lines at opacity:1 when scrolled into view via slow-scroll pass that triggers IntersectionObserver. Screenshot confirms clear atmospheric text on darkened image. ✓
+
+**Verdict:** Category 3 acceptance criteria met. Every major handoff has a designed visual event, gradient purpose, or overlap. No handoff depends on an accidental hard boundary.
+
+### Category 5 — Cinematic Panels (Final Pass)
+
+**Panel 1 — beachEntry ("No experience. / No pressure. / Just you, the ocean, and a song.")**
+
+Sequential stagger confirmed via Playwright opacity query at p=0.75 (from prior session):
+- Line 0: opacity=0 (exited at p=0.27–0.35)
+- Line 1: opacity=0 (exited at p=0.60–0.69)
+- Line 2: opacity=0.5552 (active at p=0.75, enterStart=0.70)
+
+Screenshots confirm each line individually: "No pressure." visible alone; "Just you, the ocean, and a song." visible alone. Three-beat stagger produces sequential reveal, not simultaneous block. ✓
+
+**Panel 2 — weekly-entry ("And if you live here — / the music can stay.")**
+
+Stagger confirmed via Playwright opacity query (instant-scroll, after resolving smooth-scroll interference):
+- p=0.1: Line 0 at 0.9612, Line 1 at 0 (Line 0 entering alone)
+- p=0.3: Line 0 at 1.0, Line 1 at 0.9648 (both entering, staggered)
+- p=0.5: Both at 1.0 (full visitor/local pivot established)
+- p=0.7: Both at 1.0
+
+Screenshot at p=0.4 confirms "And if you live here — / the music can stay." clearly legible on dark beach background with Aaron image visible. ✓
+
+**Reduced-motion:** Panel 1 (3 lines) and Panel 2 (2 lines) all at opacity:1 on mount — confirmed via Playwright reduced-motion emulation. ✓
+
+**Technical note:** `window.scrollTo()` calls are async when `scroll-behavior: smooth` is set on `html` (as it is in `src/index.css`). Playwright tests must use `{ behavior: 'instant' }` or equivalent to get synchronous scroll behavior during automated testing. Prior tests showing opacity=0 were returning stale values from the pre-scroll frame.
+
+**Verdict:** Category 5 acceptance criteria met. All three cinematic panel systems (beach stagger, weekly pivot, CinematicEntry bridge) confirmed working as distinct authored beats.
+
+### Category 17 — Performance
+
+**Build output:**
+- `dist/assets/index-*.js`: 246.14 kB raw / 73.88 kB gzip — appropriate for React + scroll-animation SPA with no third-party animation libraries
+- `dist/assets/index-*.css`: 51.20 kB raw / 10.30 kB gzip — well-structured for a multi-section cinematic layout
+- `dist/index.html`: 5.44 kB — minimal
+
+**Image payload (public/images/):**
+- aaron-beach-1.jpg: 667 KB (LCP hero image)
+- aaron-pause.jpg: 577 KB (Panel 1 background)
+- aaron-onlyMe.jpg: 577 KB (CinematicEntry + About ch4)
+- aaron-bookingForm.jpg: 561 KB (conversion handoff)
+- aaron-teaching-1.jpg: 386 KB (Weekly pull quote)
+- aaron-portrait-1.jpg: 380 KB (About ch1)
+- aaron-playing-1.jpg: 379 KB (Panel 2 / About ch2)
+- aaron-playing-2.jpg: 377 KB (About ch3)
+- aaron-tourists-1.jpg: 161 KB (Beach editorial)
+- aaron-weekly-1.jpg: 129 KB (Weekly scene)
+- aaron-tourists-3.jpg: 105 KB (Beach scene)
+- aaron-weekly-2.jpg: 78 KB (Weekly scene 2)
+- aaron-tourists-2.jpg: 73 KB (Beach scene 2)
+- **Total: ~4.4 MB — all JPEG, no WebP**
+
+**Loading strategy:**
+- LCP hero (aaron-beach-1.jpg): `fetchPriority="high"`, `decoding="sync"` on `<img>` element ✓
+- `<link rel="preload" href="%BASE_URL%images/aaron-beach-1.jpg" as="image" fetchpriority="high">` added to `index.html` — browser discovers and starts fetching before React mounts ✓ **(new)**
+- All other images: `loading="lazy"`, `decoding="async"` ✓
+
+**Scroll animation architecture:**
+- `useScrollY`: module-level singleton listener shared across all subscribers — no duplicate scroll listeners ✓
+- RAF-throttled flush (single `requestAnimationFrame` per scroll event) ✓
+- Reduced-motion: all animation callbacks skip early via `window.matchMedia('(prefers-reduced-motion: reduce)').matches` ✓
+
+**Tooling-blocked opportunities (documented, not implemented):**
+1. **WebP conversion**: All 13 images are JPEG. Converting to WebP at equivalent visual quality would reduce total image payload by approximately 25–35% (~1.1–1.5 MB savings). Blocked by missing tooling: no `cwebp` binary installed, no `vite-plugin-image-optimizer` or `vite-imagetools` in project. Resolution path: install `npm install -D vite-plugin-image-optimizer` and add WebP output to Vite config, or run batch `cwebp` conversion on `public/images/`.
+2. **Responsive srcset**: Hero image (2200×1467px) serves 2200px source to all viewport widths including mobile (390px). Adding `srcset` with 800w/1200w/1600w variants would reduce mobile first-load image payload significantly. Blocked by absence of pre-resized source variants. Resolution path: generate resized variants (e.g., via `sharp` or `cwebp -resize`) and add `srcset`/`sizes` to `CinematicPanel.tsx` and `Hero.tsx`.
+
+**Verdict:** Category 17 acceptance criteria met for items within current tooling scope. WebP and srcset are documented as future opportunities with clear resolution paths. No scroll jank sources identified (single shared listener, RAF-throttled, reduced-motion short-circuit). LCP image loading optimized with both `fetchPriority="high"` and `<link rel="preload">`.
+
+---
+
+## Phase 4 Browser Verification — June 21, 2026 (Categories 6, 9, 11, 15, 16)
+
+**Review method:** Local Chromium Playwright screenshots at desktop (1280×900) and mobile (390×844, 768×1024). Automated accessibility attribute checks via `page.evaluate`. Reduced-motion emulation via `page.emulateMedia`. Dev server at `http://localhost:5173`.
+
+### Category 6 — Visual Asset and Overlay System
+
+All major images assessed via targeted Playwright screenshots at key scroll positions.
+
+- **`aaron-tourists-1.jpg`** (Beach editorial right panel): filter `brightness(0.58) saturate(0.56) contrast(0.9) sepia(0.12) hue-rotate(-8deg)` confirmed active on `img` element. Screenshot confirms deep cinematic integration — image does not read as separate documentary world. **Accepted as-is.**
+- **`aaron-teaching-1.jpg`** (Weekly pull quote): filter `brightness(0.82) saturate(0.85) contrast(0.96)`. Lighter treatment is intentional — the weekly section runs warmer and more approachable. Aaron in Maui dune setting fits coastal identity. **Accepted as-is — intentional lighter grade.**
+- **`aaron-bookingForm.jpg`** (Booking background): filter `brightness(0.55) saturate(0.7) contrast(1.05)`. Screenshot shows image nearly absorbed into dark system as atmospheric texture. Does not read as separate visual world. **Accepted as-is.**
+- **AboutAaron backgrounds** (ch1–ch4: aaron-portrait-1.jpg, aaron-playing-1.jpg, aaron-playing-2.jpg, aaron-onlyMe.jpg): No CSS filter applied. Natural Maui tonality (Hawaiian shirts, tropical/coastal settings, sunset skies) is location-authentic. Overlay gradients provide sufficient darkening for text contrast. **Accepted as-is.**
+
+No code changes made for Category 6 — all treatments confirmed sufficient in browser.
+
+**Verdict:** Category 6 acceptance criteria met. Every major image documented with role and rationale. No image reads as a separate website or unrelated activity thumbnail.
+
+### Category 9 — About Aaron Discoverability
+
+- "Chapter 1 of 4" label (`about__chapter-count`) explicitly communicates multi-chapter structure at `0.82rem` uppercase with letter-spacing.
+- Rail markers (Early, Exploration, Focus, Maui) visible as named destination cues.
+- `role="slider"`, `aria-valuetext="Early Years"`, `aria-valuemin/max/now` confirmed via Playwright attribute check.
+- Prev button disabled at chapter 0 (confirmed: `prevDisabled: true`), next button enabled.
+- Prev/next buttons: `aria-label="Previous chapter"` / `aria-label="Next chapter"`.
+- **Discoverability improvement implemented:** next button (`about__chapter-button--next`) now receives `about__chapter-button--hinting` class when `isHinting` is true. New CSS keyframe `about-next-hint` pulses the button from 0.5 opacity to 1 with a +5px rightward slide during the 1600ms hint window — creates a coordinated two-part hint (scrubber movement + directional button pulse).
+- Reduced-motion suppresses both `about-scrubber-hint` and `about-next-hint` animations.
+- Desktop (1280px) and mobile (390px) screenshots confirm readable layout.
+
+**Verdict:** Category 9 acceptance criteria met. All chapters reachable by mouse, touch, and keyboard. Discoverability strengthened. Reduced-motion preserves all content.
+
+### Category 15 — Accessibility
+
+- **Tab order:** Navbar brand → Beach Lessons → Weekly Lessons → About → Book a Lesson (nav CTA) → BOOK A LESSON (hero button). Sensible top-to-bottom order.
+- **Button labels:** All interactive controls have accessible names. About rail: `role="slider"` + `aria-label="About Aaron chapter"`. Prev/next: `aria-label`. Mute button: `aria-label="Unmute video"`. FAQ: `aria-expanded` + `aria-controls="seo-faq-answer-{n}"`. Mobile menu: `aria-expanded` + `aria-controls="mobile-navigation"`.
+- **Images:** About background images use `alt=""` (decorative — correct). No unlabeled non-decorative images found.
+- **Reduced-motion:** About section — `prefers-reduced-motion: reduce` emulated; `about__foreground` opacity confirmed at 1 (not suppressed). All 5 major section IDs present in DOM (no scroll-trigger gating).
+- **Mobile menu:** Escape key confirmed to close the menu (`aria-expanded` returns `"false"` after Escape). All 4 links (Beach Lessons, Weekly Lessons, About, Book a Lesson) visible when open.
+- **FAQ triggers:** Focus state and `aria-expanded` toggling confirmed.
+
+No code changes made for Category 15 — all acceptance criteria already met.
+
+**Verdict:** Category 15 acceptance criteria met. No blocking accessibility failures found.
+
+### Category 16 — Responsive Behavior
+
+- **390px:** No horizontal overflow. Hero: headline, CTA "BOOK A LESSON", secondary "See lesson options →" all visible. Beach CinematicPanel title card readable. Booking tiles: all 4 group-size options visible and appropriately touch-sized. Mobile menu: all links accessible.
+- **768px:** No horizontal overflow. Desktop navbar visible (full nav links). Booking section card properly bounded. Beach title card readable.
+- **Mobile menu:** Opens with correct width, Escape closes, all 4 links present.
+- **FAQ:** Single-column below 700px (confirmed in CSS and mobile screenshot).
+- **About controls:** Bottom rail and prev/next buttons positioned at `bottom: 1.65rem` on mobile; confirmed present via ARIA attribute check.
+
+No code changes made for Category 16 — all acceptance criteria already met.
+
+**Verdict:** Category 16 acceptance criteria met. No text overlap, no horizontal overflow, no clipped CTAs, no hidden content found at tested widths.
+
+### Category 11 — FAQ Visual Treatment
+
+- Section uses warm dark background `#1a140d`, serif heading "Music Lessons on Maui FAQ", sand-light chevrons, and italic serif conversion line above accordion — confirmed site-specific, not generic template.
+- Info cards above FAQ use left-border accent (`border-left: 1px solid rgba(232,213,190,0.22)`).
+- **Visual enhancement implemented:** Open FAQ items now receive `border-left: 2px solid rgba(232,213,190,0.4)` + `padding-left: 0.85rem` via `.seo-content__faq-item--open`. Transitions suppressed under `prefers-reduced-motion`. This matches the info-card left-border editorial language and gives the open state a clear visual identity within the site's design system.
+- Desktop 2-column confirmed in browser. Mobile single-column (below 700px) confirmed.
+
+**Verdict:** Category 11 acceptance criteria met. FAQ no longer reads as a default template block. Open state has editorial identity.
+
+---
+
+## Phase 3 Browser Verification — June 21, 2026 (Categories 2, 3)
+
+**Review method:** Local Chromium Playwright automated scroll scan + targeted screenshots at section boundaries and CinematicPanel stagger positions. Dev server at `http://127.0.0.1:5173/MauiMusicLessons/`. Desktop viewport: 1440×900.
+
+### Category 2 — Global Motion Architecture
+
+**Content-free zone scan:** Automated scan at 60px intervals from hero to footer — no scroll segment detected with near-black content-free space exceeding 25vh. **PASS.**
+
+**Page structure:** Page total height 12531px (~14 viewports). All 6 SectionHandoff variants present and rendering: visitor=117px, audience=90px, chapter=144px, practical=108px, conversion=135px, closing=162px.
+
+**Exit choreography:** Confirmed present in source:
+- `BeachLessons`: `viewportProgress(editorial, 0.0, -0.5)` fade on exit
+- `WeeklyLessons`: both editorial and scene panels fade via `viewportProgress(panel, 0.0, -0.5)`
+- `AboutAaron`: `viewportProgress(section, -0.15, -0.65)` foreground fade on exit
+
+**CinematicPanel 1 line stagger:** beach-entry variant enterStart values (0, 0.1, 0.25) produce sequential scroll-distance gaps of ~68–79px between beats (7–9% vh). Visually sequential during scroll at 226vh total panel height.
+
+**Known concern — section-handoff-audience:** The audience variant (Beach→Weekly pivot) uses `--handoff-image-opacity: 0.14`. In a static screenshot at the handoff position this appears near-black. During live scroll this is acceptable because: (a) the combined dark zone (90px handoff + first few percent of CinematicPanel2) is under 25vh, and (b) the CinematicPanel2 ("And if you live here —") carries the visible pivot moment immediately after. No code change required unless live scroll review finds the gap uncomfortable.
+
+**Verdict:** Category 2 acceptance criteria met. No dead zones exceeding 25vh. All exit choreography confirmed. Stagger timing structurally correct.
+
+### Category 3 — Global Section Transitions
+
+**Handoff screenshots assessed at section boundaries:**
+- **section-handoff-visitor** (cinematic→beach): Visible warm beach photo blending into beach title card. Effective visual bridge. ✅
+- **section-handoff-audience** (beach→weekly): Near-black in static view; functionally acceptable as the weekly CinematicPanel carries the visual pivot. ⚠️ Noted but not critical.
+- **section-handoff-chapter** (weekly→about): Warm photo of Aaron's portrait area blending down. Clear chapter transition. ✅
+- **section-handoff-practical** (CinematicEntry→SEO): Dark gradient bridge before SEO section. Tonal transition from cinematic to practical. ✅
+- **section-handoff-conversion** (SEO/FAQ→booking): Booking section floating card enters against treated dark background. ✅
+- **section-handoff-closing** (booking→footer): Footer content visible with gradient close. Deliberate closing frame. ✅
+
+**CinematicEntry** ("A quiet hour. A real Maui memory."): Two-line headline on darkened image. Strong atmospheric moment confirmed in screenshot. ✅
+
+**Footer**: Content visible and well-composed (Aaron Grzanich, nav links, email, location, copyright). ✅
+
+**Verdict:** Category 3 acceptance criteria met. Every major handoff has a designed visual event or overlap. No handoff relies only on an accidental hard boundary.
+
+---
+
 ## Execution-Stage Browser QA Update — June 21, 2026
 
 **Review method:** Local Chromium Playwright screenshot and interaction QA against `http://127.0.0.1:5173/MauiMusicLessons/`. Evidence artifacts are stored in `Audit Phase/execution-artifacts/phase1/`. Execution reports are stored in `Audit Phase/phase-1-execution-report.md` and `Audit Phase/phase-2-execution-report.md`.

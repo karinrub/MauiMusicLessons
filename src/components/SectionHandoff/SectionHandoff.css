@@ -93,18 +93,18 @@
 
 .section-handoff--chapter {
   --handoff-from: #19130c;
-  --handoff-mid: #17100a;
+  --handoff-mid: #141009;
   --handoff-to: #0a0a0a;
   --handoff-x: 50%;
-  --handoff-y: 20%;
-  --handoff-glow: rgba(196, 170, 133, 0.08);
+  --handoff-y: 28%;
+  --handoff-glow: rgba(196, 170, 133, 0.14);
   --handoff-soft-x: 50%;
-  --handoff-soft: rgba(232, 213, 190, 0.055);
-  --handoff-sheen: rgba(232, 213, 190, 0.03);
-  --handoff-bottom: rgba(10, 10, 10, 0.56);
-  --handoff-image-opacity: 0.1;
-  --handoff-image-position: center 35%;
-  min-height: clamp(80px, 14vh, 156px);
+  --handoff-soft: rgba(232, 213, 190, 0.08);
+  --handoff-sheen: rgba(232, 213, 190, 0.045);
+  --handoff-bottom: rgba(10, 10, 10, 0.62);
+  --handoff-image-opacity: 0.16;
+  --handoff-image-position: center 30%;
+  min-height: clamp(88px, 16vh, 172px);
   margin-top: -3vh;
   margin-bottom: -1px;
 }
@@ -148,15 +148,16 @@
 
 .section-handoff--closing {
   --handoff-from: #0f0d0b;
-  --handoff-mid: #0d0a08;
-  --handoff-to: #0b0907;
+  --handoff-mid: #0c0a07;
+  --handoff-to: #0a0806;
   --handoff-x: 50%;
-  --handoff-y: 8%;
-  --handoff-glow: rgba(232, 213, 190, 0.055);
+  --handoff-y: 14%;
+  --handoff-glow: rgba(196, 170, 133, 0.09);
   --handoff-soft-x: 50%;
-  --handoff-soft: rgba(196, 170, 133, 0.045);
-  --handoff-sheen: rgba(232, 213, 190, 0.02);
-  --handoff-bottom: rgba(11, 9, 7, 0.74);
+  --handoff-soft: rgba(196, 170, 133, 0.065);
+  --handoff-sheen: rgba(232, 213, 190, 0.03);
+  --handoff-bottom: rgba(10, 8, 6, 0.82);
+  --handoff-texture-opacity: 0.62;
   min-height: clamp(96px, 18vh, 190px);
 }
 

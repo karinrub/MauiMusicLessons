@@ -150,7 +150,7 @@ export default function AboutAaron() {
             if (hasInteractedRef.current) return
             hintHasRunRef.current = true
             setIsHinting(true)
-            hintEndRef.current = setTimeout(() => setIsHinting(false), 1000)
+            hintEndRef.current = setTimeout(() => setIsHinting(false), 1600)
           }, 700)
         } else {
           clearPendingHint()
@@ -326,7 +326,7 @@ export default function AboutAaron() {
 
         <button
           type="button"
-          className="about__chapter-button about__chapter-button--next"
+          className={`about__chapter-button about__chapter-button--next${isHinting ? ' about__chapter-button--hinting' : ''}`}
           onClick={goToNextChapter}
           disabled={activeChapter === chapterMaxIndex}
           aria-label="Next chapter"

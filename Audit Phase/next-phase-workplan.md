@@ -82,7 +82,7 @@ Known conflicts and resolutions:
 4. About chapters remain interaction-dependent; the one-time hint may not make Chapters 2-4 discoverable during natural browsing.
 5. Footer arrival and booking step motion may still feel functional rather than authored.
 6. Responsive behavior has screenshot evidence at required widths but still needs full top-to-bottom review.
-7. Keyboard order, focus visibility, contrast over imagery, and complete reduced-motion behavior still need exhaustive browser verification.
+7. Keyboard order, focus visibility, contrast over imagery, and complete reduced-motion behavior still need exhaustive browser verification. **WCAG 2.1 AA audit (June 21, 2026) confirmed four failures deferred to a future remediation phase:** skip link missing (2.4.1), focus rings absent on navbar links/hero CTAs/footer nav (2.4.7/1.4.11), video no pause control (2.2.2), booking contact inputs lack `autocomplete` (1.3.5). See `baseline-verification.md` and `task-map.md` Category 15.
 8. Real testimonials/review links and phone/text fast contact remain dependency-blocked.
 
 ## Highest Risk Areas
@@ -396,6 +396,7 @@ Verify the audit phase holistically, clean up only safe technical/documentation 
 12. Confirm dependency-blocked items are listed separately from engineering work.
 13. Remove or document any unused motion utility only if it is clearly safe and in scope.
 14. Produce final completion notes with files changed, findings addressed, verification performed, blockers, dependencies, and next recommended task.
+15. Confirm WCAG 2.1 AA confirmed failures are documented as a deferred item in the completion report: skip link (2.4.1), focus rings on navbar/hero CTAs/footer nav (2.4.7/1.4.11), video pause control (2.2.2), booking autocomplete (1.3.5). These are tracked in `task-map.md` Category 15 and `baseline-verification.md`. Remediation is a separate phase after Phase 5.
 
 ### Acceptance Criteria
 
@@ -787,6 +788,7 @@ This audit phase is done when:
 11. No source audit finding was deleted, softened, or silently ignored.
 12. The current custom, cinematic, premium, calm, island-based direction is preserved.
 13. Remaining blockers are limited to explicit user data, approved asset decisions, or documented deferrals.
+14. WCAG 2.1 AA confirmed failures (skip link, focus rings, video pause, autocomplete) are documented as a deferred remediation phase in the final completion report. The site does not claim WCAG 2.1 AA conformance until that phase is complete.
 
 ## What Codex Should Do Next After Plan Approval
 

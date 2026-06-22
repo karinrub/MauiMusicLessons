@@ -14,8 +14,11 @@ export default function WeeklyLessons() {
   const subtextRef = useRef<HTMLParagraphElement>(null)
   const editorialRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<HTMLDivElement>(null)
+  const quoteTextRef = useRef<HTMLQuoteElement>(null)
+  const quoteCiteRef = useRef<HTMLElement>(null)
 
   useStaggeredReveal(cardRef, [eyebrowRef, tcTitleRef, subtextRef])
+  useStaggeredReveal(sceneRef, [quoteTextRef, quoteCiteRef], [0, 120], 0.12)
 
   // Exit choreography: fade editorial and scene panels as they scroll above the viewport.
   // One subscription handles both panels so they exit with the same easing curve.
@@ -134,10 +137,10 @@ export default function WeeklyLessons() {
             className="weekly__scene-img"
           />
         <div className="weekly__scene-quote">
-          <blockquote className="weekly__quote-text">
+          <blockquote className="weekly__quote-text" ref={quoteTextRef}>
             "You don't need talent. You need curiosity and a little consistency."
           </blockquote>
-          <cite className="weekly__quote-cite">— Aaron Grzanich</cite>
+          <cite className="weekly__quote-cite" ref={quoteCiteRef}>— Aaron Grzanich</cite>
         </div>
         <div className="weekly__scene-fade" aria-hidden="true" />
       </div>
