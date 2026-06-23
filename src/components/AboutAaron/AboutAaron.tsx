@@ -201,6 +201,34 @@ export default function AboutAaron() {
     }
   }, [reducedMotion])
 
+  // Preload lazy chapter images when About Aaron approaches the viewport so
+  // images are ready before first chapter navigation rather than only at
+  // activation time. This is a hypothesis: if images load before the user
+  // reaches About, requestBackgroundChapter will find img.complete=true and
+  // activate instantly with no decode wait.
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        observer.disconnect()
+        for (let i = 1; i < chapters.length; i++) {
+          const img = imageRefs.current[i]
+          if (!img || (img.complete && img.naturalWidth > 0)) continue
+          img.loading = 'eager'
+          img.fetchPriority = 'high'
+          img.decode().catch(() => {})
+        }
+      },
+      { rootMargin: '300px 0px' }
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
   const updateProgressFromPointer = (event: PointerEvent<HTMLDivElement>) => {
     const rail = railRef.current
     if (!rail) return
