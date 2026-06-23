@@ -27,8 +27,9 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = 'auto'): 
 
   // scrollIntoView does not work reliably in this layout (sticky/transform
   // ancestors prevent the browser from computing the scroll target correctly).
-  // Use window.scrollTo with offsetTop minus the computed scroll-margin-top,
-  // which accounts for the navbar height set in index.css.
-  const scrollMargin = parseInt(window.getComputedStyle(target).scrollMarginTop) || 0
-  window.scrollTo({ top: target.offsetTop - scrollMargin, behavior })
+  // Use the live visual position so transformed or overlapped sections do not
+  // leave the browser aiming at a stale layout offset.
+  const scrollMargin = parseFloat(window.getComputedStyle(target).scrollMarginTop) || 0
+  const targetTop = target.getBoundingClientRect().top + window.scrollY - scrollMargin
+  window.scrollTo({ top: Math.max(0, targetTop), behavior })
 }

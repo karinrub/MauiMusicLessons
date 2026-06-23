@@ -31,7 +31,10 @@ export default function WeeklyLessons() {
       if (reduced) {
         editorial.style.opacity = '1'
       } else {
-        const exitProgress = viewportProgress(editorial, 0.0, -0.5)
+        const isMobile = window.matchMedia('(max-width: 768px)').matches
+        const exitProgress = isMobile
+          ? viewportProgress(editorial, -0.6, -1.0)
+          : viewportProgress(editorial, 0.0, -0.5)
         editorial.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
       }
     }

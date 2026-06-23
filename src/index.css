@@ -36,6 +36,12 @@ html {
   scroll-margin-top: 5.75rem;
 }
 
+@media (max-width: 768px) {
+  #about {
+    scroll-margin-top: 0;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #0a0a0a;
