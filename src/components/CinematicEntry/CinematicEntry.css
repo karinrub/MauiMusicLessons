@@ -47,8 +47,8 @@
   object-position: center;
   opacity: 0;
   z-index: 0;
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0,0,0,0.82) 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0,0,0,0.82) 0%, transparent 100%);
 }
 
 .cinematic-entry__lines {

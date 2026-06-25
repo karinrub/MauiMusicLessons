@@ -27,7 +27,7 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
       el.style.opacity = '1'
       el.style.transform = 'none'
     })
-    if (imageRef.current) imageRef.current.style.opacity = '0.18'
+    if (imageRef.current) imageRef.current.style.opacity = '0.25'
   }, [lines])
 
   const count = lines.length
@@ -41,7 +41,7 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
         el.style.opacity = '1'
         el.style.transform = 'none'
       })
-      if (imageRef.current) imageRef.current.style.opacity = '0.18'
+      if (imageRef.current) imageRef.current.style.opacity = '0.25'
       return
     }
 
@@ -51,10 +51,10 @@ export default function CinematicEntry({ lines, imageSrc, imageWidth, imageHeigh
 
     if (imageRef.current) {
       const imgOp = progress < 0.14
-        ? (progress / 0.14) * 0.30
+        ? (progress / 0.14) * 0.50
         : progress > 0.86
-          ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.30
-          : 0.30
+          ? Math.max(0, 1 - (progress - 0.86) / 0.14) * 0.50
+          : 0.50
       imageRef.current.style.opacity = imgOp.toFixed(4)
     }
 

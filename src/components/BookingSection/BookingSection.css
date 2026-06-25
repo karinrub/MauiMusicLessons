@@ -491,6 +491,149 @@
   box-shadow: inset 0 0 0 1px rgba(232, 213, 190, 0.72);
 }
 
+/* ─── Booking calendar ───────────────────────────────────── */
+.booking-cal {
+  margin-bottom: 1.5rem;
+  padding: 1rem 0 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-cal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.booking-cal__month {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.booking-cal__nav {
+  display: flex;
+  align-items: center;
+}
+
+.booking-cal__nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 1.05rem;
+  cursor: pointer;
+  border-radius: 0;
+  transition: color 200ms ease;
+}
+
+.booking-cal__nav-btn:hover {
+  color: rgba(232, 213, 190, 0.85);
+}
+
+.booking-cal__nav-btn:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.72);
+  outline-offset: 2px;
+}
+
+.booking-cal__dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.2rem;
+}
+
+.booking-cal__dow {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding: 0.3rem 0;
+}
+
+.booking-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.booking-cal__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  font-weight: 300;
+  cursor: pointer;
+  border-radius: 0;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.booking-cal__cell--empty {
+  pointer-events: none;
+  cursor: default;
+}
+
+.booking-cal__cell--disabled {
+  color: rgba(255, 255, 255, 0.18);
+  cursor: not-allowed;
+}
+
+.booking-cal__cell--today {
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, 0.18);
+}
+
+.booking-cal__cell:hover:not(.booking-cal__cell--disabled):not(.booking-cal__cell--empty) {
+  border-color: rgba(232, 213, 190, 0.38);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.booking-cal__cell--in-range {
+  background: rgba(232, 213, 190, 0.08);
+  color: rgba(232, 213, 190, 0.72);
+}
+
+.booking-cal__cell--selected {
+  background: rgba(232, 213, 190, 0.18);
+  border-color: rgba(232, 213, 190, 0.85);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(232, 213, 190, 0.55);
+}
+
+.booking-cal__cell:focus-visible {
+  outline: 2px solid rgba(232, 213, 190, 0.72);
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
+}
+
+.booking-cal__selection {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: rgba(232, 213, 190, 0.82);
+  margin-top: 0.85rem;
+  letter-spacing: -0.01em;
+}
+
 .date-note-input {
   margin-top: 0.5rem;
   margin-bottom: 0;

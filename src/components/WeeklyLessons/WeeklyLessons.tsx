@@ -34,7 +34,7 @@ export default function WeeklyLessons() {
         const isMobile = window.matchMedia('(max-width: 768px)').matches
         const exitProgress = isMobile
           ? viewportProgress(editorial, -0.6, -1.0)
-          : viewportProgress(editorial, 0.0, -0.5)
+          : viewportProgress(editorial, -0.2, -0.7)
         editorial.style.opacity = (1 - easeOutCubic(exitProgress)).toFixed(3)
       }
     }
@@ -86,23 +86,23 @@ export default function WeeklyLessons() {
           <hr className="weekly__rule" aria-hidden="true" />
           <div className="weekly__body">
             <ScrollLine size="md" weight={400} delay={0.12} exitAt={0.9} color="#ede8de">
-              Aaron teaches guitar and ukulele in weekly sessions — one hour, one person, outdoors
+              Aaron teaches guitar and ukulele in weekly sessions. One hour, one person, outdoors
               on Maui. Guitar or ukulele, any starting point. Each week picks up where the last one
               ended, and the pace is set by the student, not a syllabus.
             </ScrollLine>
             <ScrollLine size="md" weight={400} delay={0.22} exitAt={0.9} color="#ede8de">
-              People who keep coming back describe a shift that's hard to predict at the start —
-              the progress becomes noticeable, the hour becomes something they protect. At some
+              People who keep coming back describe a shift that's hard to predict at the start.
+              The progress becomes noticeable, the hour becomes something they protect. At some
               point the lesson stops feeling like practice and becomes the part of the week they
               most look forward to: the one where showing up and staying curious is the whole job.
             </ScrollLine>
           </div>
           <div className="weekly__conversion-row">
-            <span className="weekly__conversion-item">$60 · 1 hr &nbsp;|&nbsp; weekly cadence</span>
-            <span className="weekly__conversion-divider" aria-hidden="true" />
             <span className="weekly__conversion-item">Kihei, Maui</span>
             <span className="weekly__conversion-divider" aria-hidden="true" />
-            <span className="weekly__conversion-item">Student-paced — no syllabus</span>
+            <span className="weekly__conversion-item">$60 · 1 hr &nbsp;|&nbsp; weekly cadence</span>
+            <span className="weekly__conversion-divider" aria-hidden="true" />
+            <span className="weekly__conversion-item">Student-paced, no syllabus</span>
           </div>
           <button
             className="btn btn--dark weekly__btn"
@@ -112,7 +112,7 @@ export default function WeeklyLessons() {
               scrollToSection('book')
             }}
           >
-            Let's find a time
+            Book your first lesson
           </button>
         </div>
         <div className="weekly__editorial-photo">
@@ -131,10 +131,10 @@ export default function WeeklyLessons() {
       {/* Beat 3 — Full-width photograph with overlaid quote */}
       <div className="weekly__scene" ref={sceneRef}>
           <img
-            src={publicAsset('/images/aaron-weekly-1.jpg')}
-            alt="Aaron and a young student sitting on a park bench, both playing ukulele and facing each other"
-            width="720"
-            height="960"
+            src={publicAsset('/images/aaron-weekly-2.jpg')}
+            alt="Aaron pointing at a ukulele chord chart with a student, Maui coastline and ocean visible behind them"
+            width="698"
+            height="920"
             loading="lazy"
             decoding="async"
             className="weekly__scene-img"

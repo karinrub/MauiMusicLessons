@@ -7,7 +7,6 @@ type Step = 'who' | 'type' | 'duration' | 'date' | 'contact' | 'confirm' | 'sent
 type GroupSize = 'solo' | 'duo' | 'group_small' | 'group_large'
 type Instrument = 'guitar' | 'ukulele'
 type Duration = '30' | '60'
-type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
 type TimeOfDay = 'morning' | 'afternoon' | 'evening'
 
 const PRICING = {
@@ -33,7 +32,8 @@ interface BookingData {
   groupSize: GroupSize | null
   instrument: Instrument | null
   duration: Duration | null
-  preferredDays: DayOfWeek[]
+  selectedDateStart: string | null
+  selectedDateEnd: string | null
   preferredTime: TimeOfDay | null
   preferredDateNote: string
   name: string
@@ -49,6 +49,50 @@ interface ContactErrors {
   name?: string
   email?: string
 }
+
+// ─── Calendar helpers ────────────────────────────────────────
+
+const MONTH_NAMES = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December',
+]
+const DOW_LABELS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+
+function toISO(date: Date): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function formatDateDisplay(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return `${MONTH_NAMES[m - 1]} ${d}, ${y}`
+}
+
+function formatDateRange(start: string, end: string): string {
+  const [sy, sm, sd] = start.split('-').map(Number)
+  const [ey, em, ed] = end.split('-').map(Number)
+  if (sy === ey) {
+    if (sm === em) return `${MONTH_NAMES[sm - 1]} ${sd} – ${ed}, ${sy}`
+    return `${MONTH_NAMES[sm - 1]} ${sd} – ${MONTH_NAMES[em - 1]} ${ed}, ${sy}`
+  }
+  return `${formatDateDisplay(start)} – ${formatDateDisplay(end)}`
+}
+
+function shiftDays(iso: string, n: number): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return toISO(new Date(y, m - 1, d + n))
+}
+
+function shiftMonths(iso: string, n: number): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  const target = new Date(y, m - 1 + n, 1)
+  const daysInTarget = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate()
+  return toISO(new Date(target.getFullYear(), target.getMonth(), Math.min(d, daysInTarget)))
+}
+
+// ─── Group/instrument/duration helpers ──────────────────────
 
 function groupLabel(g: GroupSize): string {
   const labels: Record<GroupSize, string> = {
@@ -115,16 +159,18 @@ function lessonSummary(data: BookingData): string {
   return parts.join(' · ')
 }
 
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday',
-  fri: 'Friday', sat: 'Saturday', sun: 'Sunday',
-}
 const TIME_LABELS: Record<TimeOfDay, string> = {
   morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening',
 }
 
 function buildMailto(data: BookingData): string {
   const subject = encodeURIComponent(`Lesson request from ${data.name.trim()}`)
+  let dateText = 'Not specified'
+  if (data.selectedDateStart && data.selectedDateEnd) {
+    dateText = formatDateRange(data.selectedDateStart, data.selectedDateEnd)
+  } else if (data.selectedDateStart) {
+    dateText = formatDateDisplay(data.selectedDateStart)
+  }
   const body = encodeURIComponent([
     `Name: ${data.name.trim()}`,
     `Email: ${data.email.trim()}`,
@@ -132,13 +178,14 @@ function buildMailto(data: BookingData): string {
     `Group: ${data.groupSize ? groupLabel(data.groupSize) : 'Not selected'}`,
     `Instrument: ${data.instrument === 'guitar' ? 'Guitar' : data.instrument === 'ukulele' ? 'Ukulele' : 'Not selected'}`,
     `Duration: ${data.duration === '30' ? '30 minutes' : data.duration === '60' ? '1 hour' : 'Not selected'}`,
-    `Preferred days: ${data.preferredDays.map((d) => DAY_LABELS[d]).join(', ') || 'Not specified'}`,
+    `Preferred date: ${dateText}`,
     `Preferred time: ${data.preferredTime ? TIME_LABELS[data.preferredTime] : 'Not specified'}`,
     `Timing note: ${data.preferredDateNote.trim() || 'None'}`,
   ].join('\n'))
-
   return `mailto:aaron@mauimusiclessons.com?subject=${subject}&body=${body}`
 }
+
+// ─── Reduced-motion hook ─────────────────────────────────────
 
 function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(false)
@@ -151,6 +198,192 @@ function useReducedMotion(): boolean {
   }, [])
   return reduced
 }
+
+// ─── BookingCalendar component ───────────────────────────────
+
+interface BookingCalendarProps {
+  selectedStart: string | null
+  selectedEnd: string | null
+  onSelect: (date: string) => void
+}
+
+function BookingCalendar({ selectedStart, selectedEnd, onSelect }: BookingCalendarProps) {
+  const today = new Date()
+  const todayISO = toISO(today)
+  const tomorrowISO = shiftDays(todayISO, 1)
+
+  const initialISO =
+    selectedStart && selectedStart > todayISO ? selectedStart : tomorrowISO
+
+  const [viewYear, setViewYear] = useState(() => Number(initialISO.slice(0, 4)))
+  const [viewMonth, setViewMonth] = useState(() => Number(initialISO.slice(5, 7)) - 1)
+  const [focusedISO, setFocusedISO] = useState<string>(initialISO)
+
+  const gridRef = useRef<HTMLDivElement>(null)
+  const focusReqRef = useRef(false)
+
+  useEffect(() => {
+    if (!focusReqRef.current || !gridRef.current) return
+    focusReqRef.current = false
+    gridRef.current
+      .querySelector<HTMLButtonElement>(`[data-date="${focusedISO}"]`)
+      ?.focus()
+  }, [focusedISO])
+
+  const firstDayOfMonth = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+
+  const cells: (string | null)[] = []
+  for (let i = 0; i < firstDayOfMonth; i++) cells.push(null)
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push(
+      `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    )
+  }
+
+  function prevMonth() {
+    const d = new Date(viewYear, viewMonth - 1, 1)
+    setViewYear(d.getFullYear())
+    setViewMonth(d.getMonth())
+  }
+
+  function nextMonth() {
+    const d = new Date(viewYear, viewMonth + 1, 1)
+    setViewYear(d.getFullYear())
+    setViewMonth(d.getMonth())
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    let newISO: string | null = null
+
+    switch (e.key) {
+      case 'ArrowRight': newISO = shiftDays(focusedISO, 1); break
+      case 'ArrowLeft':  newISO = shiftDays(focusedISO, -1); break
+      case 'ArrowDown':  newISO = shiftDays(focusedISO, 7); break
+      case 'ArrowUp':    newISO = shiftDays(focusedISO, -7); break
+      case 'PageDown':   newISO = shiftMonths(focusedISO, 1); break
+      case 'PageUp':     newISO = shiftMonths(focusedISO, -1); break
+      case 'Enter': {
+        e.preventDefault()
+        if (focusedISO > todayISO) onSelect(focusedISO)
+        return
+      }
+      default: return
+    }
+
+    if (!newISO) return
+    e.preventDefault()
+    focusReqRef.current = true
+    setFocusedISO(newISO)
+    setViewYear(Number(newISO.slice(0, 4)))
+    setViewMonth(Number(newISO.slice(5, 7)) - 1)
+  }
+
+  return (
+    <div className="booking-cal">
+      <div className="booking-cal__header">
+        <span className="booking-cal__month" aria-live="polite">
+          {MONTH_NAMES[viewMonth]} {viewYear}
+        </span>
+        <div className="booking-cal__nav">
+          <button
+            type="button"
+            className="booking-cal__nav-btn"
+            onClick={prevMonth}
+            aria-label="Previous month"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            className="booking-cal__nav-btn"
+            onClick={nextMonth}
+            aria-label="Next month"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <div className="booking-cal__dow-row" aria-hidden="true">
+        {DOW_LABELS.map((label) => (
+          <span key={label} className="booking-cal__dow">{label}</span>
+        ))}
+      </div>
+
+      <div
+        ref={gridRef}
+        className="booking-cal__grid"
+        role="group"
+        aria-label="Select a date"
+        onKeyDown={handleKeyDown}
+      >
+        {cells.map((iso, idx) => {
+          if (!iso) {
+            return (
+              <div
+                key={`empty-${idx}`}
+                className="booking-cal__cell booking-cal__cell--empty"
+                aria-hidden="true"
+              />
+            )
+          }
+
+          const isDisabled = iso <= todayISO
+          const isToday = iso === todayISO
+          const isSelected = iso === selectedStart || iso === selectedEnd
+          const isInRange = !!(
+            selectedStart && selectedEnd &&
+            iso > selectedStart && iso < selectedEnd
+          )
+          const isFocused = iso === focusedISO
+
+          const cls = ['booking-cal__cell']
+          if (isDisabled) cls.push('booking-cal__cell--disabled')
+          if (isToday) cls.push('booking-cal__cell--today')
+          if (isInRange) cls.push('booking-cal__cell--in-range')
+          if (isSelected) cls.push('booking-cal__cell--selected')
+
+          const dayNum = Number(iso.slice(8))
+          const [y, m, d] = iso.split('-').map(Number)
+          const dateObj = new Date(y, m - 1, d)
+          const ariaLabel = `${dateObj.toLocaleDateString('en-US', {
+            weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+          })}${isDisabled ? ', unavailable' : ''}${isSelected ? ', selected' : ''}`
+
+          return (
+            <button
+              key={iso}
+              type="button"
+              className={cls.join(' ')}
+              data-date={iso}
+              tabIndex={isFocused ? 0 : -1}
+              aria-label={ariaLabel}
+              aria-pressed={isSelected}
+              onClick={() => {
+                setFocusedISO(iso)
+                if (!isDisabled) onSelect(iso)
+              }}
+              onFocus={() => setFocusedISO(iso)}
+            >
+              {dayNum}
+            </button>
+          )
+        })}
+      </div>
+
+      {selectedStart && (
+        <p className="booking-cal__selection">
+          {selectedEnd
+            ? formatDateRange(selectedStart, selectedEnd)
+            : formatDateDisplay(selectedStart)}
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ─── BookingConversation ─────────────────────────────────────
 
 function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefObject<HTMLDivElement | null> }) {
   const [stepHistory, setStepHistory] = useState<Step[]>(['who'])
@@ -188,7 +421,8 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
     groupSize: null,
     instrument: null,
     duration: null,
-    preferredDays: [],
+    selectedDateStart: null,
+    selectedDateEnd: null,
     preferredTime: null,
     preferredDateNote: '',
     name: '',
@@ -227,25 +461,27 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
     })
   }
 
-  // Clears data for targetStep and all steps that follow it
   function clearDataFrom(targetStep: Step) {
     setData((prev) => {
       const d = { ...prev }
       if (targetStep === 'who') {
         d.groupSize = null; d.instrument = null; d.duration = null
-        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.selectedDateStart = null; d.selectedDateEnd = null
+        d.preferredTime = null; d.preferredDateNote = ''
         d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'type') {
-        // duration intentionally preserved — auto-set by 'who' for non-solo
         d.instrument = null
-        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.selectedDateStart = null; d.selectedDateEnd = null
+        d.preferredTime = null; d.preferredDateNote = ''
         d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'duration') {
         d.duration = null
-        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.selectedDateStart = null; d.selectedDateEnd = null
+        d.preferredTime = null; d.preferredDateNote = ''
         d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'date') {
-        d.preferredDays = []; d.preferredTime = null; d.preferredDateNote = ''
+        d.selectedDateStart = null; d.selectedDateEnd = null
+        d.preferredTime = null; d.preferredDateNote = ''
         d.name = ''; d.email = ''; d.phone = ''
       } else if (targetStep === 'contact') {
         d.name = ''; d.email = ''; d.phone = ''
@@ -294,10 +530,28 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
     if (!reduced) advance('date')
   }
 
+  function handleDateSelect(iso: string) {
+    setData((prev) => {
+      const { selectedDateStart: start, selectedDateEnd: end } = prev
+      if (!start) {
+        return { ...prev, selectedDateStart: iso, selectedDateEnd: null }
+      }
+      if (!end) {
+        if (iso === start) {
+          return { ...prev, selectedDateStart: null, selectedDateEnd: null }
+        }
+        if (iso > start) {
+          return { ...prev, selectedDateEnd: iso }
+        }
+        return { ...prev, selectedDateStart: iso, selectedDateEnd: null }
+      }
+      return { ...prev, selectedDateStart: iso, selectedDateEnd: null }
+    })
+    setContactErrors((p) => { const n = { ...p }; delete n.preferredDate; return n })
+  }
+
   function submitDate() {
-    const hasDay = data.preferredDays.length > 0
-    const hasTime = data.preferredTime !== null
-    if (!hasDay && !hasTime) return
+    if (!data.selectedDateStart) return
     setContactErrors((prev) => {
       const next = { ...prev }
       delete next.preferredDate
@@ -311,7 +565,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
     if (!data.groupSize) errs.groupSize = 'Group size is required'
     if (!data.instrument) errs.instrument = 'Instrument is required'
     if (!data.duration) errs.duration = 'Duration is required'
-    if (data.preferredDays.length === 0 && data.preferredTime === null) errs.preferredDate = 'Please select at least one preferred day or time'
+    if (!data.selectedDateStart) errs.preferredDate = 'Please select at least one date'
     if (!data.name.trim()) errs.name = 'Name is required'
     if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email)) errs.email = 'Valid email required'
     if (Object.keys(errs).length > 0) {
@@ -331,7 +585,6 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
 
   const history: { question: string; answer: string }[] = []
   if (stepIdx > 0 && data.groupSize) {
-    // Solo pricing is unresolved at this point — the duration chip carries it instead
     const whoAnswer = data.groupSize === 'solo' ? groupLabel(data.groupSize) : groupSummary(data.groupSize)
     history.push({ question: "Who's joining?", answer: whoAnswer })
   }
@@ -345,13 +598,12 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
       answer: data.duration === '30' ? `30 min — $${price}` : `1 hour — $${price}`,
     })
   }
-  if (stepIdx > 3 && (data.preferredDays.length > 0 || data.preferredTime)) {
-    const DAY_SHORT: Record<DayOfWeek, string> = {
-      mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun',
-    }
-    const dayPart = data.preferredDays.map((d) => DAY_SHORT[d]).join(', ')
+  if (stepIdx > 3 && data.selectedDateStart) {
+    const datePart = data.selectedDateEnd
+      ? formatDateRange(data.selectedDateStart, data.selectedDateEnd)
+      : formatDateDisplay(data.selectedDateStart)
     const timePart = data.preferredTime ? TIME_LABELS[data.preferredTime] : ''
-    const whenAnswer = [dayPart, timePart].filter(Boolean).join(' · ')
+    const whenAnswer = [datePart, timePart].filter(Boolean).join(' · ')
     history.push({ question: 'When', answer: whenAnswer })
   }
 
@@ -386,7 +638,7 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
     )
   }
 
-  // Reduced-motion: static stacked form — all steps visible at once, no back needed
+  // Reduced-motion: static stacked form
   if (reduced) {
     if (step === 'confirm' || step === 'sent') {
       return (
@@ -463,36 +715,11 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
             Aaron books 2–3 days ahead. Share your preferred window and he'll confirm availability.
           </p>
 
-          <div className="date-chip-group">
-            <p className="date-chip-label">Day</p>
-            <div className="date-chips">
-              {(['mon','tue','wed','thu','fri','sat','sun'] as DayOfWeek[]).map((day) => {
-                const labels: Record<DayOfWeek, string> = {
-                  mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu',
-                  fri: 'Fri', sat: 'Sat', sun: 'Sun',
-                }
-                const selected = data.preferredDays.includes(day)
-                return (
-                  <button
-                    key={day}
-                    type="button"
-                    className={`date-chip${selected ? ' date-chip--selected' : ''}`}
-                    onClick={() => {
-                      setData((prev) => ({
-                        ...prev,
-                        preferredDays: selected
-                          ? prev.preferredDays.filter((d) => d !== day)
-                          : [...prev.preferredDays, day],
-                      }))
-                      setContactErrors((p) => { const n = { ...p }; delete n.preferredDate; return n })
-                    }}
-                  >
-                    {labels[day]}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+          <BookingCalendar
+            selectedStart={data.selectedDateStart}
+            selectedEnd={data.selectedDateEnd}
+            onSelect={handleDateSelect}
+          />
 
           <div className="date-chip-group">
             <p className="date-chip-label">Time</p>
@@ -691,35 +918,11 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                 Aaron books 2–3 days ahead. Share your preferred window and he'll confirm availability.
               </p>
 
-              <div className="date-chip-group">
-                <p className="date-chip-label">Day</p>
-                <div className="date-chips">
-                  {(['mon','tue','wed','thu','fri','sat','sun'] as DayOfWeek[]).map((day) => {
-                    const labels: Record<DayOfWeek, string> = {
-                      mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu',
-                      fri: 'Fri', sat: 'Sat', sun: 'Sun',
-                    }
-                    const selected = data.preferredDays.includes(day)
-                    return (
-                      <button
-                        key={day}
-                        type="button"
-                        className={`date-chip${selected ? ' date-chip--selected' : ''}`}
-                        onClick={() => {
-                          setData((prev) => ({
-                            ...prev,
-                            preferredDays: selected
-                              ? prev.preferredDays.filter((d) => d !== day)
-                              : [...prev.preferredDays, day],
-                          }))
-                        }}
-                      >
-                        {labels[day]}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
+              <BookingCalendar
+                selectedStart={data.selectedDateStart}
+                selectedEnd={data.selectedDateEnd}
+                onSelect={handleDateSelect}
+              />
 
               <div className="date-chip-group">
                 <p className="date-chip-label">Time</p>
@@ -752,12 +955,11 @@ function BookingConversation({ bookingInnerRef }: { bookingInnerRef: React.RefOb
                 value={data.preferredDateNote}
                 onChange={(e) => setData((prev) => ({ ...prev, preferredDateNote: e.target.value }))}
               />
-              {/* Option A: inline acknowledgment — confirms receipt without touching the chip system */}
               {data.preferredDateNote.trim().length > 0 && (
                 <p className="note-confirm">We'll pass this along to Aaron.</p>
               )}
 
-              {(data.preferredDays.length > 0 || data.preferredTime !== null) && (
+              {data.selectedDateStart && (
                 <button type="button" className="conv-action" onClick={submitDate}>
                   Sounds good →
                 </button>

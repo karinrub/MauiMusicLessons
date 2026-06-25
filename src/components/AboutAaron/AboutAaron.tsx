@@ -28,7 +28,7 @@ const chapters = [
   {
     title: 'Maui',
     label: 'Maui',
-    image: publicAsset('/images/aaron-onlyMe.jpg'),
+    image: publicAsset('/images/aaron-beach-1.jpg'),
     text: 'In 2023, Aaron moved to Maui to deepen his study of traditional Hawaiian styles and to teach in a setting that encourages presence, patience, and joy. His goal is simple: help students of any age feel comfortable, confident, and connected through music.',
   },
 ]
@@ -92,13 +92,16 @@ export default function AboutAaron() {
         if (requestedBackgroundRef.current === chapter) setBackgroundChapter(chapter)
       })
       .catch(() => {
-        if (
-          requestedBackgroundRef.current === chapter &&
-          img.complete &&
-          img.naturalWidth > 0
-        ) {
+        if (requestedBackgroundRef.current !== chapter) return
+        if (img.complete && img.naturalWidth > 0) {
           setBackgroundChapter(chapter)
+          return
         }
+        const onLoad = () => {
+          img.removeEventListener('load', onLoad)
+          if (requestedBackgroundRef.current === chapter) setBackgroundChapter(chapter)
+        }
+        img.addEventListener('load', onLoad)
       })
   }
 
