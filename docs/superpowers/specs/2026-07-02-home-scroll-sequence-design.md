@@ -2,7 +2,7 @@
 
 Date: 2026-07-02. Fixes the reverse-scroll gap between `OpeningScene` and `StackedServicesDeck` documented in `docs/HOMEPAGE_TRANSITION_AUDIT.md`.
 
-Repository note: this project is now a local Git repository connected to `origin` at `https://github.com/karinrub/MauiMusicLessons.git`. The connected GitHub Pages URL is `https://karinrub.github.io/MauiMusicLessons/`. The remote already has an existing `main` history, so reconcile before publishing local changes.
+Repository note: this project is now a local Git repository connected to `origin` at `https://github.com/karinrub/MauiMusicLessons.git`. The connected GitHub Pages URL is `https://karinrub.github.io/MauiMusicLessons/`. The deployment source path is `/Users/karinrubin/Developer/maui-lessons`. Preserve the older remote history and deploy through normal commits to `main`, not force-pushes.
 
 ## Root cause (from audit)
 

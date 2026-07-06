@@ -1,6 +1,6 @@
 # Homepage Transition Audit: OpeningScene → StackedServicesDeck
 
-Repository note: this project is now a local Git repository connected to `origin` at `https://github.com/karinrub/MauiMusicLessons.git`. The connected GitHub Pages URL is `https://karinrub.github.io/MauiMusicLessons/`. The remote already has an existing `main` history, so avoid force-pushing over it unless replacing the remote site is intentional.
+Repository note: this project is now a local Git repository connected to `origin` at `https://github.com/karinrub/MauiMusicLessons.git`. The connected GitHub Pages URL is `https://karinrub.github.io/MauiMusicLessons/`. The deployment source path is `/Users/karinrubin/Developer/maui-lessons`. Preserve the older remote history and deploy through normal commits to `main`, not force-pushes.
 
 Audit only. No code was changed. Scope: `src/pages/Home.tsx`, `src/components/home/OpeningScene.tsx` + `.css`, `src/components/home/StackedServicesDeck.tsx` + `.css`, `src/layout/SiteLayout.tsx`, `src/App.tsx`, `src/hooks/usePrefersReducedMotion.ts`, `src/index.css`.
 

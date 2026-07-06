@@ -4,7 +4,7 @@ Date: 2026-07-06
 
 ## Current Git Connection
 
-This project is now initialized as a local Git repository.
+This project is initialized as a local Git repository and is connected to the GitHub repository that backs the public Pages URL.
 
 - Local branch: `main`
 - Remote name: `origin`
@@ -12,11 +12,11 @@ This project is now initialized as a local Git repository.
 - GitHub repository: `karinrub/MauiMusicLessons`
 - GitHub Pages URL: `https://karinrub.github.io/MauiMusicLessons/`
 
-## Important Repository Note
+## Repository History Note
 
-The connected GitHub repository is not empty. Its `main` branch already has existing history and a deployed site setup.
+The connected GitHub repository already had an older site history before this local checkout was connected.
 
-Do not force-push this local checkout over `origin/main` unless the goal is to intentionally replace the existing GitHub repository contents. To publish this local checkout into the existing repo, first reconcile the local history with `origin/main` or move the work through a reviewed branch.
+Keep that history intact. Deploy this local project through normal commits on `main`, not by force-pushing over `origin/main`.
 
 ## Deployment Setup
 
@@ -31,6 +31,16 @@ Vite derives its deployed base path from `GITHUB_REPOSITORY`. For the connected 
 - `/MauiMusicLessons/`
 
 This keeps production asset URLs compatible with the GitHub Pages project URL.
+
+## Deployment Target
+
+The source of truth for the site that should appear at `https://karinrub.github.io/MauiMusicLessons/` is this local project path:
+
+```sh
+/Users/karinrubin/Developer/maui-lessons
+```
+
+If GitHub Pages shows a different project, push the current `main` branch from this local checkout to `origin/main` and wait for the GitHub Actions Pages workflow to finish.
 
 ## Verification
 

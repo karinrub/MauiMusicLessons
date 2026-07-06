@@ -17,7 +17,7 @@ npm run build
 
 ## GitHub Pages Deployment
 
-This project is now a Git repository on the local `main` branch.
+This project is connected to Git and is the deployment target for the `karinrub/MauiMusicLessons` GitHub Pages site.
 
 - GitHub remote: `origin` -> `https://github.com/karinrub/MauiMusicLessons.git`
 - GitHub Pages URL: `https://karinrub.github.io/MauiMusicLessons/`
@@ -27,6 +27,6 @@ The repo is configured to deploy with GitHub Actions. On every push to `main`, t
 
 The Vite base path is derived from `GITHUB_REPOSITORY`, so the deployed project page uses `/MauiMusicLessons/` asset paths automatically.
 
-Important: the GitHub repository already has an existing `main` history. Do not force-push this checkout over `origin/main` unless the intent is to replace the existing remote site. Reconcile the histories first when publishing local work to the existing repository.
+The existing GitHub repository had older site history before this local project was connected. That history should be preserved; deploy this project with normal commits to `main`, not with a force-push.
 
 See `docs/GIT_AND_DEPLOYMENT.md` for the current Git/deployment status.

@@ -7,8 +7,9 @@ This project is now connected to Git.
 - Local branch: `main`
 - Remote: `origin` -> `https://github.com/karinrub/MauiMusicLessons.git`
 - GitHub Pages URL: `https://karinrub.github.io/MauiMusicLessons/`
+- Deployment source path: `/Users/karinrubin/Developer/maui-lessons`
 
-The remote repository already has an existing `main` history, so do not force-push this checkout over `origin/main` unless the explicit goal is to replace the remote site. See `docs/GIT_AND_DEPLOYMENT.md` before publishing changes.
+The remote repository had older site history before this local project was connected. Preserve that history and deploy through normal commits to `main`, not force-pushes. See `docs/GIT_AND_DEPLOYMENT.md` before publishing changes.
 
 ## Current State
 

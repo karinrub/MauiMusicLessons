@@ -16,6 +16,7 @@ dist-ssr
 .agents/
 .claude/
 .mcp.json
+.playwright-mcp/
 .superpowers/
 CLAUDE.md
 skills-lock.json
