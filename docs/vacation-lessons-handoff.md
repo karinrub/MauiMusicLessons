@@ -1,5 +1,15 @@
 # Vacation Lessons Handoff
 
+## Repository Status
+
+This project is now connected to Git.
+
+- Local branch: `main`
+- Remote: `origin` -> `https://github.com/karinrub/MauiMusicLessons.git`
+- GitHub Pages URL: `https://karinrub.github.io/MauiMusicLessons/`
+
+The remote repository already has an existing `main` history, so do not force-push this checkout over `origin/main` unless the explicit goal is to replace the remote site. See `docs/GIT_AND_DEPLOYMENT.md` before publishing changes.
+
 ## Current State
 
 The `/tourist-lessons` page has a scroll-driven cinematic scene that transitions Aaron's hero image into a resolved editorial composition.

@@ -17,13 +17,16 @@ npm run build
 
 ## GitHub Pages Deployment
 
-This repo is configured to deploy with GitHub Actions. On every push to `main`, the workflow in `.github/workflows/deploy-pages.yml` builds the site and publishes the `dist` folder to GitHub Pages.
+This project is now a Git repository on the local `main` branch.
 
-The Vite base path is derived from `GITHUB_REPOSITORY`, so project pages such as `https://karinrub.github.io/maui-lessons/` use the correct asset paths automatically.
+- GitHub remote: `origin` -> `https://github.com/karinrub/MauiMusicLessons.git`
+- GitHub Pages URL: `https://karinrub.github.io/MauiMusicLessons/`
+- Deployment workflow: `.github/workflows/deploy-pages.yml`
 
-After the GitHub repository exists, enable Pages with:
+The repo is configured to deploy with GitHub Actions. On every push to `main`, the workflow builds the site and publishes the `dist` folder to GitHub Pages.
 
-1. Open the repository on GitHub.
-2. Go to Settings > Pages.
-3. Set Source to GitHub Actions.
-4. Push to `main`.
+The Vite base path is derived from `GITHUB_REPOSITORY`, so the deployed project page uses `/MauiMusicLessons/` asset paths automatically.
+
+Important: the GitHub repository already has an existing `main` history. Do not force-push this checkout over `origin/main` unless the intent is to replace the existing remote site. Reconcile the histories first when publishing local work to the existing repository.
+
+See `docs/GIT_AND_DEPLOYMENT.md` for the current Git/deployment status.
